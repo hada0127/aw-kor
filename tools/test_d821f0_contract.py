@@ -17,6 +17,18 @@ import qa_d821f0_preservation as q
 
 SNAPSHOT = Path(os.environ.get('AW_ACCEPTED0916',
     '/home/taro1/weekend-20261024/temp/aw-ec312c-build0916'))
+# Part 1 name trim hook at 0xF10180 (inside the 0xF0A960 pin): the retired
+# 70-byte 2026-06-01 hook and its reviewed 58-byte replacement
+# (tools/test_part1_name_trim_hook.py RETIRED_HOOK / EXPECTED_HOOK).
+TRIM_HOOK = 0xF10180
+RETIRED_TRIM_HOOK = bytes.fromhex(
+    '031c00211878002806d0881c0006010e581800780028f8d1002910d0'
+    '881e0006010e5a181078812802d08f2804d006e050784028f0d002e0'
+    '50785a28ecd0c918002088707047')
+REVIEWED_TRIM_HOOK = bytes.fromhex(
+    '031c00211878002806d0881c0006010e581800780028f8d100290ad0'
+    '881e0006010e5a181078812802d150784028f3d00231c91800200870'
+    '7047')
 
 
 def fixture():
@@ -28,6 +40,14 @@ def fixture():
     rom = bytearray(original)
     for a,b,digest in c.CURRENT_PINS:
         rom[a:b] = current[a:b]
+    # accepted0916 predates the reviewed 2026-11-04 Part 1 trim-hook fix (PLAN B
+    # T1): replace exactly that retired hook, then require the production pin.
+    if bytes(rom[TRIM_HOOK:TRIM_HOOK+len(RETIRED_TRIM_HOOK)]) != RETIRED_TRIM_HOOK:
+        raise AssertionError('accepted0916 trim hook is not the retired 2026-06-01 hook')
+    rom[TRIM_HOOK:TRIM_HOOK+len(RETIRED_TRIM_HOOK)] = REVIEWED_TRIM_HOOK.ljust(len(RETIRED_TRIM_HOOK), b'\0')
+    for a,b,digest in c.CURRENT_PINS:
+        if sha256(rom[a:b]).hexdigest() != digest:
+            raise AssertionError(f'fixture pin 0x{a:X}..0x{b:X} differs from production pin')
     # Real pin bytes; synthetic old2984 allocations exercise the whole-field gate.
     manifest=[]
     for i in range(2984):

@@ -15902,10 +15902,10 @@
   {
    "source": "00DC4670",
    "profile": "p1_portrait",
-   "before_sha256": "29ee6d41fcfb94506e9ceb5ebba4ff23bea9e81d9a34791abfb35f6ed8252e74",
-   "before_target": "00A6F020",
+   "before_sha256": "c6b08d88636423e085b551484c7e6d72bc8c64d4c26301abfa021e65e779093c",
+   "before_target": "00A6F080",
    "before_bytes": 382,
-   "after_sha256": "fc8926e8c9a52881fd7c81bdbab0de48c8ba46bb0224f4f220d0013893a5c17c",
+   "after_sha256": "bb67b0d660331df42098a9bd97782a8a8d6a21625765c2adf16e318e56d2413c",
    "mode": "reviewed_spacing_reflow",
    "pages": [
     {
@@ -15922,23 +15922,23 @@
     {
      "page": 3,
      "before": [
-      "그　말은잠수함가잠수」하면",
+      "그　말은잠수함이잠수」하면",
       "공격받을　일은　없어！"
      ],
      "after": [
-      "그 말은 잠수함가 잠수」하면 공격받을 일은",
+      "그 말은 잠수함이 잠수」하면 공격받을 일은",
       "없어！"
      ]
     },
     {
      "page": 4,
      "before": [
-      "잠수함로전함을　쓰러뜨리면　뒤엔",
-      "수송선로수도에보병를　실어점령하면　돼！"
+      "잠수함이전함을　쓰러뜨리면　수도는",
+      "수송선으로보병을　실어점령하면　돼！"
      ],
      "after": [
-      "잠수함로 전함을 쓰러뜨리면 뒤엔 수송선로",
-      "수도에 보병를 실어 점령하면 돼！"
+      "잠수함이 전함을 쓰러뜨리면 수도는",
+      "수송선으로 보병을 실어 점령하면 돼！"
      ]
     }
    ],
@@ -15955,12 +15955,12 @@
      "맞지？"
     ],
     [
-     "그 말은 잠수함가 잠수」하면 공격받을 일은",
+     "그 말은 잠수함이 잠수」하면 공격받을 일은",
      "없어！"
     ],
     [
-     "잠수함로 전함을 쓰러뜨리면 뒤엔 수송선로",
-     "수도에 보병를 실어 점령하면 돼！"
+     "잠수함이 전함을 쓰러뜨리면 수도는",
+     "수송선으로 보병을 실어 점령하면 돼！"
     ],
     [
      "다음엔 힘내！"
@@ -15989,9 +15989,7 @@
     "0xDC476A": [],
     "0xDC476F": [],
     "0xDC478F": [],
-    "0xDC4796": [
-     "8140"
-    ],
+    "0xDC4796": [],
     "0xDC479F": [],
     "0xDC47A4": [],
     "0xDC47AD": [],
@@ -15999,7 +15997,7 @@
     "0xDC47C5": []
    },
    "reviewer": "gpt-6.1-sol/high",
-   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토",
+   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토; 2026-11-04 T2 재기준(EXT_COMPARE 결함 수정 문구 반영, temp/fix_20261104/T2_REPORT.md)",
    "review_indices": [
     488,
     489,
@@ -34525,7 +34523,7 @@
    "before_sha256": "4a83502a0aa9985683acc3e46a61c862cef91cc685653134bde54028b319176e",
    "before_target": "00A3D784",
    "before_bytes": 210,
-   "after_sha256": "c78682f48e1bb3dc970ba2654538ceda689ed4d5eba32bddf351056bdbe3c6f6",
+   "after_sha256": "96ee0c962a7a3a0c350fc85780a06e2500c09cdb7746328fc2770e0acdff5584",
    "mode": "reviewed_spacing_reflow",
    "pages": [
     {
@@ -34535,15 +34533,15 @@
       "스스로　판단할　때의　명령이야"
      ],
      "after": [
-      "선택한 종료는 더 할 일이 없다고、 스스로",
-      "판단할 때의 명령이야"
+      "선택한 종료는 더 할 일이 없다고、",
+      "스스로 판단할 때의 명령이야"
      ]
     }
    ],
    "final_pages": [
     [
-     "선택한 종료는 더 할 일이 없다고、 스스로",
-     "판단할 때의 명령이야"
+     "선택한 종료는 더 할 일이 없다고、",
+     "스스로 판단할 때의 명령이야"
     ],
     [
      "이걸 고르면 아군 행동이 끝나고",
@@ -34559,9 +34557,7 @@
     "0xA02B11": [],
     "0xA02B1A": [],
     "0xA02B1F": [],
-    "0xA02B37": [
-     "8140"
-    ],
+    "0xA02B37": [],
     "0xA02B56": [],
     "0xA02B65": [],
     "0xA02B7D": [],
@@ -34569,7 +34565,7 @@
     "0xA02BAE": []
    },
    "reviewer": "gpt-6.1-sol/high",
-   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토",
+   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토; 2026-11-04 T2 재기준(EXT_COMPARE 결함 수정 문구 반영, temp/fix_20261104/T2_REPORT.md)",
    "review_indices": [
     "name-policy"
    ]
@@ -34803,10 +34799,10 @@
   {
    "source": "00A03B90",
    "profile": "p2_portrait",
-   "before_sha256": "21c7c3fc69e64ec1d9614ce2bf823129d5970caa5c73a62b83645fefa13d5b2c",
+   "before_sha256": "586f37f17486d08faa2ea43f9c2b2c040a12e1e5e91f964d6a7c8da32a9bb8dc",
    "before_target": "00A3E238",
    "before_bytes": 279,
-   "after_sha256": "58ed3c51dd00911810224561c95c06ec15a4e5db743a9f137c15f884746efb6d",
+   "after_sha256": "18125cc0eae078c4b2d041e5e0dd58daad4e83123357f648d70b085073798830",
    "mode": "reviewed_spacing_reflow",
    "pages": [
     {
@@ -34834,7 +34830,7 @@
     ],
     [
      "사령관은 유닛 상태를",
-     "항상 확인해"
+     "항상 확인해！"
     ]
    ],
    "source_fragment_joiners": {
@@ -34852,7 +34848,7 @@
     "0xA03C7A": []
    },
    "reviewer": "gpt-6.1-sol/high",
-   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토",
+   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토; 2026-11-04 T2 재기준(EXT_COMPARE 결함 수정 문구 반영, temp/fix_20261104/T2_REPORT.md)",
    "review_indices": [
     1020
    ]
@@ -35052,10 +35048,10 @@
   {
    "source": "00A050B4",
    "profile": "p2_portrait",
-   "before_sha256": "55f2ec4c10ed79d419d261bb887ea24d6fb7e8c18cde8ad3b80da9ef87b96912",
+   "before_sha256": "2d82b97c1a11da10328a8af17c012a031767f4f083c30fd211efbe531e39ad73",
    "before_target": "00A3F3F8",
    "before_bytes": 250,
-   "after_sha256": "963574d905ae85a56282eb9ae97f3a1257d26b169302f7ebb25b1aee238fddcd",
+   "after_sha256": "5d8f65f1d0384794b69181c6667e4249f79d238304faf6fde9ab322731d76e24",
    "mode": "reviewed_spacing_reflow",
    "pages": [
     {
@@ -35077,7 +35073,7 @@
     ],
     [
      "그럴 땐 유닛 위에서 Ｂ 버튼을 누르면、",
-     "공격 범위가 빨갛게 표시돼"
+     "공격 범위가 빨갛게 표시돼！"
     ],
     [
      "자주포 사거리는 ２에서 ３ 칸이야 정보",
@@ -35102,7 +35098,7 @@
     ]
    },
    "reviewer": "gpt-6.1-sol/high",
-   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토",
+   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토; 2026-11-04 T2 재기준(EXT_COMPARE 결함 수정 문구 반영, temp/fix_20261104/T2_REPORT.md)",
    "review_indices": [
     1036
    ]
@@ -35986,21 +35982,21 @@
   {
    "source": "00A0770C",
    "profile": "p2_portrait",
-   "before_sha256": "cf73f11878d8a72200850f935b8be53afc4a475c61870d07b2bbccbb5e8cf4da",
+   "before_sha256": "f3150ca4a9ea63a30e3b05c6c7a5b5c531aec23a9b9f24dd983332d9bc3da2d8",
    "before_target": "00A41158",
    "before_bytes": 96,
-   "after_sha256": "3508190df755f92fc8c5fe0a16dcb4c3e61563c44c9c1a483d67792ff99b1641",
+   "after_sha256": "8f169f41162e2ab7ee2f71fd583a2b7fbdd5643f825d53d94f04719b5cc77778",
    "mode": "reviewed_spacing_reflow",
    "pages": [
     {
      "page": 1,
      "before": [
       "자　가볍게　돌파한다！",
-      "무사　귀환하면　한잔　사"
+      "무사　귀환하면　한잔　사！"
      ],
      "after": [
       "자 가볍게 돌파한다！ 무사 귀환하면 한 잔",
-      "사"
+      "사！"
      ]
     }
    ],
@@ -36011,7 +36007,7 @@
     ],
     [
      "자 가볍게 돌파한다！ 무사 귀환하면 한 잔",
-     "사"
+     "사！"
     ]
    ],
    "source_fragment_joiners": {
@@ -36025,7 +36021,7 @@
     ]
    },
    "reviewer": "gpt-6.1-sol/high",
-   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토",
+   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토; 2026-11-04 T2 재기준(EXT_COMPARE 결함 수정 문구 반영, temp/fix_20261104/T2_REPORT.md)",
    "review_indices": [
     1069
    ]
@@ -44571,25 +44567,25 @@
   {
    "source": "00A1B464",
    "profile": "p2_portrait",
-   "before_sha256": "2a46d83cd78c7737a0489b234c6ccb1475285b4f78618b55417dbcaaadceaa8c",
+   "before_sha256": "67997cb0191652b9468a75e09a433c56aa7044ec356429a3a5c0e11d16475b8f",
    "before_target": "00A4D920",
    "before_bytes": 22,
-   "after_sha256": "708c71ed00c36284f40da03594235fd1f605c24d132b61cf2b67492e5a351032",
+   "after_sha256": "63f5627c380df3777c5465bef5de74578f1f76f1ba67427eae095ea352b6d43e",
    "mode": "reviewed_spacing_reflow",
    "pages": [
     {
      "page": 0,
      "before": [
-      "서그건　안　돼。"
+      "하하지만요・・・"
      ],
      "after": [
-      "서 그건 안 돼。"
+      "하 하지만요・・・"
      ]
     }
    ],
    "final_pages": [
     [
-     "서 그건 안 돼。"
+     "하 하지만요・・・"
     ]
    ],
    "source_fragment_joiners": {
@@ -44597,7 +44593,7 @@
     "0xA1B469": []
    },
    "reviewer": "gpt-6.1-sol/high",
-   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토",
+   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토; 2026-11-04 T2 재기준(EXT_COMPARE 결함 수정 문구 반영, temp/fix_20261104/T2_REPORT.md)",
    "review_indices": [
     1416
    ]
@@ -45262,10 +45258,10 @@
   {
    "source": "00A1CF18",
    "profile": "p2_portrait",
-   "before_sha256": "869d5d8eab88f4e9c677ed38279ba9558d9347838b970dac52cf36946f09359b",
+   "before_sha256": "88d189355a959474ecc20521b88aeeeb438c7133d96d72d8b99838b2f2e1c81b",
    "before_target": "00A4E8F0",
    "before_bytes": 340,
-   "after_sha256": "2317f3bcfc2b035fe4e9d6e91e881809d3cc8ffabbf435518abf07803c3c7aa8",
+   "after_sha256": "679be77f11277286f6bd1ddcbc42fa6532ef51580895a322be418ae2b6b89dd8",
    "mode": "reviewed_spacing_reflow",
    "pages": [
     {
@@ -45299,7 +45295,7 @@
     ],
     [
      "응、되는 데까지 해보겠어",
-     "도움을 요청하는 건、마지막이면 돼"
+     "도움을 요청하는 건、마지막이면 돼！"
     ]
    ],
    "source_fragment_joiners": {
@@ -45324,7 +45320,7 @@
     "0xA1D04A": []
    },
    "reviewer": "gpt-6.1-sol/high",
-   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토",
+   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토; 2026-11-04 T2 재기준(EXT_COMPARE 결함 수정 문구 반영, temp/fix_20261104/T2_REPORT.md)",
    "review_indices": [
     1443
    ]
@@ -45641,28 +45637,28 @@
   {
    "source": "00A1DD94",
    "profile": "p2_portrait",
-   "before_sha256": "a6a7a298419529818dac0de421a737c279bb0de7e3d6a24114809b9b5698be7e",
+   "before_sha256": "9ec0ff143b961bf14dab88b6e4f2723352acdd4edfb395a7938b6f93766dd78a",
    "before_target": "00A4F030",
    "before_bytes": 50,
-   "after_sha256": "43afc035ea59f1eb2c65dbfca3e96d92066c1f759d09e1db104c70ae8e20b32f",
+   "after_sha256": "5bd280a51a32fffa267f6060ae78066bcdae0efe3572d1639750a57df282196f",
    "mode": "reviewed_spacing_reflow",
    "pages": [
     {
      "page": 0,
      "before": [
       "놈들은　신형전차를、",
-      "거기서　개발했단　거야"
+      "거기서　개발했단　거야？"
      ],
      "after": [
       "놈들은 신형 전차를、 거기서 개발했단",
-      "거야"
+      "거야？"
      ]
     }
    ],
    "final_pages": [
     [
      "놈들은 신형 전차를、 거기서 개발했단",
-     "거야"
+     "거야？"
     ]
    ],
    "source_fragment_joiners": {
@@ -45672,7 +45668,7 @@
     ]
    },
    "reviewer": "gpt-6.1-sol/high",
-   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토",
+   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토; 2026-11-04 T2 재기준(EXT_COMPARE 결함 수정 문구 반영, temp/fix_20261104/T2_REPORT.md)",
    "review_indices": [
     1454
    ]
@@ -46573,10 +46569,10 @@
   {
    "source": "00A214C0",
    "profile": "p2_portrait",
-   "before_sha256": "76474b6dc8f10cef736f60d5c79aed82539c79805375a3f27e60c44e329619fe",
+   "before_sha256": "a86c4c3dda83d55f4399ba1ce0fe936ac5e228772763dde5fcda4d40e8ceb64e",
    "before_target": "00A51690",
    "before_bytes": 150,
-   "after_sha256": "87358cbc29ad80025fdab9644fe73441540c65164afdb34077fbb78174817a49",
+   "after_sha256": "79a0f6e686dfc5e14aa3cd82e1936b235b8ca1a37321a2f3ebb37316f2bf3c03",
    "mode": "reviewed_spacing_reflow",
    "pages": [
     {
@@ -46594,7 +46590,7 @@
    "final_pages": [
     [
      "설교는 됐습니다。・・・하지만、",
-     "당신 같은 늙은이가、내 상대라고"
+     "당신 같은 늙은이가、내 상대라고？"
     ],
     [
      "큭큭큭・・・좋습니다！ １０일 만에 끝내",
@@ -46614,7 +46610,7 @@
     ]
    },
    "reviewer": "gpt-6.1-sol/high",
-   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토",
+   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토; 2026-11-04 T2 재기준(EXT_COMPARE 결함 수정 문구 반영, temp/fix_20261104/T2_REPORT.md)",
    "review_indices": [
     1491
    ]
@@ -49910,10 +49906,10 @@
   {
    "source": "00A292F0",
    "profile": "p2_portrait",
-   "before_sha256": "9be1256fdbbb635f0e12df418168c3fe5a641e325f597d4af407aa82d4ae183b",
+   "before_sha256": "b0eb21ace23476f39b3cbf3c3cd1a39c445250e10d358193643aa91ddd01c5e5",
    "before_target": "00A569A4",
    "before_bytes": 156,
-   "after_sha256": "0afa2f77761a82a271d12c7a51b70b2df8a67d2e0afddf23d26e18109215f631",
+   "after_sha256": "28a1d454150494dbab8f8309db35b40a2be88d1835891ee15059e2f076c0d1ea",
    "mode": "reviewed_spacing_reflow",
    "pages": [
     {
@@ -49934,7 +49930,7 @@
     ],
     [
      "여기까지 올 수 있었으니까、",
-     "다음엔 반드시 이겨"
+     "다음엔 반드시 이겨！"
     ],
     [
      "블랙홀 군을 쓰러뜨릴 때까지、 조금만",
@@ -49953,7 +49949,7 @@
     "0xA29377": []
    },
    "reviewer": "gpt-6.1-sol/high",
-   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토",
+   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토; 2026-11-04 T2 재기준(EXT_COMPARE 결함 수정 문구 반영, temp/fix_20261104/T2_REPORT.md)",
    "review_indices": [
     1629
    ]
@@ -53887,23 +53883,23 @@
   {
    "source": "00A32408",
    "profile": "p2_unit_help",
-   "before_sha256": "b2114271f278c05632d436b55fb41cf5ba1eb9eb447381227c68ac1534058f1b",
+   "before_sha256": "54e13c9a8da87ebd47f929507d97e15d4b3becf0d3483b506b2b273d63998787",
    "before_target": "00A32408",
    "before_bytes": 100,
-   "after_sha256": "c11c28721febb2a960d02a39ebae9cae117b27c15552a3f28f8688d42db389f9",
+   "after_sha256": "b27cba69d7285301ee04b2e777a85e597a7d32fbd4df84c2202e6bda4483e706",
    "mode": "reviewed_spacing_reflow",
    "pages": [
     {
      "page": 0,
      "before": [
       "캐논포의　사거리。",
-      "로켓포が공격불가",
+      "로켓포가공격불가",
       "２의　사거리에공격가능",
       "곳은　놓칠　수　없어。"
      ],
      "after": [
       "캐논포의 사거리。",
-      "로켓포が공격 불가 ２의",
+      "로켓포가 공격 불가 ２의",
       "사거리에 공격 가능 곳은",
       "놓칠 수 없어。"
      ]
@@ -53912,7 +53908,7 @@
    "final_pages": [
     [
      "캐논포의 사거리。",
-     "로켓포が공격 불가 ２의",
+     "로켓포가 공격 불가 ２의",
      "사거리에 공격 가능 곳은",
      "놓칠 수 없어。"
     ]
@@ -53936,7 +53932,7 @@
     "0xA3246B": []
    },
    "reviewer": "gpt-6.1-sol/high",
-   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토",
+   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토; 2026-11-04 T2 재기준(EXT_COMPARE 결함 수정 문구 반영, temp/fix_20261104/T2_REPORT.md)",
    "review_indices": [
     1763
    ]

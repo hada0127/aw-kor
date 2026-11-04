@@ -126,6 +126,65 @@ class DialogueJamTests(unittest.TestCase):
         with patch.object(spacing, 'verify_provenance'), patch.object(spacing, 'rendered_rows', return_value=(rows, [])):
             self.assertTrue(spacing._is_jam(rows[0]['intended'], rows[0]['shipped']))
 
+    def _overlay(self, payload, text):
+        rom, orig, manifest = fixture()
+        rom[0x40:0x50] = payload.ljust(16, b'\0')
+        m = manifest[0]
+        m['rewrite'] = dict(batch='t', review_ref='t', before_sha256='0', after_sha256='0',
+                            previous_target='0x000020', previous_len=16, previous_status='native')
+        m['line_spans'] = {'0x000022': [0, len(payload)]}
+        m['source_line_fragments'] = {'0x000022': [[0, len(payload)]]}
+        m['source_fragment_joiners'] = {'0x000022': []}
+        m['source_texts'] = {'0x000022': text}
+        return rom, orig, manifest
+
+    def test_overlay_row_controls_are_tokens_not_glyphs(self):
+        codes = {value: key for key, value in load_syl().items()}
+        ga, na, da = (bytes.fromhex(f'{codes[c]:04x}') for c in '가나다')
+        # wait, 가, page break, 나, fullwidth space, 다, end: the page break separates words.
+        rom, orig, manifest = self._overlay(b'w' + ga + b'k' + na + b'\x81\x40' + da + b'\0', '가 나 다')
+        rows, _ = rendered_rows(rom, manifest, relocation_writes(manifest), orig)
+        self.assertEqual((rows[0]['shipped'], rows[0]['kind']), ('가　나　다', 'dialogue-rewrite'))
+        self.assertEqual(check(rom, manifest, relocation_writes(manifest), orig)[:2], (1, []))
+        # Dropping the page break's separator role (a wait instead) is a jam.
+        rom, orig, manifest = self._overlay(b'w' + ga + b'w' + na + b'\x81\x40' + da + b'\0', '가 나 다')
+        count, jams, _ = check(rom, manifest, relocation_writes(manifest), orig)
+        self.assertEqual((count, len(jams)), (1, 1))
+
+    def test_overlay_fold_covers_writer_width_forms(self):
+        codes = {value: key for key, value in load_syl().items()}
+        ga, na = (bytes.fromhex(f'{codes[c]:04x}') for c in '가나')
+        dots = '・・・'.encode('shift_jis')
+        rom, orig, manifest = self._overlay('Ａ'.encode('shift_jis') + b'\x81\x40' + ga + dots + na + b'\0',
+                                            'A 가...나')
+        count, jams, unsupported = check(rom, manifest, relocation_writes(manifest), orig)
+        self.assertEqual((count, jams, unsupported), (1, [], []))
+        # Legacy rows keep the narrow fold: the same text is not compared there.
+        self.assertFalse(is_jammed('A 가...나', 'Ａ가・・・나'))
+        self.assertTrue(is_jammed('A 가...나', 'Ａ가・・・나', overlay=True))
+
+    def test_control_only_rows_are_not_unsupported(self):
+        rom, orig, manifest = self._overlay(b'k\0', '')
+        stats = {}
+        count, jams, unsupported = check(rom, manifest, relocation_writes(manifest), orig, stats=stats)
+        self.assertEqual((count, jams, unsupported, stats), (0, [], [], {'no_text': 1}))
+        # An empty authored owner that still ships Hangul stays unsupported.
+        codes = {value: key for key, value in load_syl().items()}
+        rom, orig, manifest = self._overlay(bytes.fromhex(f'{codes["가"]:04x}') + b'\0', '')
+        count, _, unsupported = check(rom, manifest, relocation_writes(manifest), orig)
+        self.assertEqual((count, unsupported), (0, [(0x22, 'no authored Hangul owner')]))
+
+    def test_superseded_spacing_intent_is_not_an_owner(self):
+        intent = [20, 12, 12, '', None, '가 나 다', None, 'dialogue-spacing-final-intent-superseded']
+        final = [20, 8, 8, '', None, None, None, 'dialogue-rewrite-final']
+        _, unsupported = final_owner_spans([intent, final], 64, skip_superseded=True)
+        self.assertEqual(unsupported, [])
+        owners, _ = final_owner_spans([intent], 64, skip_superseded=True)
+        self.assertEqual(owners, {})
+        # Builder callers keep the previous ownership rule.
+        _, unsupported = final_owner_spans([intent, final], 64)
+        self.assertEqual(unsupported, [(20, 'partially superseded owner')])
+
     def test_whole_relocation_record_omission_fails(self):
         rom, orig, manifest = fixture()
         writes = relocation_writes(manifest)
@@ -197,6 +256,11 @@ class B23RestorationTests(unittest.TestCase):
         rom = Path(path).read_bytes()
         manifest = json.loads((ROOT / 'temp/repoint_manifest.json').read_text())
         baseline = json.loads((ROOT / 'data/bteam_baseline.json').read_text())['overrides']
+        # 2026-11-04 user-approved bulk rewrites: a ledger-owned row ships its
+        # reviewed `to` wording, not the B-team baseline (qa_bteam_drift B3 rule).
+        from qa_bteam_drift import ledger_entries, load_ledger_bytes
+        ledger = ledger_entries(load_ledger_bytes())
+        expected = {k: (ledger[k]['to'] if k in ledger else v) for k, v in baseline.items()}
         codes = load_syl()
         for addr, site in ((0xD9EDB6, 0xDC0BF0), (0xDCB1BE, 0xDDE190),
                            (0xDCC63A, 0xDE0410), (0xDCD9DA, 0xDE2814)):
@@ -205,7 +269,7 @@ class B23RestorationTests(unittest.TestCase):
             target = int(m['new_addr'], 16)
             self.assertEqual(int.from_bytes(rom[site:site + 4], 'little'), 0x08000000 + target)
             text = decode_payload(row_bytes(rom, m, key), codes)
-            self.assertEqual(separator_signature(text), separator_signature(baseline[f'0x{addr:08X}']))
+            self.assertEqual(separator_signature(text), separator_signature(expected[f'0x{addr:08X}']))
             assert_part1_portrait_page_rows(addr - 2, rom[target:target + m['new_len']])
             if addr in (0xDCC63A, 0xDCD9DA):
                 following = f'0x{addr + 0x23:06X}'

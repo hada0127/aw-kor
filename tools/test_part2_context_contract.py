@@ -11,6 +11,30 @@ import part2_context_contract as C
 from test_part2_native_controls import HOOK_FIXTURE
 
 
+LAYOUT_LEDGER = Path(B.BASE, 'data', 'dialogue_layout_repairs.json')
+
+
+def reflowed(rom, target, length, source):
+    """Apply the reviewed layout ledger entry exactly as dialogue_pixel_layout does."""
+    from dialogue_pixel_layout import reflow_message, Glyphs
+    ledger = json.loads(LAYOUT_LEDGER.read_text())
+    spec = next(s for s in ledger if int(s['source'], 16) == source)
+    after, _ = reflow_message(bytes(rom[target:target + length]), 'p2', Glyphs(bytes(rom)),
+                              spec['pages'], spec['rows_per_page'], None, allow_paging=True)
+    assert len(after) == length
+    rom[target:target + length] = after
+    return ledger
+
+
+def swap_wait(rom, target, length, nth=0):
+    """Move the nth 0x57 wait one glyph pair right (same control count)."""
+    payload = bytes(rom[target:target + length])
+    offset = -1
+    for _ in range(nth + 1):
+        offset = payload.index(b'\x57', offset + 1)
+    rom[target + offset:target + offset + 3] = rom[target + offset + 1:target + offset + 3] + b'\x57'
+
+
 class ContextContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -161,6 +185,61 @@ class ContextContractTests(unittest.TestCase):
             self.assertEqual(env['required_script_repoints'], {address})
             self.assertEqual(env['rom'][address:address+6], self.original[address:address+6])
             self.assertEqual(env['WRITE_LOG'][-1][5], '선생님!')
+
+
+class ContextLayoutRepresentationTests(unittest.TestCase):
+    """B2: after the reviewed pixel-layout stage the contract must still hold."""
+
+    @classmethod
+    def setUpClass(cls):
+        ContextContractTests.setUpClass.__func__(cls)
+
+    fixture = ContextContractTests.fixture
+
+    def layout_fixture(self):
+        rom, manifest = self.fixture()
+        ledger = reflowed(rom, 0xA3D000, manifest[0]['new_len'], C.SOURCE)
+        return rom, manifest, ledger
+
+    def test_reviewed_layout_passes_only_with_ledger(self):
+        rom, manifest, ledger = self.layout_fixture()
+        self.assertEqual(C.verify(rom, self.original, manifest, self.codes, ledger)['layout'],
+                         'reviewed_pixel_layout')
+        with self.assertRaisesRegex(ValueError, 'control sequence'):
+            C.verify(rom, self.original, manifest, self.codes)
+        # The pre-layout state is not accepted once the ledger owns the message.
+        rom0, manifest0 = self.fixture()
+        with self.assertRaises(ValueError):
+            C.verify(rom0, self.original, manifest0, self.codes, ledger)
+
+    def test_injected_control_changes_fail(self):
+        rom, manifest, ledger = self.layout_fixture()
+        start, length = 0xA3D000, manifest[0]['new_len']
+        payload = bytes(rom[start:start + length])
+        mutations = {
+            'moved_wait': lambda r: swap_wait(r, start, length, 2),
+            'wait_byte': lambda r: r.__setitem__(start + payload.index(b'\x57'), 0x77),
+            'newline_to_page': lambda r: r.__setitem__(start + payload.index(b'\x72'), 0x6B),
+            'page_to_newline': lambda r: r.__setitem__(start + payload.index(b'\x6b'), 0x72),
+            'dropped_terminator': lambda r: r.__setitem__(start + length - 1, 0x20),
+        }
+        for name, mutate in mutations.items():
+            changed = bytearray(rom)
+            mutate(changed)
+            with self.subTest(name), self.assertRaises(ValueError):
+                C.verify(changed, self.original, manifest, self.codes, ledger)
+
+    def test_ledger_must_bind_contract_text_and_wording(self):
+        rom, manifest, ledger = self.layout_fixture()
+        for edit in ('before', 'after'):
+            bad = copy.deepcopy(ledger)
+            spec = next(s for s in bad if int(s['source'], 16) == C.SOURCE)
+            spec['pages'][0][edit][0] = spec['pages'][0][edit][0].replace('이글', '독수리')
+            with self.subTest(edit), self.assertRaisesRegex(ValueError, 'layout repair'):
+                C.verify(rom, self.original, manifest, self.codes, bad)
+        bad = ledger + [next(s for s in ledger if int(s['source'], 16) == C.SOURCE)]
+        with self.assertRaisesRegex(ValueError, 'duplicate'):
+            C.verify(rom, self.original, manifest, self.codes, bad)
 
 
 if __name__ == '__main__':

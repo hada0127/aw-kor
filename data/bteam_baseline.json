@@ -467,7 +467,7 @@
   "0x00A1AFFC": "에-,",
   "0x00A1B194": "네,",
   "0x00A1B3C8": "어떡할까요?",
-  "0x00A1B469": "그건 안 돼.",
+  "0x00A1B469": "하지만요...",
   "0x00A1B4EC": "캣 님.17일까지,",
   "0x00A1B5F0": "왁,",
   "0x00A1B81C": "옛,",
@@ -950,7 +950,7 @@
   "0x00A2CB64": "캣",
   "0x00A2CB70": "스네이크",
   "0x00A2CB7C": "호크",
-  "0x00A2CB8C": "하치",
+  "0x00A2CB8C": "이반",
   "0x00A2CB94": "한나",
   "0x00A2CB9C": "야마모토",
   "0x00A2CBAC": "튜토리얼",
@@ -2783,7 +2783,7 @@
   "0x00DF58DB": "항구가 있는 도시.",
   "0x00DF59CF": "공장이 있는 도시.",
   "0x00DF5A2F": "색적 시에는,적 유닛",
-  "0x00DF5E12": "당신에게는,코스모 랜드에 대해",
+  "0x00DF5E12": "코스모 랜드에 대해",
   "0x00DF5F0E": "최근에는　큰 전투는 없었지만",
   "0x00DF5F5A": "아　미안해요.",
   "0x00DF5FBA": "덕분에 레드스타국의 일부,아라라 지방도",
@@ -2824,7 +2824,7 @@
   "0x00DF8DFA": "틀림없으신가요?",
   "0x00DF8E16": "어드밴스 워즈에 오신 걸 환영해요!",
   "0x00DF8E6E": "레드스타의 사령관,캐서린이에요.",
-  "0x00DF8EAE": "혹시, 이 게임은 처음이신가요?",
+  "0x00DF8EAE": "너, 혹시 이 게임은 처음이니?",
   "0x00DF90F6": "첫 작전은 전투 개시야!",
   "0x00DF92CA": "그게 좋겠다고 생각해요!",
   "0x00DF92E6": "「작전룸」은, 다음 「모드 셀렉트」",
@@ -3423,6 +3423,30 @@
    "to": "뭐, 자네치고는 잘했군.",
    "approved": "2026-10-07 user reply 「제안대로」 in session (recorded in CLAUDE.md 「2026-10-07 사용자 승인(B팀 예외·크레딧)」)",
    "reason": "ま、おまえさんにしては、じょうできだな。 — じょうでき=上出来(well done), not 上等品"
+  },
+  "0x00DF5E12": {
+   "from": "당신에게는,코스모 랜드에 대해",
+   "to": "코스모 랜드에 대해",
+   "approved": "2026-11-04 user (temp/fix_20261104/inputs.md msg3/5)",
+   "reason": "EXT_COMPARE P1 #1: あなたには、コスモランドのことを／説明しなくちゃいけないわね。 The next row (0xDF5E35) restores 설명; drop the literal 당신에게는"
+  },
+  "0x00A1B469": {
+   "from": "그건 안 돼.",
+   "to": "하지만요...",
+   "approved": "2026-11-04 user (temp/fix_20261104/inputs.md msg3/5)",
+   "reason": "EXT_COMPARE P2 #3 msg1353: で、ですが・・・ is a stammered objection, not a repeat of the previous それはダメ。 line"
+  },
+  "0x00A2CB8C": {
+   "from": "하치",
+   "to": "이반",
+   "approved": "2026-11-04 user (temp/fix_20261104/inputs.md msg7/8)",
+   "reason": "names_audit 1-1: Part 2 CO name table 0xA2CB84 ハチ / 0xA2CB8C イワン; the B-team key was shifted one entry, so イワン showed 하치 twice. CSV 0x00A2CB8C already 이반"
+  },
+  "0x00DF8EAE": {
+   "from": "혹시, 이 게임은 처음이신가요?",
+   "to": "너, 혹시 이 게임은 처음이니?",
+   "approved": "2026-11-04 user (inputs.md msg7-8)",
+   "reason": "あなた、このゲームは初めてかしら？ — Catherine speaks banmal to the player elsewhere; exact 34-byte native slot (polite_choice_dialogue FIRST), no repoint"
   }
  }
 }

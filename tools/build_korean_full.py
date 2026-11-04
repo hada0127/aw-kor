@@ -251,6 +251,7 @@ DENY_REGIONS = [
     # half-open [start, end), so this preserves exactly the 122B found row.
     ('punctuation_width_table_noise', 0xD721B5, 0xD7222F),
     ('part2_name_compose', 0xF70000, 0xF77800),           # 2편 이름 조합 nc_dense·코드 이미지(PLAN-v5 §1.8)
+    ('part1_name_compose', 0xF77800, 0xF79800),           # 1편 이름 조합 코드 이미지(PLAN B D8)
     ('korean_data',     0xF00000, 0x1000000),             # 내가 주입한 글리프/테이블 영역
     # Link-play client images (1-cart VS multiboot; temp/linkclient_20261013/plan.md).
     # The 120-byte charset tables are lookup data, not text; the dead program copies
@@ -2319,7 +2320,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xB82018: '전투 개시!',
     # Part 1 opening tutorial after name confirm. Keep these short because this
     # text engine reuses tiny fixed fragments and wraps poorly with long words.
-    0xDF8EAE: '혹시, 이 게임은 처음이신가요?',
+    0xDF8EAE: '너, 혹시 이 게임은 처음이니?',
     0xDF8EFF: '어드밴스 워즈에는',
     0xDF8F26: '여러 모드가 있어',
     0xDF8F3F: '게임보이 한 대로',
@@ -4241,7 +4242,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA28E47: '파이프　따윈　한방',
     0xA2932E: '다음엔　반드시　이겨',
     0xA295EC: '스트레이트 블래스트',
-    0xA29840: '메테오강타',
+    0xA29840: '메테오스트라이크',
     0xA29906: '애니메 무',
     0xA29C06: '지형이지만 방어엔',
     0xA29C63: '가능',
@@ -4700,7 +4701,7 @@ ADDRESS_TEXT_OVERRIDES.update({
     0x9EBF88: '레드스타 패배. 타군 항복도 패배. 정말? 종료 공격 합류 대기 시스템',
     0x9EC040: '대기공격합류항복종료닫기설정',
     0xA1EDE4: '물건 때문에',
-    0xD83138: '0123456789룰칙정찰날씨장군브레이크초기수입매턴수입거점있음없음맑음눈비랜덤',
+    0xD83138: '0123456789룰칙색적날씨장군브레이크초기수입매턴수입거점있음없음맑음눈비랜덤',
     0xD75917: '비카가루진동',
     0xD8FFF9: '걸어오는 쪽이',
     0xD90250: 'B 버튼으로 메뉴를 닫을 수 있어.',
@@ -4869,7 +4870,7 @@ def b84_full_power_dictionary(dialogue_overrides):
 INTRO_DIRECT_TEXT = {
     # Early name-control intros are compact: text fragment, byte 0x69 for the
     # entered player name, then さん/さん！. Keep the prefix exactly 14 bytes.
-    0xDF5D9A: ('반가워. ', 14),
+    0xDF5D9A: ('반가워, ', 14),
     0xDF8E3E: ('반가워. ', 14),
     0xDF8E58: ('나는　캐서린。', 16),
 }
@@ -5335,6 +5336,168 @@ def restore_symbol_glyphs(rom, orig):
             rom[off:off + 32] = orig[off:off + 32]
             restored.add(slot)
     return len(restored)
+
+
+# Korean-style 、/。 (temp/fix_20261104/punct_glyph_research.md option a).
+# Only the glyph images change; 0x8141/0x8142 text bytes stay as encoded.
+# P1 per-char path: symbol table top = shared blank slot 95 (never touched),
+# bottom = private slot. P2 A3 cache: private node, pixels at node+6..+70.
+import korean_punct_glyphs as _korean_punct  # noqa: E402 (shared with QA checks)
+
+KOREAN_PUNCT_FONT_BASE = _korean_punct.FONT_BASE
+KOREAN_PUNCT_P1_TOP_BLANK = _korean_punct.TOP_BLANK_SLOT
+KOREAN_PUNCT_P1_BOTTOM = _korean_punct.P1_BOTTOM_SLOT
+KOREAN_PUNCT_A3_NODE = _korean_punct.A3_NODE
+KOREAN_PUNCT_INK = _korean_punct.INK
+KOREAN_PUNCT_PIXELS = _korean_punct.PIXELS
+KOREAN_PUNCT_ORIG_P1 = {
+    286: bytes.fromhex('00000000000000000000000000000000'
+                       'a0040000000a00000000000000000000'),
+    285: bytes.fromhex('000000000000000000000000404a0000'
+                       'a0a00000404a00000000000000000000'),
+}
+KOREAN_PUNCT_ORIG_A3 = {
+    0x807BE8: bytes.fromhex(
+        '307c80088108' + '00' * 48 + 'a00e0000000a0000' + '00' * 8 + '0000'),
+    0x807D50: bytes.fromhex(
+        '987d80088108' + '00' * 44 + 'e0ea0000a0a00000e0ea0000' + '00' * 8 + '0000'),
+}
+# The three P1 symbol tables (0x81xx/0x82xx/0x83xx) are contiguous u16 slot
+# entries; scan them raw so neither index convention can hide a sharer.
+KOREAN_PUNCT_SYMBOL_TABLE_RANGE = (0xB8027C, 0xB80B7C)
+# Owner entries (0x81xx rows: both index conventions agree).
+KOREAN_PUNCT_P1_ENTRY = {0x8141: (0xB8027E, 0xB8028E), 0x8142: (0xB80280, 0xB80290)}
+
+
+_korean_punct_bottom_tile = _korean_punct.bottom_tile
+
+
+def _korean_punct_digit_table_entries():
+    """Entries patch_fullwidth_digit_glyphs rewrites late in the build.
+
+    The native table points two of them (0xB806D4/0xB806D6) at slots 285/286;
+    the digit pass moves them to private name-grid slots. The patch step
+    tolerates only those, and the final verification allows no sharer.
+    """
+    entries = set()
+    for digit in range(10):
+        idx = _symbol_table_index(0x824F + digit)
+        entries.update(0xB8027C + 2 * (idx + delta) for delta in (0, 8))
+    return entries
+
+
+def _korean_punct_symbol_slot_owners(rom):
+    """Every P1 symbol/kanji table reference to FONT_BASE slots, keyed by slot."""
+    owners = {}
+    lo, hi = KOREAN_PUNCT_SYMBOL_TABLE_RANGE
+    for at in range(lo, hi, 2):
+        owners.setdefault(struct.unpack_from('<H', rom, at)[0], []).append(at)
+    # Kanji/reserved-code 6-byte table [SJIS_BE, top, bottom], as the IWRAM
+    # converter reads it (start/end literals), plus the native table location.
+    start, end = (struct.unpack_from('<I', rom, a)[0] - 0x08000000
+                  for a in (0xEFE970, 0xEFE974))
+    if not 0 <= start < end <= len(rom) or (end - start) % 6:
+        raise AssertionError('invalid relocated kanji glyph table')
+    for begin, finish in sorted({(start, end), (0xB80B7C, 0xB8180C)}):
+        for at in range(begin, finish, 6):
+            for field in (at + 2, at + 4):
+                owners.setdefault(struct.unpack_from('<H', rom, field)[0], []).append(field)
+    for ch, slots in NAME_GRID_SLOTS.items():
+        for slot in slots:
+            owners.setdefault(slot, []).append(f'name-grid:{ch}')
+    return owners
+
+
+def _korean_punct_a3_owners(rom):
+    """Walk every A3 bucket; return node offset -> [(bucket low byte, hi)].
+
+    Buckets exist for SJIS trail bytes 0x40..0xFC; words below 0x40 are other
+    data that happens to precede the table.
+    """
+    owners = {}
+    for low in range(0x40, 0xFD):
+        pointer = struct.unpack_from('<I', rom, 0x807680 + low * 4)[0]
+        seen = set()
+        while pointer:
+            node = pointer - 0x08000000
+            if node in seen or not 0 <= node <= len(rom) - 72:
+                raise AssertionError(f'invalid A3 glyph chain at bucket {low:#x}')
+            seen.add(node)
+            owners.setdefault(node, []).append((low, rom[node + 4]))
+            pointer = struct.unpack_from('<I', rom, node)[0]
+    return owners
+
+
+def _check_korean_punct_ownership(rom, tolerated=frozenset()):
+    slot_owners = _korean_punct_symbol_slot_owners(rom)
+    for code, slot in KOREAN_PUNCT_P1_BOTTOM.items():
+        top_entry, bottom_entry = KOREAN_PUNCT_P1_ENTRY[code]
+        if struct.unpack_from('<H', rom, top_entry)[0] != KOREAN_PUNCT_P1_TOP_BLANK:
+            raise AssertionError(f'P1 punctuation {code:#x} top is not the shared blank')
+        sharers = [at for at in slot_owners.get(slot, []) if at not in tolerated]
+        if sharers != [bottom_entry]:
+            raise AssertionError(f'P1 punctuation slot {slot} is shared: {sharers}')
+    a3_owners = _korean_punct_a3_owners(rom)
+    for code, node in KOREAN_PUNCT_A3_NODE.items():
+        if a3_owners.get(node) != [(code & 0xFF, code >> 8)]:
+            raise AssertionError(f'A3 punctuation node {node:#x} is shared: {a3_owners.get(node)}')
+        if rom[node + 5] != 8:
+            raise AssertionError(f'A3 punctuation node {node:#x} advance changed')
+
+
+def patch_korean_punct_glyphs(rom, orig):
+    """Redraw 、/。 as Korean comma/period in the P1 font and P2 A3 cache."""
+    for slot, expected in KOREAN_PUNCT_ORIG_P1.items():
+        off = KOREAN_PUNCT_FONT_BASE + slot * 32
+        if bytes(orig[off:off + 32]) != expected or bytes(rom[off:off + 32]) != expected:
+            raise AssertionError(f'P1 punctuation slot {slot} is not the restored original')
+    for node, expected in KOREAN_PUNCT_ORIG_A3.items():
+        if bytes(orig[node:node + 72]) != expected or bytes(rom[node:node + 72]) != expected:
+            raise AssertionError(f'A3 punctuation node {node:#x} is not the original')
+    blank = KOREAN_PUNCT_FONT_BASE + KOREAN_PUNCT_P1_TOP_BLANK * 32
+    if bytes(rom[blank:blank + 32]) != bytes(32):
+        raise AssertionError('P1 shared blank slot 95 is not blank')
+    _check_korean_punct_ownership(rom, _korean_punct_digit_table_entries())
+    from render_galmuri_8x16 import render_char
+    source = b''.join(render_char(',', ink=KOREAN_PUNCT_INK))
+    comma = [(x, y) for y in range(16) for x in range(8)
+             if (source[(y // 8) * 32 + (y % 8) * 4 + x // 2] >> (4 * (x % 2))) & 15]
+    if [(x, y + 9) for x, y in comma] != list(KOREAN_PUNCT_PIXELS[0x8141]):
+        raise AssertionError('Galmuri comma source pixels changed')
+    for code, char in ((0x8141, '、'), (0x8142, '。')):
+        tile = _korean_punct_bottom_tile(code)
+        off = KOREAN_PUNCT_FONT_BASE + KOREAN_PUNCT_P1_BOTTOM[code] * 32
+        rom[off:off + 32] = tile
+        WRITE_LOG.append([off, 32, 32, tile.hex(), None, char, None,
+                          'korean-punct-p1-font'])
+        # A3 pixels: 64 bytes at node+6 (rows 0-7 then rows 8-15); the
+        # header (next, hi, advance) and the two pad bytes stay native.
+        pixels = bytes(32) + tile
+        node = KOREAN_PUNCT_A3_NODE[code]
+        rom[node + 6:node + 70] = pixels
+        WRITE_LOG.append([node + 6, 64, 64, pixels.hex(), None, char, None,
+                          'korean-punct-a3'])
+    return len(KOREAN_PUNCT_P1_BOTTOM)
+
+
+def verify_korean_punct_glyphs(rom, orig):
+    from dialogue_pixel_layout import Glyphs
+    glyphs = Glyphs(bytes(rom))
+    for code in KOREAN_PUNCT_PIXELS:
+        expected = {(x, y): KOREAN_PUNCT_INK for x, y in KOREAN_PUNCT_PIXELS[code]}
+        for game in ('p1', 'p2'):
+            bitmap = glyphs.bitmap(code.to_bytes(2, 'big'), game)
+            ink = {(x, y): v for y, row in enumerate(bitmap) for x, v in enumerate(row) if v}
+            if ink != expected:
+                raise AssertionError(f'Korean punctuation {code:#x} {game} pixels changed')
+        node = KOREAN_PUNCT_A3_NODE[code]
+        if (bytes(rom[node:node + 6]) != bytes(orig[node:node + 6])
+                or bytes(rom[node + 70:node + 72]) != bytes(orig[node + 70:node + 72])):
+            raise AssertionError(f'A3 punctuation node {node:#x} header changed')
+    blank = KOREAN_PUNCT_FONT_BASE + KOREAN_PUNCT_P1_TOP_BLANK * 32
+    if bytes(rom[blank:blank + 32]) != bytes(32):
+        raise AssertionError('P1 shared blank slot 95 is not blank')
+    _check_korean_punct_ownership(rom)
 
 
 PART2_A3_DECIMAL_NODE = 0xFD0000
@@ -9841,7 +10004,7 @@ def patch_part2_domino_co_name_obj(rom):
 # A3-fix: 일본어(テンキ/収入/日数/ユウセイ/能力/アニメ) → 한글(날씨/수입/일수/우세/능력/애니).
 # 타깃은 외부 AW2 디코드 참조(data/reference/gap_targets.json)와 일관. 룰 SETTING 메뉴(0xB839AC)는 별개로 이미 번역됨.
 CAMPAIGN_RULE_LABELS = [
-    (0x45D334, '정찰'),   # サクテキ(索敵) — fog/recon
+    (0x45D334, '색적'),   # サクテキ(索敵) — fog/recon (2026-11-04 names: 색적, both parts)
     (0x45D434, '날씨'),   # テンキ(天気)
     (0x45D534, '수입'),   # 収入
     (0x45D634, '일수'),   # 日数
@@ -9971,7 +10134,7 @@ PART1_RULE_CIRCLE_SIG = '131a4e7eac41a812'
 # The Part 1 circle OBJ palette renders index 5 as dark ink; index 15 is pale.
 PART1_RULE_CIRCLE_INK = 5
 PART1_RULE_CIRCLE_LABELS = [
-    (80, '정찰'),
+    (80, '색적'),   # 索敵 (2026-11-04 names: 색적, matches Part 2 '색적:%s')
     (88, '날씨'),
     (96, '수입'),
     (104, '일수'),
@@ -13221,6 +13384,7 @@ PART2_HOOK_A3_SPACE_FILE = HOOK_FILE + 0x340
 PART2_HOOK_SPACE_313_FILE = HOOK_FILE + 0x360
 PART2_HOOK_SPACE_B11_FILE = HOOK_FILE + 0x3A0
 PART2_HOOK_SPACE_A2CC_FILE = HOOK_FILE + 0x400   # 맵선택 리스트 렌더러(0x831Bxxx) 공백 핸들러
+PART2_HOOK_A3_COLOR_FILE = HOOK_FILE + 0x440    # A3 한글 글리프 색 리맵 복사(PART2_HOOK_A3 가 BL)
 # ★Part1 대사 파서 반각공백(0x20) 렌더 hook (2026-06-25 런타임 트레이스 완성, in-game 확증).
 # 화면 위치 = [state+0x28] + [state+0x32]*2 + [state+0x33]*64 (0x8b11b80). 즉 [state+0x32]=열.
 # off-by-one: 위치가 파서 전(0x8b1271e) 계산 → 0x20 열 advance가 다음글자 적용. 그래서 hook 2개:
@@ -13356,6 +13520,7 @@ PART2_HOOK_A3_SPACE_RT = 0x08F30340
 PART2_HOOK_SPACE_313_RT = 0x08F30360
 PART2_HOOK_SPACE_B11_RT = 0x08F303A0
 PART2_HOOK_SPACE_A2CC_RT = 0x08F30400
+PART2_HOOK_A3_COLOR_RT = 0x08F30440
 PART1_YESNO_HOOK_RT = 0x08F10000
 PART1_YESNO_FRAME_HOOK_RT = PART1_YESNO_HOOK_RT + 0x0C
 PART1_NAME_TRIM_HOOK_RT = 0x08F10180
@@ -13374,11 +13539,16 @@ PART1_NAME_TRIM_EXPECT = bytes.fromhex('031c002118780028')
 PART2_HOOK_A3_TABLE_START_OFF = 0x88
 PART2_HOOK_A3_TABLE_END_OFF = 0x8C
 
+# Strip trailing SJIS spaces (81 40) only, then write 0 at buf[len].
+# 2026-11-04: the 2026-06-01 version also stripped 8F 5A, which is now 「요」
+# in the 2350 map (「반가워요」 was saved as 「반가워」). Source:
+# temp/fix_20261104/p1compose/t1/trim_hook.s (clang thumbv4t, 58 bytes).
 PART1_NAME_TRIM_HOOK = bytes.fromhex(
-    '031c00211878002806d0881c0006010e581800780028f8d1002910d0'
-    '881e0006010e5a181078812802d08f2804d006e050784028f0d002e0'
-    '50785a28ecd0c918002088707047'
+    '031c00211878002806d0881c0006010e581800780028f8d100290ad0'
+    '881e0006010e5a181078812802d150784028f3d00231c91800200870'
+    '7047'
 )
+PART1_NAME_TRIM_HOOK_SPAN = 70  # bytes reserved at 0xF10180 (retired 70-byte hook)
 
 def _thumb_bl(src_rt, dst_rt):
     off = dst_rt - (src_rt + 4)
@@ -13528,8 +13698,10 @@ PART2_HOOK_BOT_TEMPLATE = bytes.fromhex(
 PART2_HOOK_A3 = bytes.fromhex(
     '0478417804911d4a3f2932d923020b431b4eb3422dd31b4eb3422ad81a4e1b4fbe4226d2'
     '32781202707802439a4201d00636f5e7708802041bd5b188144b1840194040014901134a80'
-    '1889180c1c6d01114aad18061c2f1c0fce0fc70fce0fc7261c20352f1c0fce0fc70fce0f'
-    'c70b4800470498014a3f28094b1847'
+    '1889180c1c6d01114aad18'
+    '00f0b4f8'  # bl PART2_HOOK_A3_COLOR (0x08F30440): colour-remapped 64B glyph copy
+    'c046c046c046c046c046c046c046c046c046c046c046'  # nop x11 (was raw ldmia/stmia copy)
+    '0b4800470498014a3f28094b1847'
     '60f95208'  # glyph-cache page pointer table literal: 0x0852F960
     '40880000'  # min Korean reserved SJIS: 0x8840
     'a7e20000'  # max Korean reserved SJIS: 0xE2A7 (2350자 완성형 전범위; 구 0x9369는 1030 한정 →
@@ -13542,6 +13714,23 @@ PART2_HOOK_A3 = bytes.fromhex(
     'c1610003'  # Korean handled return: IWRAM epilogue 0x030061C1
     '8d600003'  # non-Korean return: IWRAM 0x0300608D
 )
+
+# 2편 키워드 강조색(0x31/0x32/0x33 스타일, 2026-11-04 T2.7). 파서 0x0831424C 가 스타일 바이트로
+# state+0x2E(색 c=0..3)를 정하고 0x0831BBDC→A3(IWRAM 0x0300605C)에 r2=c 로 넘긴다. 원본 A3 는
+# r9=c 로 두고 잉크 nibble 10 을 10+c 로 바꿔 VRAM 에 쓴다(BG 팔레트 8: 12=빨강, 13=파랑).
+# 한글 경로(PART2_HOOK_A3)는 KOR_BASE 글리프(잉크 nibble 9)를 ldmia/stmia 로 그대로 복사해 색이
+# 사라졌다. 이 루틴은 c!=0 이면 nibble 9 를 10+c 로(9+(c+1)) 바꾸고, c==0 이면 그대로 복사한다
+# (기존 출력과 바이트 동일). 입력 r0=윗 글리프, r4=아랫 글리프, r5=VRAM 대상, r9=c. BG VRAM 은
+# 바이트 쓰기가 안 되므로 halfword 로 쓴다. 소스: temp/fix_20261104/re/highlight/asm/color_copy.s
+PART2_HOOK_A3_COLOR = bytes.fromhex(
+    '061c2f1c4b4601332022102a00d1261c30880236012b0cd000210500cd402d072d0f092d'
+    '02d11d008d40401904311029f3d138800237013ae7d17047'
+)
+assert len(PART2_HOOK_A3_COLOR) == 60
+_a3_bl_off = PART2_HOOK_A3_COLOR_RT - (PART2_HOOK_A3_RT + 0x54 + 4)
+assert PART2_HOOK_A3[0x54:0x58] == struct.pack(
+    '<HH', 0xF000 | ((_a3_bl_off >> 12) & 0x7FF), 0xF800 | ((_a3_bl_off >> 1) & 0x7FF))
+assert len(PART2_HOOK_A3) == 0xA4 and PART2_HOOK_A3[0x6E:0x70] == bytes.fromhex('0b48')
 
 # The Advance 2 tilemap renderers are SJIS-oriented: at their main loop they only
 # branch on NUL/newline, then treat every other byte as a two-byte code. Korean
@@ -13844,6 +14033,217 @@ def _part2_name_compose(rom, orig):
         if name not in ('a3_table_tail', 'a3_max'):
             rom[start:end] = expected[name]
     return _verify_part2_name_compose(rom, orig)
+
+
+# 1편 이름 입력 두벌식 조합(PLAN B Phase C, D6/D8). 파일 오프셋, 반열린 [start, end).
+# 이 기능이 쓰는 영역의 단일 정본. trim 훅(0xF10180)은 기존 PART1_NAME_TRIM_HOOK 경로가 쓰고 여기선 전제만 본다.
+P1_NAME_COMPOSE_WRITES = (
+    ('p1_image', 0xF77800, 0xF79800),       # 코드 이미지(IMAGE_RT 0x08F77800, 상한 8,192B, 남는 칸 0)
+    ('h1_press', 0xB49018, 0xB49022),       # S1 일반 셀
+    ('h2_confirm', 0xB48FE4, 0xB48FEC),     # S2 확정(START·확인 셀)
+    ('h3_backspace', 0xB49162, 0xB4916C),   # S3 지우기(B·뒤로 셀)
+    ('h4_display', 0xB488FE, 0xB48908),     # D1 생성자 6행
+    ('h5_preview', 0xB48E50, 0xB48E58),     # 미리보기 함수 전체 대체
+    ('h6_alloc', 0xB4985C, 0xB4985E),       # 이름 객체 할당 0x6C → 0x80
+    ('h7_lr', 0xB49180, 0xB49182),          # L/R 편집 위치 이동 차단(beq → b)
+)
+P1_NAME_COMPOSE_REGIONS = {name: (start, end) for name, start, end in P1_NAME_COMPOSE_WRITES}
+# 원본 inline 사이트(D6): 이름, 원본 바이트(= 현재 빌드). 교체 바이트는 _p1_name_compose_payload.
+P1_NAME_COMPOSE_SITES = (
+    ('h1_press', bytes.fromhex('6520f5f7fdf9fff7fffd')),
+    ('h2_confirm', bytes.fromhex('fff7e0fea5e10000')),
+    ('h3_backspace', bytes.fromhex('01382070fff7dbfdfff7')),
+    ('h4_display', bytes.fromhex('3d4b80252d0200950124')),
+    ('h5_preview', bytes.fromhex('f0b5474680b483b0')),
+    ('h6_alloc', bytes.fromhex('6c20')),
+    ('h7_lr', bytes.fromhex('2bd0')),
+)
+# 바꾸지 않는 이웃 바이트(D6 KEEP): 확정 리터럴 · 입력 epilogue · 소리 0x66 · D1 복귀 · 할당 뒤 · 공백쌍.
+P1_NAME_COMPOSE_KEEP = (
+    (0xB48FEC, bytes.fromhex('8c72be08')),
+    (0xB49336, bytes.fromhex('08bc9846f0bc01bc0047')),
+    (0xB4916E, bytes.fromhex('6620')),
+    (0xB48964, bytes.fromhex('3968')),
+    (0xB4985E, bytes.fromhex('c9f7cffd2060')),
+    (0xDFA108, bytes.fromhex('8140')),
+)
+# 원본과 같아야 하는 표: native 선택표 6×15(커서·wide·취소 판정이 읽음) · 이름 화면 사전 목록 4묶음(T0 NR-1).
+P1_NAME_COMPOSE_KEEP_ORIGINAL = ((0xDF9F5C, 0xDFA010), (0xBE7178, 0xBE7264))
+P1_NAME_DICT_LISTS = ((0xBE7178, 40), (0xBE71CC, 31), (0xBE720C, 26), (0xBE7244, 16))
+# T0 런타임 실측(temp/fix_20261104/p1compose/t0/T0_RE.md · p1_config.json). blob CONFIG 와 대조한다.
+P1_NAME_COMPOSE_CONFIG = {
+    'obj_ptr': 0x03004690,
+    'cache_base': 0x02010AD4,
+    'cache_bank': 1,
+    'cache_count_off': 0x2,
+    'cache_list_off': 0x204,
+    'cache_tile_off': 0x60E,
+    'cache_code_order': 'be',
+    'vram_charblock': 0x06000000,
+    'kor_base': KOR_BASE_RT,
+    'tbl_start': P.NEW_TBL_RT,
+    'tbl_end': P.NEW_TBL_RT + sum(NAME_COMPOSE_TABLE_ENTRIES) * 6,
+    'jamo_first_tile': 1275,
+    'pal_remap': None,
+    'tilemap_lit': 0x08BE7280,
+}
+P1_NAME_TILEMAP_BUFFER = 0x02012D44   # *(u32*)0x08BE7280 (T0 NR-4)
+
+
+def _p1_dict_list(rom, start, count):
+    """이름 화면 사전 목록 1묶음(u16 BE 코드 count 개 + 첫 바이트 0 종단)."""
+    codes = [int.from_bytes(rom[start + 2 * i:start + 2 * i + 2], 'big') for i in range(count)]
+    if any(c >> 8 == 0 for c in codes) or rom[start + 2 * count] != 0:
+        raise ValueError(f'name-screen dictionary list 0x{start:X} is not {count} codes + 0')
+    return codes
+
+
+def _p1_name_compose_inputs(rom, orig):
+    """1편 코드 이미지·설정·사전 목록을 검증한다(캐시 없음). 실패 시 ValueError."""
+    import gen_jamo_assets as jamo
+    import part1_name_compose_blob as blob
+    blob.verify_code()
+    stale = blob.check_sources()
+    if stale:
+        raise ValueError('part1 name-compose image is stale (tools/name_compose_p1/build_image_p1.py): '
+                         + ', '.join(stale))
+    start, end = P1_NAME_COMPOSE_REGIONS['p1_image']
+    if ((blob.IMAGE_RT, blob.DENSE_RT, blob.IMAGE_MAX)
+            != (0x08000000 + start, 0x08000000 + NAME_COMPOSE_REGIONS['nc_dense'][0], end - start)
+            or len(blob.CODE) > blob.IMAGE_MAX):
+        raise ValueError(f'part1 name-compose image layout/size invalid ({len(blob.CODE)}B)')
+    want = dict(P1_NAME_COMPOSE_CONFIG, jamo_first_tile=jamo.FIRST_TILE)
+    if set(blob.CONFIG) != set(want):
+        raise ValueError('part1 name-compose CONFIG keys differ from the builder')
+    bad = sorted(k for k in want if blob.CONFIG[k] != want[k])
+    if bad:
+        raise ValueError('part1 name-compose CONFIG differs from the builder: ' + ', '.join(bad))
+    lit = P1_NAME_COMPOSE_CONFIG['tilemap_lit'] - 0x08000000
+    for label, image in (('original', orig), ('current', rom)):
+        if struct.unpack_from('<I', image, lit)[0] != P1_NAME_TILEMAP_BUFFER:
+            raise ValueError(f'{label} ROM tilemap literal 0x{lit:X} != 0x{P1_NAME_TILEMAP_BUFFER:08X}')
+    lists = [_p1_dict_list(orig, s, n) for s, n in P1_NAME_DICT_LISTS]
+    for (s, n), codes in zip(P1_NAME_DICT_LISTS, lists):
+        if _p1_dict_list(rom, s, n) != codes:
+            raise ValueError(f'current ROM dictionary list 0x{s:X} differs from the original')
+    if len({c for codes in lists for c in codes}) != sum(n for _, n in P1_NAME_DICT_LISTS):
+        raise ValueError('name-screen dictionary lists contain duplicate codes')
+    hosts = [code for _index, code in blob.host_tab()]
+    places = list(blob.placeholders())
+    chosen = hosts + places
+    if len(set(chosen)) != len(chosen) or len(hosts) != 33 or len(places) != 8:
+        raise ValueError('part1 host/placeholder codes are not 33 + 8 distinct codes')
+    if not set(places) <= set(lists[3]) or not set(hosts) <= set(lists[2]) | set(lists[3]):
+        raise ValueError('part1 host/placeholder codes are not in the dakuten/hidden-kanji lists')
+    if set(chosen) & (set(lists[0]) | set(lists[1])):
+        raise ValueError('part1 host/placeholder codes overlap the digit/kana/symbol lists')
+    return blob
+
+
+def _p1_far_tramp(entry, site):
+    """ldr r3,[pc,#0]; bx r3; .word entry (r3 는 사이트에서 dead — tramp_p1.s). site%4==2 면 앞에 nop."""
+    if not entry & 1:
+        raise ValueError('Thumb entry must have bit 0 set')
+    if site % 4 == 0:
+        return bytes.fromhex('004b1847') + struct.pack('<I', entry)
+    if site % 4 == 2:
+        return bytes.fromhex('c046004b1847') + struct.pack('<I', entry)
+    raise ValueError('Thumb trampoline site must be halfword aligned')
+
+
+def _p1_name_compose_payload():
+    """_part1_name_compose 가 쓰는 영역별 바이트(이름 → bytes)."""
+    import part1_name_compose_blob as blob
+    regions = P1_NAME_COMPOSE_REGIONS
+    tramp = lambda name, sym: _p1_far_tramp(blob.entry(sym), regions[name][0])
+    payload = {
+        'p1_image': blob.CODE + bytes(blob.IMAGE_MAX - len(blob.CODE)),
+        'h1_press': tramp('h1_press', 'nc1_tramp_press') + bytes.fromhex('c046'),
+        'h2_confirm': tramp('h2_confirm', 'nc1_tramp_confirm'),
+        'h3_backspace': tramp('h3_backspace', 'nc1_tramp_backspace'),
+        'h4_display': tramp('h4_display', 'nc1_tramp_display'),
+        'h5_preview': tramp('h5_preview', 'nc1_preview'),
+        'h6_alloc': bytes.fromhex('8020'),
+        'h7_lr': bytes.fromhex('2be0'),
+    }
+    for name, data in payload.items():
+        if len(data) != regions[name][1] - regions[name][0]:
+            raise ValueError(f'part1 name-compose payload {name} size {len(data)} mismatch')
+    return payload
+
+
+def _p1_trim_hook_errors(rom):
+    """1편 trim 훅(T1 수정본)·사이트 트램펄린 전제."""
+    hook, span = PART1_NAME_TRIM_HOOK_FILE, PART1_NAME_TRIM_HOOK_SPAN
+    errors = []
+    if (bytes(rom[hook:hook + len(PART1_NAME_TRIM_HOOK)]) != PART1_NAME_TRIM_HOOK
+            or any(rom[hook + len(PART1_NAME_TRIM_HOOK):hook + span])):
+        errors.append('trim hook 0xF10180 is not PART1_NAME_TRIM_HOOK')
+    tramp = bytes.fromhex('004b1847') + struct.pack('<I', PART1_NAME_TRIM_HOOK_RT | 1)
+    if bytes(rom[PART1_NAME_TRIM_SITE:PART1_NAME_TRIM_SITE + 8]) != tramp:
+        errors.append('trim site 0xB11298 trampoline missing')
+    return errors
+
+
+def _p1_name_compose_keep_errors(rom, orig):
+    errors = []
+    for start, value in P1_NAME_COMPOSE_KEEP:
+        for label, image in (('original', orig), ('current', rom)):
+            if bytes(image[start:start + len(value)]) != value:
+                errors.append(f'keep 0x{start:X}: {label} ROM differs from expect')
+    for start, end in P1_NAME_COMPOSE_KEEP_ORIGINAL:
+        if bytes(rom[start:end]) != bytes(orig[start:end]):
+            errors.append(f'keep 0x{start:X}..0x{end:X}: differs from the original ROM')
+    return errors
+
+
+def _verify_part1_name_compose(rom, orig):
+    """최종 payload 필수 대조. 불일치가 하나라도 있으면 AssertionError."""
+    blob = _p1_name_compose_inputs(rom, orig)
+    expected = _p1_name_compose_payload()
+    bad = [name for name, start, end in P1_NAME_COMPOSE_WRITES if bytes(rom[start:end]) != expected[name]]
+    bad += _p1_name_compose_keep_errors(rom, orig) + _p1_trim_hook_errors(rom)
+    if bad:
+        raise AssertionError('part1 name-compose final payload mismatch: ' + ', '.join(bad))
+    hook = PART1_NAME_TRIM_HOOK_FILE
+    return {'code_bytes': len(blob.CODE), 'code_sha256': blob.CODE_SHA,
+            'image_rt': f'0x{blob.IMAGE_RT:08X}',
+            'trim_hook_sha256': hashlib.sha256(bytes(rom[hook:hook + PART1_NAME_TRIM_HOOK_SPAN])).hexdigest()}
+
+
+def _part1_name_compose(rom, orig):
+    """1편 이름 입력 조합 코드 이미지와 H1~H7 훅을 쓴다(PLAN B T4).
+
+    2편 _part2_name_compose(자모 타일·nc_dense·표 end 2926)와 T1 trim 훅이 먼저 끝났어야 한다.
+    사전조건을 모두 확인한 뒤에만 쓴다 — 실패하면 ValueError, rom 불변.
+    """
+    _p1_name_compose_inputs(rom, orig)
+    expected = _p1_name_compose_payload()
+    errors = []
+    try:
+        _verify_part2_name_compose(rom, orig)
+    except AssertionError as exc:
+        errors.append(f'part2 name compose not finished ({exc})')
+    table = P1_NAME_COMPOSE_CONFIG
+    if (struct.unpack_from('<I', rom, P.LIT_TBL_START)[0] != table['tbl_start']
+            or struct.unpack_from('<I', rom, P.LIT_TBL_END)[0] != table['tbl_end']):
+        errors.append('part1 converter table literals are not the 2926-entry table')
+    errors += _p1_trim_hook_errors(rom)
+    regions = P1_NAME_COMPOSE_REGIONS
+    for name, original in P1_NAME_COMPOSE_SITES:
+        start, end = regions[name]
+        if bytes(orig[start:end]) != original:
+            errors.append(f'{name}: original ROM differs from expect')
+        if bytes(rom[start:end]) != original:
+            errors.append(f'{name}: site already changed')
+    errors += _p1_name_compose_keep_errors(rom, orig)
+    if any(rom[regions['p1_image'][0]:regions['p1_image'][1]]):
+        errors.append('p1_image: region F77800..F79800 not empty')
+    if errors:
+        raise ValueError('part1 name-compose preconditions failed: ' + '; '.join(errors))
+    for name, start, end in P1_NAME_COMPOSE_WRITES:
+        rom[start:end] = expected[name]
+    return _verify_part1_name_compose(rom, orig)
 
 
 PART2_A3_TRAMP_SITE = 0xA3C7E8
@@ -14469,6 +14869,24 @@ BTEAM_SEAM_RESIDUAL_TEXT = {
 ADDRESS_TEXT_OVERRIDES.update({address: text for address, text in BTEAM_SEAM_RESIDUAL_TEXT.items()
                                if address not in BTEAM_ROUND2_RESTORE})
 
+# W3 reviewed whole-message rewrites (temp/fix_20261104/decision_W3_arena.md).
+DIALOGUE_REWRITES = os.path.join(BASE, 'data', 'dialogue_rewrites.json')
+
+
+def apply_dialogue_rewrites(rom, orig, manifest, writes, syl_to_code, path=DIALOGUE_REWRITES):
+    """Final text stage: after relocation, spacing/layout and late appends.
+
+    Messages that fit their current relocated allocation are rewritten there;
+    all others go whole to a fresh overlay arena after every settled allocation
+    (below 0xAFF000). Pinned/contract-owned messages are refused. An empty
+    overlay returns before any read or write, so the ROM stays byte-identical.
+    """
+    from dialogue_rewrite_apply import load_rewrites, apply_overlay, builder_encoder
+    rewrites = load_rewrites(path)
+    if not rewrites['messages']:
+        return apply_overlay(orig, rom, manifest, writes, rewrites, None)
+    return apply_overlay(orig, rom, manifest, writes, rewrites, builder_encoder(syl_to_code))
+
 
 def main():
     ap = argparse.ArgumentParser()
@@ -14603,6 +15021,8 @@ def _build(args, publication):
     rom[PART2_HOOK_TOP_B11_FILE:PART2_HOOK_TOP_B11_FILE + len(PART2_HOOK_TOP_B11)] = PART2_HOOK_TOP_B11
     rom[PART2_HOOK_BOT_B11_FILE:PART2_HOOK_BOT_B11_FILE + len(PART2_HOOK_BOT_B11)] = PART2_HOOK_BOT_B11
     rom[PART2_HOOK_A3_FILE:PART2_HOOK_A3_FILE + len(PART2_HOOK_A3)] = PART2_HOOK_A3
+    assert rom[PART2_HOOK_A3_COLOR_FILE:PART2_HOOK_A3_COLOR_FILE + 0xC0] == bytes(0xC0)
+    rom[PART2_HOOK_A3_COLOR_FILE:PART2_HOOK_A3_COLOR_FILE + len(PART2_HOOK_A3_COLOR)] = PART2_HOOK_A3_COLOR
     rom[PART2_HOOK_A3_SPACE_FILE:PART2_HOOK_A3_SPACE_FILE + len(PART2_HOOK_A3_SPACE)] = PART2_HOOK_A3_SPACE
     rom[PART2_HOOK_SPACE_313_FILE:PART2_HOOK_SPACE_313_FILE + len(PART2_HOOK_SPACE_313)] = PART2_HOOK_SPACE_313
     rom[PART2_HOOK_SPACE_B11_FILE:PART2_HOOK_SPACE_B11_FILE + len(PART2_HOOK_SPACE_B11)] = PART2_HOOK_SPACE_B11
@@ -14626,6 +15046,8 @@ def _build(args, publication):
     assert rom[PART1_YESNO_CURSOR_FIX_FILE + len(PART1_YESNO_CURSOR_FIX):PART1_YESNO_CURSOR_FIX_FILE + 48] == bytes(48 - len(PART1_YESNO_CURSOR_FIX))
     rom[PART1_YESNO_CURSOR_FIX_FILE:PART1_YESNO_CURSOR_FIX_FILE + len(PART1_YESNO_CURSOR_FIX)] = PART1_YESNO_CURSOR_FIX
     assert rom[PART1_YESNO_UNUSED_CLASSIFIER_FILE:PART1_YESNO_UNUSED_CLASSIFIER_FILE + PART1_YESNO_UNUSED_CLASSIFIER_LEN] == bytes(PART1_YESNO_UNUSED_CLASSIFIER_LEN)
+    assert len(PART1_NAME_TRIM_HOOK) <= PART1_NAME_TRIM_HOOK_SPAN
+    assert rom[PART1_NAME_TRIM_HOOK_FILE:PART1_NAME_TRIM_HOOK_FILE + PART1_NAME_TRIM_HOOK_SPAN] == bytes(PART1_NAME_TRIM_HOOK_SPAN)
     rom[PART1_NAME_TRIM_HOOK_FILE:PART1_NAME_TRIM_HOOK_FILE + len(PART1_NAME_TRIM_HOOK)] = PART1_NAME_TRIM_HOOK
     # 3) FONT_BASE 리터럴(0xEFE97C)을 hook_top|1 로 교체 (top·bot 둘 다 이 리터럴로 base 로드)
     assert struct.unpack('<I', rom[P.LIT_FONTBASE:P.LIT_FONTBASE + 4])[0] == 0x08B974D0
@@ -15022,6 +15444,7 @@ def _build(args, publication):
     # 그리드는 원본 FONT_BASE(bulk-DMA)를 쓰므로 per-char 대화(0x08F00000)와 독립.
     st['grid_glyphs'] = patch_name_grid(rom)
     st['symbol_glyphs'] = restore_symbol_glyphs(rom, orig)
+    st['korean_punct_glyphs'] = patch_korean_punct_glyphs(rom, orig)
     st['part2_a3_decimal_node'] = patch_part2_decimal_point_a3(rom, orig)
     st['part2_a3_prologue_comma_node'] = part2_prologue_comma_node(rom, orig)
     st['part2_ui_kanji_glyphs'] = patch_part2_ui_kanji_glyphs(rom, orig)
@@ -15395,28 +15818,28 @@ def _build(args, publication):
         0xD9FADA: '네. ',
         0xD9FD89: '네. ',
         0xD9FE4A: '네. ',
-        0xDA0B87: '이쪽',
-        0xDA0BA5: '요. ',
-        0xDA0DE5: '밖에',
-        0xDA10C2: '부터',
-        0xDA1231: '요. ',
-        0xDA136F: '이쪽',
-        0xDA138D: '요. ',
-        0xDA1797: '요. ',
-        0xDA1A61: '요. ',
+        0xDA0B87: '이　',
+        0xDA0BA5: '!   ',
+        0xDA0DE5: '만　',
+        0xDA10C2: '에서',
+        0xDA1231: '!   ',
+        0xDA136F: '이　',
+        0xDA138D: '!   ',
+        0xDA1797: '!   ',
+        0xDA1A61: '야. ',
         0xDA1C1B: '지금',
-        0xDA1C25: '밖에',
-        0xDA1DBB: '하고',
-        0xDA248F: '요. ',
-        0xDA2605: '요! ',
-        0xDA2E77: '하고',
-        0xDA2F37: '했다',
-        0xDA2F6E: '방금',
-        0xDA3123: '하고',
-        0xDA336A: '부터',
+        0xDA1C25: '만　',
+        0xDA1DBB: '해  ',
+        0xDA248F: '!   ',
+        0xDA2605: '해! ',
+        0xDA2E77: '해　',
+        0xDA2F37: '한　',
+        0xDA2F6E: '이　',
+        0xDA3123: '하게',
+        0xDA336A: '에서',
         0xDA3D3D: '야. ',
         0xDC30DE: '야! ',
-        0xDC4727: '가  ',
+        0xDC4727: '이  ',
         0xDC58CA: '요. ',
         0xDC707A: '요. ',
         0xDC7166: '응? ',
@@ -15446,7 +15869,7 @@ def _build(args, publication):
         # DEEDF0 is owned by the later lossless submarine-help writer.
         0xDEF39E: '에서',
         0xDF26B6: '적의',
-        0xDF7737: '요. ',
+        0xDF7737: '야. ',
         0xE0092C: '자  ',
         0xE04F52: '어? ',
         0xE0640E: '네? ',
@@ -15588,7 +16011,7 @@ def _build(args, publication):
         0xA1AC4F: '또  ',
         0xA1B044: '뭐? ',
         0xA1B180: '하, ',
-        0xA1B464: '서  ',
+        0xA1B464: '하  ',
         0xA1B5C5: '어, ',
         0xA1B6D4: '그는',
         0xA1B7FE: '네. ',
@@ -15736,7 +16159,7 @@ def _build(args, publication):
         0xB82E32: '점령',
         0xB82E3A: '공격',
         0xB82E42: '공격',
-        0xB839E8: '정찰',
+        0xB839E8: '색적',
         0xA314ED: '보병',
         0xA31561: '보병',
         0xA32246: '보급',
@@ -15859,37 +16282,38 @@ def _build(args, publication):
         0xD9C823: '와',
         0xD9CAEC: '와',
         0xD9E86E: '을',
-        0xDA0AEB: '을',
+        0xDA0AEB: '　',
         0xDA0DB0: '을',
-        0xDA0E0F: '가',
-        0xDA0F76: '와',
+        0xDA0E0F: '　',
+        0xDA0F76: '과',
         0xDA1002: '로',
-        0xDA10D2: '을',
+        0xDA10D2: '를',
         0xDA152C: '을',
         0xDA1691: '은',
         0xDA16D4: '의',
-        0xDA18D6: '을',
-        0xDA1C8E: '을',
-        0xDA1DB3: '을',
-        0xDA1E46: '을',
-        0xDA1F72: '을',
-        0xDA1FB9: '은',
-        0xDA2051: '을',
+        0xDA18D6: '　',
+        0xDA1C8E: '　',
+        0xDA1DB3: '　',
+        0xDA1E46: '　',
+        0xDA1F72: '　',
+        0xDA1FB9: '는',
+        0xDA2051: '　',
         0xDA2059: '해',
-        0xDA2130: '을',
-        0xDA25FD: '로',
-        0xDA2799: '로',
-        0xDA2A6D: '로',
-        0xDA2D29: '의',
+        0xDA2130: '　',
+        0xDA25FD: '　',
+        0xDA2799: '이',
+        0xDA2A6D: '이',
+        0xDA2D29: '은',
         0xDA2D50: '길',
-        0xDA311B: '로',
+        0xDA311B: '이',
         0xDA3227: '길',
         0xDA3329: '길',
         0xDA33AB: '을',
         0xDC2FE9: '에',
         0xDC40F3: '와',
         0xDC46EB: '도',
-        0xDC4767: '로',
+        0xDC4767: '이',
+        0xA32427: '가',  # 2026-11-04 msg3070: native が after ロケット砲 token
         0xDC550B: '도',
         0xDC8DE8: '나',
         0xDC8DF2: '을',
@@ -16394,7 +16818,7 @@ def _build(args, publication):
         (0xA038BC, 0xA038D0, '직접 공격은　', 'part2 tutorial direct attack definition row'),
         (0xA0389C, 0xA038A4, '직접공격', 'part2 tutorial direct attack row'),
         (0xA038DC, 0xA038EA, '이동한 뒤,　', 'part2 tutorial after moving row'),
-        (0xA038EB, 0xA038FD, '공격하는 거야', 'part2 tutorial attack method row'),
+        (0xA038EB, 0xA038FD, '공격하는 거야?', 'part2 tutorial attack method row'),
         (0xA03915, 0xA03921, '직접 공격은　', 'part2 tutorial direct attack close combat row'),
         (0xA03922, 0xA03938, '적 옆에서 싸우니까', 'part2 tutorial adjacent row'),
         (0xA0393A, 0xA0394C, '네가 공격한 뒤　', 'part2 tutorial after own attack row'),
@@ -16432,7 +16856,7 @@ def _build(args, publication):
         (0xA03C2F, 0xA03C53, '남은 탄수도 표시돼', 'part2 tutorial ammo count row'),
         (0xA03C54, 0xA03C66, '사령관은　', 'part2 tutorial as commander row'),
         (0xA03C67, 0xA03C79, '유닛 상태를', 'part2 tutorial unit status row'),
-        (0xA03C7A, 0xA03C98, '항상 확인해', 'part2 tutorial always check row'),
+        (0xA03C7A, 0xA03C98, '항상 확인해!', 'part2 tutorial always check row'),
         (0xA03C9C, 0xA03CB0, '네 보병 부대가,', 'part2 capture infantry row'),
         (0xA03CB1, 0xA03CC1, '점령 시작했어', 'part2 capture started row'),
         (0xA03CC4, 0xA03CE8, '상태창을 봐', 'part2 capture status window row'),
@@ -16452,7 +16876,7 @@ def _build(args, publication):
         (0xA03E24, 0xA03E2E, '알았어', 'part2 capture understood row'),
         (0xA03E30, 0xA03E40, '점령 중 보병은', 'part2 capture infantry guard lead row'),
         (0xA03E41, 0xA03E51, '꼭 지킬 거야', 'part2 capture guard row'),
-        (0xA03E54, 0xA03E60, '좋아', 'part2 capture encouragement row'),
+        (0xA03E54, 0xA03E60, '좋아!', 'part2 capture encouragement row'),
         (0xA03E61, 0xA03E75, '점령 끝날 때까지', 'part2 capture until finish row'),
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped, faddr), label, source_text=text)
@@ -17092,7 +17516,7 @@ def _build(args, publication):
         (0xA164A4, 0xA164AC, '으으,', 'part2 groan second repeat row'),
         (0xA165BF, 0xA165CD, '점령 완료다.', 'part2 capture complete row'),
         (0xA16749, 0xA1674F, '그래', 'part2 I see row'),
-        (0xA16770, 0xA16786, '더는 오지 않아도 돼', 'part2 do not come again row'),
+        (0xA16770, 0xA16786, '더는 오지 않아도 돼!', 'part2 do not come again row'),
         (0xA167D1, 0xA167DD, '미안...', 'part2 sorry row'),
         (0xA1680E, 0xA16814, '...', 'part2 both ellipsis row'),
         (0xA16837, 0xA16841, '둘 다.', 'part2 both of you row'),
@@ -18853,7 +19277,7 @@ def _build(args, publication):
         (0xD9387E, 0xD9389C, '호이프 장군이야', 'whip commander praise row'),
         (0xD938A1, 0xD938C7, '이 거점의 중요성을 잘 아는', 'whip understands base row'),
         (0xD938CA, 0xD938D2, '듯해', 'whip understands tail row'),
-        (0xD938D7, 0xD938FF, '치리치리 요새로 간 부대는', 'chiri fort unit row'),
+        (0xD938D7, 0xD938FF, '치리지리 요새로 간 부대는', 'chiri fort unit row'),
         (0xD93902, 0xD93918, '거의 당한 듯해', 'chiri fort unit defeated row'),
         (0xD9391E, 0xD93930, '남은 건', 'remaining units lead row'),
         (0xD93931, 0xD93937, '경전차', 'remaining light tank label row'),
@@ -19037,7 +19461,7 @@ def _build(args, publication):
         (0xD94A13, 0xD94A31, '적 전멸 쪽이 빠를 거야', 'hint rout faster row'),
         (0xD94A36, 0xD94A44, '힘내', 'hint good luck row'),
         (0xD94A4A, 0xD94A6A, '블루문 군이 도망갔어', 'victory blue moon fled row'),
-        (0xD94A6F, 0xD94A93, '치리치리 요새는 전략상 중요', 'victory fort important row'),
+        (0xD94A6F, 0xD94A93, '치리지리 요새는 전략상 중요', 'victory fort important row'),
         (0xD94A96, 0xD94AA4, '거점이었어', 'victory base row'),
         (0xD94AA9, 0xD94AC5, '정말 잘해 줬어!!', 'victory praise row'),
         (0xD94ACA, 0xD94AEC, '다음도 이 기세로 힘내!!', 'victory next row'),
@@ -20979,7 +21403,7 @@ def _build(args, publication):
         (0xDA11FF, 0xDA120F, '거긴 아니야', 'not there unit row'),
         (0xDA121D, 0xDA1227, '곳에서', 'at unit row'),
         (0xDA1228, 0xDA1230, '결정', 'grab unit retry a row'),
-        (0xDA123B, 0xDA1267, '방금 한 행동이 유닛 선택이야', 'unit grab definition row'),
+        (0xDA123B, 0xDA1267, '방금 한 행동을 「유닛 잡기」라고 해.', 'unit grab definition row'),
         (0xDA126E, 0xDA1296, '유닛 명령은 모두 유닛을', 'unit command starts lead row'),
         (0xDA129A, 0xDA12B2, '고르기부터 시작해', 'unit command starts row'),
         (0xDA12B9, 0xDA12E3, '지금 유닛 중심으로 맵 색이', 'move range color lead row'),
@@ -20993,7 +21417,7 @@ def _build(args, publication):
         (0xDA1397, 0xDA13C1, '이처럼 유닛 하나는 1턴 동안', 'one unit per turn lead row'),
         (0xDA13C5, 0xDA13EB, '이동과 행동을 할 수 있어', 'one unit per turn row'),
         (0xDA13F2, 0xDA1414, '지금 명령이 2개 나왔지', 'two commands row'),
-        (0xDA1423, 0xDA1441, '」는 아무것도 안 하는 것', 'wait command definition row'),
+        (0xDA1423, 0xDA1441, '」는 아무것도 안 하는 거야.', 'wait command definition row'),
         (0xDA1445, 0xDA1467, '이동만 할 때 고르면 돼', 'wait command move only row'),
         (0xDA146E, 0xDA1478, '여기선「', 'choose wait here lead row'),
         (0xDA147E, 0xDA148E, '」를 골라 봐', 'choose wait row'),
@@ -21122,8 +21546,8 @@ def _build(args, publication):
         (0xDA2157, 0xDA2181, '맞다 깜빡했는데 앞으로 얼마', 'capture durability aside row'),
         (0xDA2185, 0xDA218D, '정도면', 'capture durability how much row'),
         (0xDA2193, 0xDA21B3, '되는지는 여기서 알 수 있어', 'capture durability visible row'),
-        (0xDA21BA, 0xDA21E4, '내구 숫자가 10이지', 'durability number row'),
-        (0xDA21EB, 0xDA2215, '이 숫자는「내구력」으로 0이 되면', 'durability reaches zero lead row'),
+        (0xDA21BA, 0xDA21E4, '「내」 옆의 숫자가 10이지?', 'durability number row'),
+        (0xDA21EB, 0xDA2215, '이건 「내구력」이라고 해. 0이 됐을', 'durability reaches zero lead row'),
         (0xDA2219, 0xDA221F, '그때', 'durability reaches zero time row'),
         (0xDA2225, 0xDA2233, '가능해', 'durability capture row'),
         (0xDA223A, 0xDA2250, '내구력 최대값은 20', 'durability max row'),
@@ -21167,7 +21591,7 @@ def _build(args, publication):
         (0xDA25C9, 0xDA25D1, '지금 이', 'only this target lead row'),
         (0xDA25D7, 0xDA25EF, '밖에 없으니 그대로', 'only this target row'),
         (0xDA25F4, 0xDA25FC, '결정', 'attack target a row'),
-        (0xDA260F, 0xDA2633, '「대기」는 행동 종료 명령이야', 'wait command ends action row'),
+        (0xDA260F, 0xDA2633, '「대기」는 행동 종료 명령이야.', 'wait command ends action row'),
         (0xDA2637, 0xDA2641, '여기선「', 'choose attack command lead row'),
         (0xDA2647, 0xDA2655, '」를 골라 줘', 'choose attack command row'),
         (0xDA265B, 0xDA2685, '이걸로 적에게 피해를 줬어!', 'enemy damaged row'),
@@ -21218,7 +21642,7 @@ def _build(args, publication):
         (0xDA2B5F, 0xDA2B6F, '그러니 이쪽', 'choose other unit lead row'),
         (0xDA2B75, 0xDA2B81, '을 골라 줘', 'choose other unit row'),
         (0xDA2B87, 0xDA2B9B, '미안하지만 이', 'terrain unit retry lead row'),
-        (0xDA2BA1, 0xDA2BB1, '를 골라 줄', 'terrain unit grab row'),
+        (0xDA2BA1, 0xDA2BB1, '을 골라 줄', 'terrain unit grab row'),
         (0xDA2BB5, 0xDA2BBD, '래?', 'terrain unit grab tail row'),
         (0xDA2BC3, 0xDA2BDB, '이동 범위에 주목해 봐', 'movement range notice row'),
         (0xDA2BE3, 0xDA2C0B, '여긴 적이 있어서 어쩔 수 없지만,', 'movement range enemy blocked row'),
@@ -21228,7 +21652,7 @@ def _build(args, publication):
         (0xDA2C5E, 0xDA2C7C, '이동력 2를 쓰기 때문이야', 'terrain movement cost row'),
         (0xDA2C89, 0xDA2CAD, '의 이동력은 3인데 2칸만 가는', 'movement two tiles lead row'),
         (0xDA2CB1, 0xDA2CBF, '이유가 그거야', 'movement two tiles reason row'),
-        (0xDA2CC7, 0xDA2CE5, '이걸「이동 비용」이라고 해', 'movement cost term row'),
+        (0xDA2CC7, 0xDA2CE5, '이걸 「이동 비용」이라 해.', 'movement cost term row'),
         (0xDA2CEC, 0xDA2D14, '이동 비용은 지형과 병종으로 정해져', 'movement cost depends row'),
         (0xDA2D1B, 0xDA2D23, '예로는', 'movement cost example row'),
         (0xDA2D2F, 0xDA2D43, '에서 비용은 2,', 'movement cost example two row'),
@@ -21257,10 +21681,10 @@ def _build(args, publication):
         (0xDA2F51, 0xDA2F67, '의 체력을 비교해 봐', 'compare hp row'),
         (0xDA2F78, 0xDA2F92, '쪽이 수가 많지?', 'more hp count row'),
         (0xDA2F99, 0xDA2FBB, '왜 이런 일이 생기냐면,', 'terrain defense why row'),
-        (0xDA2FBF, 0xDA2FDB, '「지형 방어력」덕분이야', 'terrain defense term row'),
-        (0xDA2FE9, 0xDA3001, '」방어력은 이 숫자,', 'terrain defense number row'),
-        (0xDA3005, 0xDA3011, '「4」지', 'terrain defense four row'),
-        (0xDA301F, 0xDA3031, '」방어력은 여기', 'other terrain defense row'),
+        (0xDA2FBF, 0xDA2FDB, '「지형 방어력」 덕분이야.', 'terrain defense term row'),
+        (0xDA2FE9, 0xDA3001, '」 방어력은 이 숫자,', 'terrain defense number row'),
+        (0xDA3005, 0xDA3011, '「4」지?', 'terrain defense four row'),
+        (0xDA301F, 0xDA3031, '」 방어력은 여기', 'other terrain defense row'),
         (0xDA3035, 0xDA303F, '「1」이야', 'terrain defense one row'),
         (0xDA3044, 0xDA306C, '이 숫자가 클수록 방어력이 높은', 'higher defense number row'),
         (0xDA3070, 0xDA3096, '지형, 즉 피해를 덜 받아', 'higher terrain defense row'),
@@ -21301,11 +21725,11 @@ def _build(args, publication):
         (0xDA342D, 0xDA343F, '한 번 더 들을래?', 'terrain lesson repeat row'),
         (0xDA3447, 0xDA3473, '그런데 이 수업을 들어 준 너는,', 'extra lesson unlocked lead row'),
         (0xDA3477, 0xDA34A3, '과외 수업을 들을 수 있게 됐어', 'extra lesson unlocked row'),
-        (0xDA34AA, 0xDA34C4, '수업명은「지형에 대해」', 'extra lesson name row'),
+        (0xDA34AA, 0xDA34C4, '수업명은 「지형에 대해」', 'extra lesson name row'),
         (0xDA34CB, 0xDA34F7, '앞 칠판에 적어 둘 테니 언제든 들으러', 'extra lesson blackboard row'),
         (0xDA34FB, 0xDA3503, '와 줘', 'extra lesson come row'),
         (0xDA350A, 0xDA3534, '하지만 더 잘 이해하려면 다음 수업', 'terrain lesson recommendation lead row'),
-        (0xDA3538, 0xDA3564, '「공격과 전략 2」를 듣고 난 뒤를 추천해', 'terrain lesson recommendation row'),
+        (0xDA3538, 0xDA3564, '「공격과 전략 2」를 먼저 듣길 추천해.', 'terrain lesson recommendation row'),
         (0xDA356B, 0xDA3579, '그럼 또 봐', 'terrain lesson goodbye row'),
         (0xDA357F, 0xDA35AB, '그래도 지형을 더 알고 싶다면', 'terrain extension offer row'),
         (0xDA35AE, 0xDA35D0, '가르쳐 줄 수 있어 어쩔래?', 'terrain extension ask row'),
@@ -21392,7 +21816,7 @@ def _build(args, publication):
         (0xDA4083, 0xDA408D, '선택', 'select row'),
         (0xDA4093, 0xDA40BB, '이 수업은 전투를 진행하는 데 필요한', 'strategy lesson lead row'),
         (0xDA40BF, 0xDA40CD, '전략 수업이야', 'strategy lesson row'),
-        (0xDA40D4, 0xDA40FA, '이 수업은 앞 수업「공격과 전략」을', 'strategy prerequisite lead row'),
+        (0xDA40D4, 0xDA40FA, '이 수업 전에 「공격과 전략」을', 'strategy prerequisite lead row'),
         (0xDA40FE, 0xDA411E, '듣고 오는 걸 추천해', 'strategy prerequisite row'),
         (0xDA4125, 0xDA4131, '들을래?', 'strategy lesson ask row'),
         (0xDA413B, 0xDA4167, '지금까지 수업을 들었다면 알겠지만', 'previous lessons reminder row'),
@@ -21672,10 +22096,10 @@ def _build(args, publication):
         (0xDC4733, 0xDC473D, '」하면', 'submerge command tail row'),
         (0xDC4740, 0xDC475A, '공격받을 일은 없어!', 'submarine safe row'),
         (0xDC4760, 0xDC4766, '잠수함', 'submarine defeat label row'),
-        (0xDC476F, 0xDC478B, '을 쓰러뜨리면 뒤엔', 'after defeating sub row'),
+        (0xDC476F, 0xDC478B, '을 쓰러뜨리면 수도는', 'after defeating sub row'),
         (0xDC478F, 0xDC4795, '수송선', 'transport ship label row'),
-        (0xDC4796, 0xDC479E, '로수도에', 'transport to capital row'),
-        (0xDC47A4, 0xDC47AC, '를 실어', 'transport cargo row'),
+        (0xDC4796, 0xDC479E, '으로', 'transport to capital row'),
+        (0xDC47A4, 0xDC47AC, '을 실어', 'transport cargo row'),
         (0xDC47B2, 0xDC47C0, '하면 돼!', 'capture with transport row'),
         (0xDC47C5, 0xDC47D9, '다음엔 힘내!', 'naval next cheer row'),
         (0xDC47DE, 0xDC47E6, '젠장!', 'surrounded curse row'),
@@ -23585,7 +24009,7 @@ def _build(args, publication):
         (0xD82C3E, 4, '수도'),
         (0xD830D0, 76, terrain_status_row),
         (0xA294C4, 4, '폭탄'),
-        (0xA29840, 16, '메테오강타'),
+        (0xA29840, 16, '메테오스트라이크'),
         (0xA2985E, 4, '작전'),
         (0xA29866, 8, '브레이크'),
         (0xA29872, 6, '세이브'),
@@ -23762,9 +24186,11 @@ def _build(args, publication):
     # has no visual gap between the entered name and さん, so keep 님 attached.
     suffix = encode_text('님', syl_to_code, unmapped)
     _suffix_pad = suffix + bytes([FILL_BYTE]) * (6 - len(suffix))
-    rom[0xDF5DA9:0xDF5DA9 + 6] = _suffix_pad
+    _suffix_greet = encode_text('님！', syl_to_code, unmapped)
+    _suffix_greet = _suffix_greet + bytes([FILL_BYTE]) * (6 - len(_suffix_greet))
+    rom[0xDF5DA9:0xDF5DA9 + 6] = _suffix_greet
     rom[0xDF8E4D:0xDF8E4D + 6] = _suffix_pad
-    WRITE_LOG.append([0xDF5DA9, 6, len(_suffix_pad), _suffix_pad.hex(), None, '님', None, 'name-suffix'])
+    WRITE_LOG.append([0xDF5DA9, 6, len(_suffix_greet), _suffix_greet.hex(), None, '님！', None, 'name-suffix'])
     WRITE_LOG.append([0xDF8E4D, 6, len(_suffix_pad), _suffix_pad.hex(), None, '님', None, 'name-suffix'])
 
     # This Hoip CO-help row originally starts the second line with runtime
@@ -24975,6 +25401,7 @@ def _build(args, publication):
     st['part1_production_info_final'] = verify_production_info_final(rom)
     verify_part2_decimal_point_a3(rom, orig)
     verify_part2_prologue_comma_node(rom, orig)
+    verify_korean_punct_glyphs(rom, orig)
     # Link-play client font (Design A): after every text writer, before the checksum.
     import link_client_font
     _lcf_codes = {k: v.to_bytes(2, 'big') for k, v in syl_to_code.items()}
@@ -24995,7 +25422,7 @@ def _build(args, publication):
         with open(os.path.join(BASE, 'data', 'dialogue_layout_repairs.json'), encoding='utf-8') as _stream:
             _layout_repairs = json.load(_stream)
         _layout_applied = apply_pixel_layout(rom, orig, _rp_manifest, WRITE_LOG, _layout_repairs)
-        from dialogue_spacing import apply_repairs as apply_dialogue_spacing, verify as verify_dialogue_spacing
+        from dialogue_spacing import apply_repairs as apply_dialogue_spacing, verify as verify_dialogue_spacing, load_ledger as _load_dialogue_spacing_ledger
         _spacing_applied = apply_dialogue_spacing(rom, orig, _rp_manifest, WRITE_LOG)
         st['dialogue_spacing_pages'] = verify_dialogue_spacing(rom, orig, _rp_manifest)
         st['dialogue_spacing_messages'] = len(_spacing_applied)
@@ -25048,6 +25475,52 @@ def _build(args, publication):
         # The apology message keeps its exact first page while its later
         # pages receive reviewed spacing. Check its active pointer/prefix again.
         st['protected_help_apology_contract'] = verify_protected_help_apology(rom, orig, lambda text, address: encode_full_fidelity(text, syl_to_code, unmapped, address), _rp_manifest)
+        # W3 overlay: last text writer. Pixel/renderer audits and the
+        # B82FAC/EC312C/D821F0/B830AC final contracts below see its result.
+        from dialogue_rewrite_apply import load_rewrites as _load_dialogue_rewrites
+        # Earlier text contracts run again on the state the overlay starts from
+        # and on the final state. Each verifier knows the reviewed layout,
+        # spacing and rewrite representations of its message; any failure here
+        # stops the build (no pre-existing-failure exemption).
+        _fid = lambda text, address: encode_full_fidelity(text, syl_to_code, unmapped, address)
+        _fit = lambda text, size, address: encode_fit(text, size, syl_to_code, unmapped, address)
+        _hb_spacing = [m for m in _load_dialogue_spacing_ledger()['messages']
+                       if int(m['source'], 16) == hellbowz_ending.START]
+        if len(_hb_spacing) > 1:
+            raise AssertionError('Hellbowz ending: duplicate spacing ledger entry')
+        _hb_spacing = _hb_spacing[0] if _hb_spacing else None
+        _hb_rewrite = [m for m in _load_dialogue_rewrites(DIALOGUE_REWRITES)['messages'].values()
+                       if int(m['source'], 16) == hellbowz_ending.START]
+        _hb_rewrite = _hb_rewrite[0] if _hb_rewrite else None
+        _hb_before = None  # pre-overlay Hellbowz report, set after the first pass
+        _rewrite_contracts = [
+            ('repaired_message_controls', lambda: verify_repaired_message_controls(orig, rom)),
+            ('part2_padding_dispatch', lambda: verify_part2_padding_dispatch(orig, rom)),
+            ('part2_dialogue_layout', lambda: verify_dialogue_layout_contracts(rom, orig, _rp_manifest, syl_to_code)),
+            ('part2_context', lambda: verify_context_contract(rom, orig, _rp_manifest, syl_to_code, _layout_repairs)),
+            ('part2_teacher_context', lambda: verify_teacher_context(rom, orig, _rp_manifest, syl_to_code)),
+            ('secret_hire', lambda: verify_secret_hire(rom, orig, _fid)),
+            ('polite_choice', lambda: verify_polite_choice_dialogue(rom, orig, _fid)),
+            ('polite_registration', lambda: verify_polite_registration(rom, orig, _fid)),
+            ('red_unit_intro', lambda: verify_red_unit_intro(rom, orig, lambda text, address: encode_required_full_fidelity(text, syl_to_code, unmapped, address))),
+            ('m19_dialogue', lambda: m19_dialogue.verify(rom, orig, _m19_expected_payload, _m19_encode)),
+            ('hellbowz_ending', lambda: hellbowz_ending.verify(
+                rom, orig, _hellbowz_expected_payload, _m19_encode,
+                spacing=_hb_spacing, rewrite=_hb_rewrite, before=_hb_before)),
+            ('protected_help_apology', lambda: verify_protected_help_apology(rom, orig, _fid, _rp_manifest)),
+            ('map_design_intro', lambda: verify_map_design_intro(rom, orig, _fit)),
+            ('return_mode_question', lambda: verify_return_mode_question(rom, orig, _fit)),
+            ('part1_ship_help', lambda: verify_ship_help(rom, orig, _rp_manifest, _fid)),
+            ('part1_submarine_help', lambda: verify_submarine_help(rom, orig, _rp_manifest, _fid)),
+            ('part2_volcano_context', lambda: verify_volcano_context(rom, orig, _rp_manifest, syl_to_code, _layout_repairs)),
+        ]
+        _pre_overlay = {_name: _check() for _name, _check in _rewrite_contracts}
+        _hb_before = _pre_overlay['hellbowz_ending']
+        st['dialogue_rewrites'] = apply_dialogue_rewrites(rom, orig, _rp_manifest, WRITE_LOG, syl_to_code)
+        for _name, _check in _rewrite_contracts:
+            _check()
+        st['dialogue_rewrites']['contracts_rechecked'] = [n for n, _ in _rewrite_contracts]
+        print(f"→ 대사 재작성 overlay: {st['dialogue_rewrites']}")
         with open(os.path.join(BASE, 'temp', 'dialogue_spacing_applied.json'), 'w', encoding='utf-8') as _stream:
             json.dump(_spacing_applied, _stream, ensure_ascii=False, indent=1)
         with open(staged_manifest, 'w', encoding='utf-8') as _stream:
@@ -25063,6 +25536,7 @@ def _build(args, publication):
         with open(os.path.join(BASE, 'temp', 'dialogue_layout_applied.json'), 'w', encoding='utf-8') as _stream:
             json.dump(_layout_applied, _stream, ensure_ascii=False, indent=1)
     st['part2_name_compose'] = _part2_name_compose(rom, orig)
+    st['part1_name_compose'] = _part1_name_compose(rom, orig)
     shift_dialogue_wait_cursor_right(rom, orig)
     rom[0xBD] = (-(0x19 + sum(rom[0xA0:0xBD]))) & 0xFF
     assert len(rom) == 0x1000000
@@ -25123,6 +25597,31 @@ def _build(args, publication):
     with open(_bteam_baseline_path, encoding='utf-8') as _stream:
         _bteam_baseline = json.load(_stream)
     _bteam_issues = _check_bteam_rom(_bteam_baseline, staged_rom, intg_path, staged_manifest)
+    # Ledger-owned B-team rows must ship their approved rewrite "to" wherever
+    # they are. An APPLY_LEDGER_REWRITE issue (old wording or an unbound
+    # entry) is fatal. Any other issue on a ledger row comes from a separately
+    # listed decision (e.g. a round-2 DEFER that never matches); it is
+    # tolerated only when the entry is bound and the ROM shows its "to".
+    from qa_bteam_drift import (ledger_entries as _bteam_ledger_entries,
+                                load_ledger_bytes as _bteam_ledger_bytes,
+                                display_equivalent as _bteam_display)
+    _bteam_ledger = _bteam_ledger_entries(_bteam_ledger_bytes())
+
+    def _bteam_ledger_shipped(issue):
+        entry = _bteam_ledger[issue['address']]
+        address = int(issue['address'], 16)
+        return (entry.get('from') == issue['baseline'] and isinstance(entry.get('to'), str)
+                and _bteam_display(issue['rom_text'], address, actual=True)
+                == _bteam_display(entry['to'], address))
+
+    _ledger_failures = [issue for issue in _bteam_issues
+                        if issue['decision'] == 'APPLY_LEDGER_REWRITE'
+                        or (issue['address'] in _bteam_ledger and not _bteam_ledger_shipped(issue))]
+    if _ledger_failures:
+        raise AssertionError(f'B-team approved rewrites not shipped ({len(_ledger_failures)}): '
+                             f'{[(i["address"], i["decision"], i["rom_text"]) for i in _ledger_failures[:20]]}')
+    st['bteam_ledger_rows'] = len(_bteam_ledger)
+    st['bteam_ledger_listed_issues'] = sum(issue['address'] in _bteam_ledger for issue in _bteam_issues)
     _restoration_issues = {int(issue['address'], 16): issue for issue in _bteam_issues
                            if int(issue['address'], 16) in BTEAM_RESTORE_BASELINE_ROWS}
     # A reviewed name-boundary spacing exception is a restored display row,

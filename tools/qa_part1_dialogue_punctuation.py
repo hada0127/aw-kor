@@ -15,6 +15,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 from dialogue_regions import PART1_DIALOG_RANGES, PART2_STORY_RANGES, is_part1_dialog_address, is_part2_story_address, needs_safe_dialogue_punctuation
+from korean_punct_glyphs import symbol_tile_ok
 
 ROOT = Path(__file__).resolve().parents[1]
 ROM = ROOT / "output" / "game_wars_korean_full.gba"
@@ -228,7 +229,8 @@ def glyph_state(rom: bytes, original: bytes, sjis: int) -> dict[str, Any]:
         cur = rom[glyph_off:glyph_off + 32]
         orig = original[glyph_off:glyph_off + 32]
         nonzero.append(sum(1 for b in cur if b))
-        matches_original.append(cur == orig)
+        # 、/。 bottoms are redrawn as Korean marks (korean_punct_glyphs).
+        matches_original.append(symbol_tile_ok(sjis, delta, cur, orig))
     return {
         "slots": slots,
         "nonzero": nonzero,

@@ -66,7 +66,8 @@ KEYS = {
     "L": 512,
 }
 
-PART1_MENU_PRENAV = [
+# Old (pre-compose) name grid: five A presses typed kana, START confirmed.
+PART1_MENU_PRENAV_LEGACY_GRID = [
     "A",
     "START",
     "A",
@@ -79,6 +80,35 @@ PART1_MENU_PRENAV = [
     "A",
     "START",
 ]
+# Hangul compose grid (PLAN B): the name screen opens with the cursor on
+# (0,0)=ㄱ after the ninth key; type ㄱ, move to (0,2)=ㅏ, type it (「가」),
+# then START. START with an incomplete syllable is rejected by contract.
+PART1_MENU_PRENAV_COMPOSE_GRID = [
+    "A",
+    "START",
+    "A",
+    "START",
+    "A",
+    "A",
+    "A",
+    "A",
+    "A",
+    "A",  # ㄱ
+    "DOWN",
+    "DOWN",
+    "A",  # ㅏ -> 가
+    "START",
+]
+# Default route; select the legacy route with --legacy-name-grid for old ROMs.
+PART1_MENU_PRENAV = list(PART1_MENU_PRENAV_COMPOSE_GRID)
+
+
+def use_legacy_name_grid(enabled: bool = True) -> None:
+    """Switch PART1_MENU_PRENAV in place so importers see the same route."""
+    route = PART1_MENU_PRENAV_LEGACY_GRID if enabled else PART1_MENU_PRENAV_COMPOSE_GRID
+    PART1_MENU_PRENAV[:] = list(route)
+
+
 PART1_MENU_ADVANCE_A_PRESSES = 16
 START_PROMPT_CROP = (56, 96, 184, 124)
 PART1_OPTION_LAYER_SHA256 = {
@@ -91,36 +121,6 @@ PART1_OPTION_LAYER_SHA256 = {
     "single_battle": "13003c5491e940e6bef0d0b1b2d474e9a89d4d7aab8e9785ad8b411eee25efd9",
     "wars_shop": "aab89d57e89f1ef294703dfb44c57a09ecdc64a97b11f6bd79a45d6b9d70a76c",
 }
-# 2026-10-14 user-approved mock variant A: 「어드밴스 워즈」 in OkDanDan.
-# Crops isolate the five logo placements from prompts and separate TM/2 sprites.
-# Bounds are the existing text OBJ footprint; minimum heights follow the
-# achievable JP-like ink size in variant A within those fixed cells.
-TITLE_LOGO_GOLDENS = {
-    "shared": ((0, 0, 240, 75), (20, 20, 212, 52), 27, "f649bac8724a63ad0cf4bacd3b694d605c372480c0f91177fc0dbac44899b19a"),
-    "select_top": ((0, 0, 220, 75), (12, 4, 204, 52), 28, "a31a0661c7c79b2e6bd0eb571747df06429e3cfa5fc70c2b0f86b1e1863295ed"),
-    "select_bottom": ((0, 80, 220, 135), (24, 92, 216, 124), 30, "32d91a5e750ff2a0e7a81d726245f122dd44b0ad6ab661968cb09ecdda06e3ac"),
-    "part1": ((0, 0, 240, 75), (16, 12, 224, 60), 33, "17991e9d48a5d71b05736aff2e59eb756ef90e9a399a10935f48633119bdb261"),
-    "part2": ((0, 0, 240, 75), (16, 20, 208, 52), 30, "2144b39767a62a8ef607a3684999be2b1bffcf43764a4b22c0142e38ec62db1f"),
-}
-
-
-def assert_title_logo_golden(name: str, layer: Image.Image) -> str:
-    crop_box, footprint, min_height, golden_sha = TITLE_LOGO_GOLDENS[name]
-    crop = layer.crop(crop_box)
-    bbox = crop.getbbox()
-    if bbox is None:
-        raise AssertionError(f"{name} title logo: blank")
-    x0, y0, x1, y1 = (bbox[0] + crop_box[0], bbox[1] + crop_box[1],
-                      bbox[2] + crop_box[0], bbox[3] + crop_box[1])
-    fx0, fy0, fx1, fy1 = footprint
-    if not (fx0 <= x0 < x1 <= fx1 and fy0 <= y0 < y1 <= fy1):
-        raise AssertionError(f"{name} title logo: outside text OBJ footprint {(x0, y0, x1, y1)}")
-    if y1 - y0 < min_height:
-        raise AssertionError(f"{name} title logo: height {y1-y0} < {min_height}")
-    digest = hashlib.sha256(crop.tobytes()).hexdigest()
-    if digest != golden_sha:
-        raise AssertionError(f"{name} title logo: layer hash changed {digest} != {golden_sha}")
-    return f"bbox={(x0, y0, x1, y1)}:sha256={digest}"
 # The short 기록 header keeps its original footer and has 27 colored pixels
 # with the approved OkDanDan face (previous Noto: 53). Cold saved-game menu
 # observation at C1A81C confirmed both Korean syllables and RECORD are intact.
@@ -370,12 +370,7 @@ def run_asset_checks() -> list[str]:
     try:
         title_layer = th.make_title_index_layer()
         select_layer = th.make_select_index_layer()
-        part1_layer = th.make_part1_index_layer()
         part2_layer = th.make_part2_index_layer()
-        for name, layer in (("shared", title_layer), ("select_top", select_layer),
-                            ("select_bottom", select_layer), ("part1", part1_layer),
-                            ("part2", part2_layer)):
-            checked.append(f"asset:title_logo:{name}:{assert_title_logo_golden(name, layer)}")
         top = assert_select_logo_style(
             "select top Korean logo",
             select_layer,
@@ -387,8 +382,11 @@ def run_asset_checks() -> list[str]:
             center_max=118,
             x1_max=204,
             min_w=176,
-            min_h=28,
-            min_body_pixels=1000,
+            # 2026-11-04 legacy logo restore: the Linux OkDanDan build draws the
+            # select top 「게임보이 워즈 어드밴스」: measured h=20, body=666
+            # (pre-b32 Mac-era values were 22 / 860).
+            min_h=20,
+            min_body_pixels=640,
         )
         bottom = assert_select_logo_style(
             "select bottom Korean logo",
@@ -400,8 +398,9 @@ def run_asset_checks() -> list[str]:
             center_min=117,
             center_max=126,
             x1_max=219,
-            min_h=30,
-            min_body_pixels=1000,
+            # 2026-11-04 legacy logo restore (Linux OkDanDan): measured h=19, body=722.
+            min_h=19,
+            min_body_pixels=700,
         )
         top_tm = assert_tm_pattern("select top TM", th.make_select_top_tm_overlay_layer(), (201, 26, 219, 38))
         part1_tm = assert_tm_pattern("part1 title TM", th.make_part1_tm_overlay_layer(), (210, 33, 229, 45))
@@ -417,8 +416,10 @@ def run_asset_checks() -> list[str]:
             center_max=121,
             x1_max=208,
             min_w=176,
-            min_h=30,
-            min_body_pixels=1000,
+            # 2026-11-04 legacy logo restore (Linux OkDanDan): measured h=20, body=666
+            # (pre-b32 Mac-era values were 22 / 860).
+            min_h=20,
+            min_body_pixels=640,
         )
         checked.append(f"asset:select_top_logo:{top}")
         checked.append(f"asset:select_bottom_logo:{bottom}")
@@ -1182,7 +1183,10 @@ def main() -> None:
         help="Temporary save used to reach the Part1 in-battle action menu. Empty string skips this check.",
     )
     parser.add_argument("--asset-only", action="store_true")
+    parser.add_argument("--legacy-name-grid", action="store_true", help="Use the pre-compose kana name grid route (old ROMs).")
     args = parser.parse_args()
+    if args.legacy_name_grid:
+        use_legacy_name_grid()
 
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)

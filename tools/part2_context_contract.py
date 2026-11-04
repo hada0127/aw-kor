@@ -26,6 +26,88 @@ TEACHER_SOURCES = (
 )
 
 
+def _fold(text):
+    """Wording signature: every space (incl. U+3000) removed."""
+    return ''.join(text.split())
+
+
+def layout_rows(source, rows, layout_repairs):
+    """Expected final rows when a reviewed pixel-layout repair owns ``source``.
+
+    ``rows`` are the contract's ((page, line, text), ...) before the layout
+    stage. dialogue_pixel_layout.apply_repairs re-wraps a reviewed page into its
+    ledger ``after`` rows (``rows_per_page`` rows per native page, keeping the
+    allocation). Returns None when no repair owns the source. The repair must
+    be bound to the contract text and must not change its wording.
+    """
+    specs = [s for s in layout_repairs or () if int(s['source'], 16) == source]
+    if not specs:
+        return None
+    if len(specs) != 1:
+        raise ValueError(f'{source:#x}: duplicate layout repair')
+    spec = specs[0]
+    per = spec.get('rows_per_page')
+    if spec.get('game') != 'p2' or spec.get('profile') != 'p2_portrait' or type(per) is not int or per < 1:
+        raise ValueError(f'{source:#x}: layout repair profile changed')
+    reviewed = {}
+    for page in spec['pages']:
+        if page['page'] in reviewed:
+            raise ValueError(f'{source:#x}: duplicate layout repair page')
+        reviewed[page['page']] = page
+    pages = sorted({page for page, _, _ in rows})
+    if not set(reviewed) <= set(pages):
+        raise ValueError(f'{source:#x}: layout repair page outside the contract')
+    out, number = [], 0
+    for page in pages:
+        texts = [text for p, _, text in rows if p == page]
+        if page in reviewed:
+            before, after = list(reviewed[page]['before']), list(reviewed[page]['after'])
+            if [t.strip('\u3000 ') for t in before] != [t.strip('\u3000 ') for t in texts]:
+                raise ValueError(f'{source:#x}: layout repair is not bound to the contract text')
+            if not after or _fold(''.join(after)) != _fold(''.join(texts)):
+                raise ValueError(f'{source:#x}: layout repair changes wording')
+            chunks = [after[i:i + per] for i in range(0, len(after), per)]
+        else:
+            chunks = [texts]
+        for chunk in chunks:
+            out.extend((number, line, text) for line, text in enumerate(chunk))
+            number += 1
+    return tuple(out)
+
+
+def check_layout_representation(tokens, rows, expected_rows, source_rows, source_joins, label):
+    """Final-state contract for a reviewed re-wrap (layout_rows).
+
+    Rows/pages must be exactly the reviewed layout; every wait keeps its byte
+    and its position relative to the (space-free) wording; the only row/page
+    controls are those the layout needs; the message stays terminated.
+    """
+    actual = tuple((r['page'], r['line'], r['text'].strip('\u3000 ')) for r in rows)
+    wanted = tuple((p, l, t.strip('\u3000 ')) for p, l, t in expected_rows)
+    if actual != wanted or any(not r['controls_understood'] for r in rows):
+        raise ValueError(f'{label} reviewed layout rows changed: {actual!r}')
+
+    def waits(row_texts, row_joins):
+        out, base = [], 0
+        for text, joins in zip(row_texts, row_joins):
+            out.extend(base + len(_fold(left)) for left in joins)
+            base += len(_fold(text))
+        return out
+
+    final = waits([r['text'] for r in rows], [[j['left'] for j in r['same_row_joins']] for r in rows])
+    if final != waits([t for _, _, t in source_rows], source_joins):
+        raise ValueError(f'{label} text-relative wait positions changed')
+    kinds = [t['kind'] for t in tokens]
+    source_waits = [t['raw'] for t in tokens if t['kind'] == 'same_row']
+    pages = len({p for p, _, _ in expected_rows})
+    if (len(source_waits) != sum(len(j) for j in source_joins)
+            or kinds.count('page') != pages
+            or kinds.count('newline') != len(expected_rows) - pages
+            or kinds.count('end') != 1 or kinds[-1] != 'end'):
+        raise ValueError(f'{label} native control sequence changed under reviewed layout')
+    return source_waits
+
+
 def verify_teacher_context(rom, original, manifest, syllable_codes):
     """Source-bound first-page regression; no native-consumer/pixel approval."""
     options = dict(consumer=NC.CONSUMER, native_profile=NC.NativeProfile(rom))
@@ -69,7 +151,12 @@ def verify_teacher_context(rom, original, manifest, syllable_codes):
             'pixels_verified': False, 'scope': 'source first-page text/control regression under 31424c interpretation'}
 
 
-def verify(rom, original, manifest, syllable_codes):
+def verify(rom, original, manifest, syllable_codes, layout_repairs=None):
+    """``layout_repairs``: the reviewed pixel-layout ledger once that stage ran.
+
+    None = pre-layout state (source controls/rows exactly). Given, a ledger
+    entry for SOURCE requires its reviewed re-wrap instead (layout_rows).
+    """
     matches = [m for m in manifest if int(m['msg'], 16) == SOURCE]
     if len(matches) != 1 or matches[0]['status'] != 'relocated':
         raise ValueError('A199B0 context repair must be relocated exactly once')
@@ -89,14 +176,8 @@ def verify(rom, original, manifest, syllable_codes):
     tokens = tokenize(payload, **options)
     controls = lambda ts: [t['raw'] for t in ts
                           if t['kind'] in ('same_row', 'newline', 'page', 'end')]
-    if controls(tokens) != controls(tokenize(old, **options)):
-        raise ValueError('A199B0 source control sequence changed under 31424c interpretation')
     codes = {int(v, 16) if isinstance(v, str) else int(v): k
              for k, v in syllable_codes.items()}
-    rows, unknown, terminated = assemble_rows(tokens, codes, 'story_layout_unverified', **options)
-    actual = tuple((r['page'], r['line'], r['text']) for r in rows)
-    if unknown or not terminated or actual != ROWS or any(not r['controls_understood'] for r in rows):
-        raise ValueError('A199B0 complete context text changed')
     # Conditional parser interpretation: preserve source join positions.
     # This does not establish the actual A199B0 consumer or its wait behavior.
     expected = (
@@ -104,6 +185,24 @@ def verify(rom, original, manifest, syllable_codes):
         ('지상전의　한나가　합류하면、',),
         ('자、', '자、우리　나라를、'),
     )
+    reflowed = layout_rows(SOURCE, ROWS, layout_repairs)
+    if reflowed is not None:
+        rows, unknown, terminated = assemble_rows(tokens, codes, 'story_layout_unverified', **options)
+        if unknown or not terminated:
+            raise ValueError('A199B0 complete context text changed')
+        waits = check_layout_representation(tokens, rows, reflowed, ROWS, expected, 'A199B0')
+        if waits != [t['raw'] for t in tokenize(old, **options) if t['kind'] == 'same_row']:
+            raise ValueError('A199B0 source control sequence changed under 31424c interpretation')
+        return {'source': f'0x{SOURCE:08X}', 'target': f'0x{target:08X}',
+                'payload_sha256': hashlib.sha256(payload).hexdigest(), 'layout': 'reviewed_pixel_layout',
+                'native_consumer_verified': False, 'pixels_verified': False,
+                'scope': 'source text/control regression under 31424c interpretation (reviewed layout re-wrap); native consumer unverified; pixels unverified'}
+    if controls(tokens) != controls(tokenize(old, **options)):
+        raise ValueError('A199B0 source control sequence changed under 31424c interpretation')
+    rows, unknown, terminated = assemble_rows(tokens, codes, 'story_layout_unverified', **options)
+    actual = tuple((r['page'], r['line'], r['text']) for r in rows)
+    if unknown or not terminated or actual != ROWS or any(not r['controls_understood'] for r in rows):
+        raise ValueError('A199B0 complete context text changed')
     if tuple(tuple(j['left'] for j in r['same_row_joins']) for r in rows) != expected:
         raise ValueError('A199B0 source join positions changed under 31424c interpretation')
     return {'source': f'0x{SOURCE:08X}', 'target': f'0x{target:08X}',

@@ -10,10 +10,10 @@ def lossless(before, after, manifest):
         raise AssertionError('B82FAC lossless arrays/order changed')
     requested, unfulfilled = after['requested'], after['unfulfilled']
     fixed = {int(a,16) for m in manifest if m.get('status') == 'relocated' for a in m.get('fixed',[])}
-    if (len(requested) != 1710 or len(set(requested)) != 1710 or len(unfulfilled) != 9
+    if (len(requested) != 1704 or len(set(requested)) != 1704 or len(unfulfilled) != 3
             or c.MESSAGE in {int(a,16) for a in requested}
             or [a for a in requested if int(a,16) not in fixed] != unfulfilled):
-        raise AssertionError('B82FAC lossless 1710/1701/9 recomputation differs')
+        raise AssertionError('B82FAC lossless 1704/1701/3 recomputation differs')
 
 
 def validate(old_rom, new_rom, old_manifest, new_manifest, old_log, new_log):

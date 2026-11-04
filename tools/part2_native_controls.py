@@ -23,7 +23,17 @@ PATCH_REGIONS = {'a3_glyph_trampoline': {'start': 10733544, 'end': 10733552, 'sh
 # The only other accepted A3 hook: the reviewed bytes above with just the max code
 # (+0x84 = 0xE352, 2350 + name-compose jamo) and table end (+0x8C = 0x08F24494)
 # literals widened (PLAN-v5 §1.7). Exact hashes only; nothing is normalized.
-PATCH_REGION_VERSIONS = {'a3_glyph_hook': ('a36e078dc12a77facf3d6b130b7375e071622678180577105713345b499b9cd2',)}
+# 2026-11-04 T2.7: the Korean glyph copy (+0x54..+0x6E) became `bl 0x08F30440` + nops so
+# native colour bytes 0x31..0x33 recolour Korean ink too (same max/end literals as above).
+PATCH_REGION_VERSIONS = {'a3_glyph_hook': ('a36e078dc12a77facf3d6b130b7375e071622678180577105713345b499b9cd2',
+                                           '6e0048c89dba9dc733259ec1508b66d5658b52d1d95c28893962622d4ede2779')}
+# A hook version that calls out of its hashed region is accepted only together
+# with the exact callee bytes. The colour-hook version's `bl 0x08F30440` targets
+# the 60-byte colour-remapped copy (temp/fix_20261104/re/highlight/asm/color_copy.bin,
+# builder PART2_HOOK_A3_COLOR). Older hook versions carry their copy inline.
+A3_COLOR_COPY = {'start': 15926336, 'end': 15926396, 'sha256': '2e7a8100ef9da50937754f9b2bed9362d094d47a8abd81ef4681bd48c79aac22'}
+PATCH_VERSION_CALLEES = {('a3_glyph_hook', PATCH_REGION_VERSIONS['a3_glyph_hook'][1]):
+                         (('a3_color_copy', A3_COLOR_COPY),)}
 
 class NativeConsumerError(ValueError):
     pass
@@ -55,6 +65,10 @@ def verify_patch_connections(rom, names=None):
         if actual!=spec['sha256'] and actual not in PATCH_REGION_VERSIONS.get(name,()):
             raise NativeConsumerError('P2 patched hook changed: '+name)
         result[name]=actual
+        for callee,cspec in PATCH_VERSION_CALLEES.get((name,actual),()):
+            if sha(rom[cspec['start']:cspec['end']])!=cspec['sha256']:
+                raise NativeConsumerError('P2 patched hook callee changed: '+callee)
+            result[callee]=cspec['sha256']
     return result
 
 def _read_bound(path, expected):

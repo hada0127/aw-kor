@@ -255,21 +255,21 @@ class RomDriftTest(unittest.TestCase):
             self.assertEqual(original[key], before)
             overrides = dict(original)
             overrides[key] = after
-            self.assertEqual(check(baseline, overrides)['drift'],
+            self.assertEqual(check(baseline, overrides, rewrites=EMPTY_OVERLAY, ledger_bytes=_EMPTY_LEDGER)['drift'],
                              [(key, before, after)])
         key = '0x00DEECDE'
         overrides = dict(original)
         overrides[key] = '해상　유닛。지상　유닛을'
-        self.assertEqual(check(baseline, overrides)['drift'],
+        self.assertEqual(check(baseline, overrides, rewrites=EMPTY_OVERLAY, ledger_bytes=_EMPTY_LEDGER)['drift'],
                          [(key, original[key], overrides[key])])
         key = '0x00A34B6C'
         overrides = dict(original)
         overrides[key] = '　예　　　아뇨'
-        self.assertEqual(check(baseline, overrides)['drift'], [])
+        self.assertEqual(check(baseline, overrides, rewrites=EMPTY_OVERLAY, ledger_bytes=_EMPTY_LEDGER)['drift'], [])
         for near_miss in ('예　　　아뇨', '　예　　　아뇨　', '　예　　 아뇨'):
             with self.subTest(near_miss=near_miss):
                 overrides[key] = near_miss
-                self.assertEqual(check(baseline, overrides)['drift'],
+                self.assertEqual(check(baseline, overrides, rewrites=EMPTY_OVERLAY, ledger_bytes=_EMPTY_LEDGER)['drift'],
                                  [(key, original[key], near_miss)])
 
     def test_consensus_sets_and_baseline_pin(self):
@@ -409,7 +409,9 @@ class RomDriftTest(unittest.TestCase):
             def check(data, record):
                 paths[0].write_bytes(data)
                 paths[2].write_text(json.dumps([record]))
-                return check_rom(base, *map(str, paths))
+                # Baseline-only fixture: the committed ledger now owns 0xDD010A.
+                return check_rom(base, *map(str, paths), ledger_bytes=_EMPTY_LEDGER,
+                                 ledger_pinned=_sha(_EMPTY_LEDGER))
             self.assertEqual(check(rom, message), [])
             target = int(message['new_addr'], 16)
             for off in (target + 24, target + 55, target + 71, target + 4):
@@ -666,6 +668,381 @@ class RomDriftTest(unittest.TestCase):
             paths[0].write_bytes(rom)
             with self.assertRaisesRegex(ValueError, 'overlay changed protected in-place slot'):
                 check_rom(base, *map(str, paths), str(map_rom))
+
+
+
+def _ledger_bytes(entries, approved='2026-11-04 user (test)'):
+    data = {'_doc': 'test', 'approved': approved, 'entries': entries}
+    return (json.dumps(data, sort_keys=True, ensure_ascii=False, indent=1) + '\n').encode()
+
+
+def _sha(data):
+    import hashlib
+    return hashlib.sha256(data).hexdigest()
+
+
+# Synthetic ledgers are checked against an empty W3 overlay: the committed
+# data/dialogue_rewrites.json is filled wave by wave and has its own ledger.
+EMPTY_OVERLAY = {'_doc': 'x', 'schema': 1, 'messages': {}}
+_EMPTY_LEDGER = json.dumps({'_doc': 'x', 'approved': 'x', 'entries': {}}).encode()
+
+
+class ApprovedRewriteLedgerTest(unittest.TestCase):
+    """data/bteam_approved_rewrites.json bulk approval ledger (plan A T0)."""
+
+    def setUp(self):
+        from qa_bteam_drift import APPROVED_EXCEPTIONS
+        self.baseline = json.loads((ROOT / 'data/bteam_baseline.json').read_text())
+        exceptions = set(APPROVED_EXCEPTIONS) | set(self.baseline['_user_approved_exceptions'])
+        self.key = next(k for k in sorted(self.baseline['overrides']) if k not in exceptions)
+        self.before = self.baseline['overrides'][self.key]
+        self.after = self.before + ' 재작성'
+        self.overrides = dict(self.baseline['overrides'])
+        self.overrides[self.key] = self.after
+        self.entry = {'from': self.before, 'to': self.after, 'batch': 'p2-b00',
+                      'reviewed_by': 'harness-review/test',
+                      'review_ref': 'temp/fix_20261104/humanizer/batches/p2-b00/review.json',
+                      'message': self.key.lower()}
+
+    def test_committed_ledger_is_pinned_and_empty_ledger_passes(self):
+        from qa_bteam_drift import (APPROVED_REWRITE_LEDGER, APPROVED_REWRITE_LEDGER_DIGEST,
+                                    ledger_entries, load_ledger_bytes)
+        raw = load_ledger_bytes()
+        self.assertEqual(Path(APPROVED_REWRITE_LEDGER), ROOT / 'data/bteam_approved_rewrites.json')
+        self.assertEqual(_sha(raw), APPROVED_REWRITE_LEDGER_DIGEST)
+        data = json.loads(raw)
+        self.assertEqual(raw.decode(), json.dumps(data, sort_keys=True, ensure_ascii=False,
+                                                  indent=1) + '\n')
+        result = check(self.baseline, self.baseline['overrides'])
+        self.assertEqual(result['errors'], [])
+        self.assertEqual(result['drift'], [])
+        if not ledger_entries(raw):
+            # An empty ledger approves nothing: a B-team change is still drift.
+            self.assertEqual(check(self.baseline, self.overrides)['drift'],
+                             [(self.key, self.before, self.after)])
+
+    def test_exact_ledger_entry_clears_drift(self):
+        raw = _ledger_bytes({self.key: self.entry})
+        result = check(self.baseline, self.overrides, rewrites=EMPTY_OVERLAY, ledger_bytes=raw, ledger_pinned=_sha(raw))
+        self.assertEqual(result['errors'], [])
+        self.assertEqual(result['drift'], [])
+        self.assertEqual(result['missing'], [])
+
+    def test_digest_mismatch_fails(self):
+        raw = _ledger_bytes({self.key: self.entry})
+        result = check(self.baseline, self.overrides, rewrites=EMPTY_OVERLAY, ledger_bytes=raw)
+        self.assertTrue(any('digest mismatch' in e for e in result['errors']))
+        edited = raw.replace(b'p2-b00', b'p2-b01')
+        result = check(self.baseline, self.overrides, ledger_bytes=edited, ledger_pinned=_sha(raw))
+        self.assertTrue(any('digest mismatch' in e for e in result['errors']))
+
+    def test_overlap_with_individual_exceptions_fails(self):
+        from qa_bteam_drift import APPROVED_EXCEPTIONS
+        recorded = self.baseline['_user_approved_exceptions']
+        for key in ('0x00DD0D1A', next(k for k in recorded if k not in APPROVED_EXCEPTIONS)):
+            with self.subTest(key=key):
+                entry = dict(self.entry, **{'from': self.baseline['overrides'].get(key, 'x'),
+                                            'to': self.baseline['overrides'].get(key, 'x') + '!'})
+                raw = _ledger_bytes({key: entry})
+                errors = check(self.baseline, self.baseline['overrides'], ledger_bytes=raw,
+                               ledger_pinned=_sha(raw))['errors']
+                self.assertTrue(any(key in e and 'overlaps' in e for e in errors), errors)
+
+    def test_from_to_and_metadata_must_be_exact(self):
+        cases = {
+            'from': dict(self.entry, **{'from': self.before + '.'}),
+            'to': dict(self.entry, to=self.after + '.'),
+            'noop': dict(self.entry, to=self.before),
+            'batch': dict(self.entry, batch=''),
+            'reviewed_by': {k: v for k, v in self.entry.items() if k != 'reviewed_by'},
+            'review_ref': dict(self.entry, review_ref=None),
+        }
+        for name, entry in cases.items():
+            with self.subTest(case=name):
+                raw = _ledger_bytes({self.key: entry})
+                result = check(self.baseline, self.overrides, rewrites=EMPTY_OVERLAY, ledger_bytes=raw,
+                               ledger_pinned=_sha(raw))
+                self.assertTrue(result['errors'], name)
+        raw = _ledger_bytes({self.key: self.entry}, approved='')
+        self.assertTrue(check(self.baseline, self.overrides, rewrites=EMPTY_OVERLAY, ledger_bytes=raw,
+                              ledger_pinned=_sha(raw))['errors'])
+        raw = _ledger_bytes({self.key: dict(self.entry, approved='2026-11-04 user')}, approved='')
+        self.assertEqual(check(self.baseline, self.overrides, rewrites=EMPTY_OVERLAY, ledger_bytes=raw,
+                               ledger_pinned=_sha(raw))['errors'], [])
+        raw = _ledger_bytes({self.key.lower(): self.entry})
+        self.assertTrue(check(self.baseline, self.overrides, rewrites=EMPTY_OVERLAY, ledger_bytes=raw,
+                              ledger_pinned=_sha(raw))['errors'])
+        raw = _ledger_bytes({'0x00FFFFF0': dict(self.entry)})
+        self.assertTrue(check(self.baseline, self.overrides, rewrites=EMPTY_OVERLAY, ledger_bytes=raw,
+                              ledger_pinned=_sha(raw))['errors'])
+        # An unlisted B-team change next to a listed one is still drift.
+        raw = _ledger_bytes({self.key: self.entry})
+        other = next(k for k in sorted(self.baseline['overrides'])
+                     if k > self.key and k not in self.baseline['_user_approved_exceptions'])
+        overrides = dict(self.overrides)
+        overrides[other] = overrides[other] + '?'
+        self.assertEqual([d[0] for d in check(self.baseline, overrides, rewrites=EMPTY_OVERLAY, ledger_bytes=raw,
+                                              ledger_pinned=_sha(raw))['drift']], [other])
+
+    def test_accept_keeps_baseline_for_ledger_addresses(self):
+        from qa_bteam_drift import accept
+        raw = _ledger_bytes({self.key: self.entry})
+        new = accept(self.baseline, self.overrides, ledger_bytes=raw)
+        self.assertEqual(new['overrides'][self.key], self.before)
+        self.assertEqual(core_digest(new), PINNED_CORE_DIGEST)
+        with self.assertRaisesRegex(ValueError, 'outside the approved exceptions'):
+            accept(self.baseline, self.overrides, ledger_bytes=_ledger_bytes({}))
+
+    def test_final_rom_gate_matches_only_ledger_to_text(self):
+        na = json.loads((ROOT / 'data/syllable_to_code_2350.json').read_text())['나']
+        na = (int(na, 0) if isinstance(na, str) else na).to_bytes(2, 'big')
+        with tempfile.TemporaryDirectory(dir=ROOT / 'temp') as tmp:
+            folder = Path(tmp)
+            rom = bytearray(256)
+            rom[0x20:0x22] = na
+            writes = [[0x20, 2, 2, na.hex(), None, '나', 0, 'test']]
+            base = {'overrides': {'0x00000020': '가'}}
+            paths = [folder / name for name in ('rom.gba', 'map.json', 'manifest.json')]
+            paths[0].write_bytes(rom)
+            paths[1].write_text(json.dumps(writes))
+            paths[2].write_text('[]')
+            empty = _ledger_bytes({})
+            self.assertEqual(len(check_rom(base, *map(str, paths), ledger_bytes=empty,
+                                           ledger_pinned=_sha(empty))), 1)
+            entry = dict(self.entry, **{'from': '가', 'to': '나'})
+            raw = _ledger_bytes({'0x00000020': entry})
+            self.assertEqual(check_rom(base, *map(str, paths), ledger_bytes=raw,
+                                       ledger_pinned=_sha(raw)), [])
+            wrong = _ledger_bytes({'0x00000020': dict(entry, to='다')})
+            self.assertEqual(len(check_rom(base, *map(str, paths), ledger_bytes=wrong,
+                                           ledger_pinned=_sha(wrong))), 1)
+            stale = _ledger_bytes({'0x00000020': dict(entry, **{'from': '라'})})
+            self.assertEqual(len(check_rom(base, *map(str, paths), ledger_bytes=stale,
+                                           ledger_pinned=_sha(stale))), 1)
+            with self.assertRaisesRegex(ValueError, 'ledger digest mismatch'):
+                check_rom(base, *map(str, paths), ledger_bytes=raw)
+
+    def test_final_rom_gate_rejects_old_wording_for_valid_ledger(self):
+        """A valid ledger entry makes its row require "to": old wording is a hard issue."""
+        from qa_bteam_drift import round2_issue_bucket
+        na = json.loads((ROOT / 'data/syllable_to_code_2350.json').read_text())['나']
+        na = (int(na, 0) if isinstance(na, str) else na).to_bytes(2, 'big')
+        with tempfile.TemporaryDirectory(dir=ROOT / 'temp') as tmp:
+            folder = Path(tmp)
+            paths = [folder / name for name in ('rom.gba', 'map.json', 'manifest.json')]
+            base = {'overrides': {'0x00000020': '가'}}
+            entry = dict(self.entry, **{'from': '가', 'to': '나'})
+            raw = _ledger_bytes({'0x00000020': entry})
+
+            def issues(glyph):
+                rom = bytearray(256)
+                rom[0x20:0x22] = glyph
+                paths[0].write_bytes(rom)
+                paths[1].write_text(json.dumps([[0x20, 2, 2, glyph.hex(), None, 'x', 0, 'test']]))
+                paths[2].write_text('[]')
+                return check_rom(base, *map(str, paths), ledger_bytes=raw, ledger_pinned=_sha(raw))
+
+            self.assertEqual(issues(na), [])
+            old = issues(GLYPH)  # ROM still shows the baseline ("from") wording
+            self.assertEqual([(x['address'], x['rom_text'], x['decision']) for x in old],
+                             [('0x00000020', '가', 'APPLY_LEDGER_REWRITE')])
+            self.assertEqual(old[0]['cause'], 'ledger-owned row differs from approved rewrite "to"')
+            # Never absorbed as a listed round-2 residual, even at a listed address.
+            self.assertEqual(round2_issue_bucket(old[0], {0x20}), 'unlisted')
+            # Baseline-only equivalences (width alias here) must not rescue it either.
+            with mock.patch('qa_bteam_drift.round2_width_equivalent', return_value=True), \
+                    mock.patch('qa_bteam_drift.matches_reviewed_bteam_spacing', return_value=True):
+                self.assertEqual(len(issues(GLYPH)), 1)
+                self.assertEqual(issues(na), [])
+            # An entry whose "from" is not the baseline binds nothing: both readings fail.
+            stale = _ledger_bytes({'0x00000020': dict(entry, **{'from': '라'})})
+            raw = stale
+            self.assertEqual([x['cause'] for x in issues(na)],
+                             ['ledger entry not bound to the B-team baseline'])
+            self.assertEqual(len(issues(GLYPH)), 1)
+
+    def test_builder_final_gate_rejects_old_wording_of_ledger_restore_row(self):
+        """The builder's final check_rom call (committed ledger) fails a ledger row left unchanged."""
+        import re
+        import build_korean_full as builder
+        from qa_bteam_drift import ledger_entries, load_ledger_bytes
+        source = (ROOT / 'tools/build_korean_full.py').read_text(encoding='utf-8')
+        # The builder relies on the committed, pinned ledger (no override arguments).
+        self.assertRegex(source, r'_check_bteam_rom\(_bteam_baseline, staged_rom, intg_path, staged_manifest\)')
+        ledger = ledger_entries(load_ledger_bytes())
+        accounted = (set(builder.BTEAM_PREVIOUS_KOREAN_TEXT) | set(builder.BTEAM_ROUND2_RESIDUALS)
+                     | set(builder.BTEAM_SCRIPT_SPACING_REPAIRS) | {0xA34B6C})
+        rows = [k for k in sorted(ledger) if int(k, 16) in builder.BTEAM_RESTORE_BASELINE_ROWS
+                and int(k, 16) not in accounted]
+        if not rows:
+            self.skipTest('no ledger-owned builder restoration row')
+        syl = {s: int(c, 16) for s, c in json.loads(
+            (ROOT / 'data/syllable_to_code_2350.json').read_text()).items()}
+        key, address = rows[0], int(rows[0], 16)
+        base = {'overrides': {key: self.baseline['overrides'][key]}}
+        with tempfile.TemporaryDirectory(dir=ROOT / 'temp') as tmp:
+            folder = Path(tmp)
+            paths = [folder / name for name in ('rom.gba', 'map.json', 'manifest.json')]
+
+            def issues(text):
+                # Rendered form as the overlay writes it (fullwidth spaces/punctuation).
+                enc = b''.join(syl[ch].to_bytes(2, 'big') if ch in syl
+                               else b'\x81\x40' if ch == '\u3000' else ch.encode('shift_jis')
+                               for ch in display_equivalent(text, address))
+                rom = bytearray(address + len(enc) + 16)
+                rom[address:address + len(enc)] = enc
+                paths[0].write_bytes(rom)
+                paths[1].write_text(json.dumps([[address, len(enc), len(enc), enc.hex(),
+                                                 None, text, 0, 'test']]))
+                paths[2].write_text('[]')
+                return check_rom(base, *map(str, paths))  # same call shape as the builder
+
+            self.assertEqual(issues(ledger[key]['to']), [])
+            old = issues(ledger[key]['from'])
+            self.assertEqual([(x['address'], x['decision']) for x in old],
+                             [(key, 'APPLY_LEDGER_REWRITE')])
+        # The builder raises when a restoration issue is outside its expected
+        # residual set; this row is not in any expected-residual source.
+        self.assertNotIn(address, accounted)
+
+
+class DialogueRewriteOverlayDriftTest(unittest.TestCase):
+    """W3 rewrites (data/dialogue_rewrites.json owner_texts) feed both drift gates."""
+
+    def setUp(self):
+        from qa_bteam_drift import APPROVED_EXCEPTIONS
+        self.baseline = json.loads((ROOT / 'data/bteam_baseline.json').read_text())
+        exceptions = set(APPROVED_EXCEPTIONS) | set(self.baseline['_user_approved_exceptions'])
+        self.key = next(k for k in sorted(self.baseline['overrides']) if k not in exceptions)
+        self.other = next(k for k in sorted(self.baseline['overrides'])
+                          if k > self.key and k not in exceptions)
+        self.before = self.baseline['overrides'][self.key]
+        self.after = self.before + ' 재작성'
+        self.row = f'0x{int(self.key, 16):06X}'
+        self.overrides = dict(self.baseline['overrides'])
+
+    def rewrites(self, owner_texts):
+        entry = {'source': self.row, 'game': 'p2', 'before_sha256': 'a', 'after_sha256': 'b',
+                 'ko': self.after, 'batch': 'p2-b00', 'reviewed_by': 'harness-review/test',
+                 'review_ref': 'temp/test/review.json'}
+        if owner_texts is not None:
+            entry['owner_texts'] = owner_texts
+        return {'_doc': 'test', 'schema': 1, 'messages': {self.row: entry}}
+
+    def entry(self, **change):
+        entry = {'from': self.before, 'to': self.after, 'batch': 'p2-b00',
+                 'reviewed_by': 'harness-review/test', 'review_ref': 'temp/test/review.json',
+                 'message': self.row}
+        entry.update(change)
+        return entry
+
+    def run_check(self, rewrites, entries):
+        raw = _ledger_bytes(entries)
+        return check(self.baseline, self.overrides, rewrites=rewrites,
+                     ledger_bytes=raw, ledger_pinned=_sha(raw))
+
+    def test_empty_overlay_is_a_no_op(self):
+        result = self.run_check(EMPTY_OVERLAY, {})
+        self.assertEqual((result['drift'], result['errors']), ([], []))
+        # The committed overlay (None = load data/dialogue_rewrites.json) is
+        # covered by the committed ledger, so it is drift-free as well.
+        result = check(self.baseline, self.overrides)
+        self.assertEqual((result['drift'], result['errors']), ([], []))
+
+    def test_ledgered_rewrite_passes(self):
+        result = self.run_check(self.rewrites({self.row: self.after}), {self.key: self.entry()})
+        self.assertEqual((result['drift'], result['missing'], result['errors']), ([], [], []))
+        # Non-B-team rows of the same message never need a ledger entry.
+        result = self.run_check(self.rewrites({self.row: self.after, '0xFFFFF0': 'x'}),
+                                {self.key: self.entry()})
+        self.assertEqual((result['drift'], result['errors']), ([], []))
+
+    def test_unlisted_rewrite_is_drift(self):
+        result = self.run_check(self.rewrites({self.row: self.after}), {})
+        self.assertEqual(result['drift'], [(self.key, self.before, self.after)])
+        # A listed row does not cover another rewritten B-team row of the message.
+        other_row = f'0x{int(self.other, 16):06X}'
+        other_text = self.baseline['overrides'][self.other] + '?'
+        result = self.run_check(self.rewrites({self.row: self.after, other_row: other_text}),
+                                {self.key: self.entry()})
+        self.assertEqual([d[0] for d in result['drift']], [self.other])
+
+    def test_ledger_to_or_from_mismatch_fails(self):
+        for name, entry in {'to': self.entry(to=self.after + '.'),
+                            'from': self.entry(**{'from': self.before + '.'})}.items():
+            with self.subTest(case=name):
+                result = self.run_check(self.rewrites({self.row: self.after}), {self.key: entry})
+                self.assertTrue(any(self.key in e for e in result['errors']), result['errors'])
+        # The override alone (without the rewrite) no longer matches the ledger "to".
+        result = self.run_check({'_doc': 'x', 'schema': 1, 'messages': {}}, {self.key: self.entry()})
+        self.assertTrue(any('override differs from the ledger' in e for e in result['errors']))
+
+    def test_rewrite_without_owner_texts_or_bad_overlay_fails(self):
+        result = self.run_check(self.rewrites(None), {})
+        self.assertTrue(any('owner_texts' in e for e in result['errors']), result['errors'])
+        doc = self.rewrites({self.row: self.after})
+        second = dict(doc['messages'][self.row], source='0xFFFFF0')
+        doc['messages']['0xFFFFF0'] = second
+        result = self.run_check(doc, {self.key: self.entry()})
+        self.assertTrue(any('two dialogue rewrites' in e for e in result['errors']))
+        with tempfile.TemporaryDirectory(dir=ROOT / 'temp') as tmp:
+            bad = Path(tmp) / 'rewrites.json'
+            bad.write_text(json.dumps({'schema': 9, 'messages': {}}))
+            from qa_bteam_drift import rewrite_owner_texts
+            self.assertTrue(rewrite_owner_texts(path=str(bad))[1])
+
+    def test_rewrite_of_individual_exception_row_fails(self):
+        key = '0x00DD0D1A'
+        row = f'0x{int(key, 16):06X}'
+        doc = self.rewrites({row: '다른 문장'})
+        doc['messages'] = {row: dict(doc['messages'][self.row], source=row)}
+        result = self.run_check(doc, {})
+        self.assertTrue(any(key in e for e in result['errors']), result['errors'])
+
+    def test_rom_gate_reads_relocated_overlay_message(self):
+        na = json.loads((ROOT / 'data/syllable_to_code_2350.json').read_text())['나']
+        na = (int(na, 0) if isinstance(na, str) else na).to_bytes(2, 'big')
+        with tempfile.TemporaryDirectory(dir=ROOT / 'temp') as tmp:
+            folder = Path(tmp)
+            rom = bytearray(256)
+            # Native message keeps its old bytes; the overlay copy lives at 0xA0.
+            rom[0x40:0x42] = GLYPH
+            rom[0xA0:0xA2] = na
+            rom[0xA2] = 0
+            rom[0x10:0x14] = (0x080000A0).to_bytes(4, 'little')
+            writes = [[0x40, 2, 2, GLYPH.hex(), None, '가', 0, 'native'],
+                      [0xA0, 3, 3, (na + b'\0').hex(), None, None, None, 'dialogue-rewrite-final'],
+                      [0x10, 4, 4, (0x080000A0).to_bytes(4, 'little').hex(), None, None, None,
+                       'dialogue-rewrite-pointer']]
+            manifest = [{'msg': '0x40', 'old_len': 3, 'status': 'relocated', 'ptr_off': '0x10',
+                         'ptr_sites': ['0x10'], 'new_addr': '0xA0', 'new_len': 3,
+                         'line_spans': {'0x000040': [0, 2]},
+                         'source_line_fragments': {'0x000040': [[0, 2]]},
+                         'rewrite': {'previous_target': '0x000040', 'previous_status': 'native'}}]
+            base = {'overrides': {'0x00000040': '가'}}
+            paths = [folder / name for name in ('rom.gba', 'map.json', 'manifest.json')]
+            paths[0].write_bytes(rom)
+            paths[1].write_text(json.dumps(writes))
+            paths[2].write_text(json.dumps(manifest))
+            entry = self.entry(**{'from': '가', 'to': '나', 'message': '0x000040'})
+
+            def issues(entries):
+                raw = _ledger_bytes(entries)
+                return check_rom(base, *map(str, paths), ledger_bytes=raw, ledger_pinned=_sha(raw))
+
+            self.assertEqual(issues({'0x00000040': entry}), [])
+            missing = issues({})
+            self.assertEqual([(x['address'], x['rom_text']) for x in missing],
+                             [('0x00000040', '나')])
+            self.assertEqual(len(issues({'0x00000040': dict(entry, to='다')})), 1)
+            # The old native bytes still read '가', but the gate follows the
+            # pointer: a stale pointer to the native slot is a hard mismatch.
+            rom[0x10:0x14] = (0x08000040).to_bytes(4, 'little')
+            writes[2][3] = rom[0x10:0x14].hex()
+            paths[0].write_bytes(rom)
+            paths[1].write_text(json.dumps(writes))
+            stale = issues({'0x00000040': entry})
+            self.assertEqual([x['cause'] for x in stale], ['repoint pointer mismatch'])
 
 
 if __name__ == '__main__':

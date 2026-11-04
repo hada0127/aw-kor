@@ -1,11 +1,11 @@
 {
   "_readme": "aw-kor 고유명사 통일 사전. 각 행의 `edit` 필드를 채우면 그 한국어로 통일한다(비우면 ko/current 유지). tools/apply_proper_nouns_dict.py 로 translation_for_import.csv 에 적용. freq=대사 등장 횟수, variants=import CSV 관측 표기 분포. muramasa-kor proper_nouns.json 포맷 미러.",
   "counts": {
-    "characters": 13,
+    "characters": 16,
     "nations": 5,
     "places": 4,
     "discovered_candidates": 1,
-    "common_terms": 53,
+    "common_terms": 59,
     "issues": 4
   },
   "characters": [
@@ -141,6 +141,39 @@
         "헬바우즈": 1
       },
       "edit": ""
+    },
+    {
+      "ja": "イワン",
+      "ko": "이반",
+      "freq": 30,
+      "note": "CO (2편) — 2026-11-04 names_audit 1-1/1-2: CO 표 0xA2CB8C 하치→이반, 이완 금지",
+      "variants": {
+        "이반": 25,
+        "이완": 5
+      },
+      "edit": "이반"
+    },
+    {
+      "ja": "モップ",
+      "ko": "모프",
+      "freq": 70,
+      "note": "CO — 2026-11-04 names_audit 1-3: CO 표 0xA2CB48 모프 기준, 몹 금지(몹시 아님)",
+      "variants": {
+        "모프": 61,
+        "몹": 9
+      },
+      "edit": "모프"
+    },
+    {
+      "ja": "キャット",
+      "ko": "캣",
+      "freq": 79,
+      "note": "CO (2편) — 2026-11-04 names_audit 1-4: 캐트 금지",
+      "variants": {
+        "캣": 77,
+        "캐트": 2
+      },
+      "edit": "캣"
     }
   ],
   "nations": [
@@ -568,6 +601,48 @@
       "current": "기관총",
       "edit": "",
       "note": "2026-10-06 candidate5: CSV 34/34 + Part 2 B팀 무기목록(0xA29440/0xA294D4)이 기관총. compact 무기 사전도 기관총(魯傑兎). B팀 보호 도움말 6행(0xA3353C/0xA33D8C/0xDED082/0xDEEC1A/0xDEEC92/0xDEF5FA)의 머신건은 보호 문구라 유지. 2026-10-06 candidate6: 같은 메시지(0xDED082 부포인 머신건./0xDED0DA 부포인 머신건의,) 사이의 비B팀 0xDED09F도 메시지 내 일관성을 위해 머신건 유지(review5 #1). 원칙: B팀 보호 문구와 그 문구가 있는 같은 메시지 안은 머신건, 그 밖은 기관총. 2026-10-06 candidate7: CSV 0x00DED09F도 override와 같은 '의 머신건은,'으로 맞춤(review6 #4)."
+    },
+    {
+      "term": "치리지리 (チリヂリ 지명; 치리치리 금지)",
+      "ja_note": "チリヂリトリデ / チリヂリガワ",
+      "current": "치리지리",
+      "edit": "",
+      "note": "2026-11-04 names_audit 1-5"
+    },
+    {
+      "term": "캐논포 (キャノン砲; 캐넌 금지)",
+      "ja_note": "キャノン砲",
+      "current": "캐논포",
+      "edit": "",
+      "note": "2026-11-04 names_audit 1-6"
+    },
+    {
+      "term": "수송선 (輸送船; 수송함 금지)",
+      "ja_note": "輸送船",
+      "current": "수송선",
+      "edit": "",
+      "note": "2026-11-04 names_audit 2-1: JP 輸送船 행만 수송선"
+    },
+    {
+      "term": "색적 (索敵/サクテキ; 1편 룰 옵션 포함)",
+      "ja_note": "索敵",
+      "current": "색적",
+      "edit": "",
+      "note": "2026-11-04 names_audit 2-6: 1편 룰 옵션 0xB839E8·룰 사전 0xD83138 정찰→색적. 偵察車=정찰차는 그대로"
+    },
+    {
+      "term": "메테오 스트라이크 (メテオストライク)",
+      "ja_note": "メテオストライク",
+      "current": "메테오스트라이크",
+      "edit": "",
+      "note": "2026-11-04 names_audit 2-5: 2편 0xA29840 16B 고정 칸이라 띄어쓰기 없이 메테오스트라이크. 1편 컷인 콤팩트 0xB84E50 은 메테오 유지"
+    },
+    {
+      "term": "사령관 (シレイ 플레이어 직함; 시레이 금지, 指揮官=지휘관은 별개)",
+      "ja_note": "シレイ",
+      "current": "사령관/사령",
+      "edit": "",
+      "note": "2026-11-04 names_audit 2-4"
     }
   ],
   "issues": [

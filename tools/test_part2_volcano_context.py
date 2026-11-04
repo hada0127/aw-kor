@@ -91,5 +91,48 @@ class VolcanoContextTests(unittest.TestCase):
             C.verify(rom, self.original, manifest, self.codes)
 
 
+class VolcanoLayoutRepresentationTests(unittest.TestCase):
+    """B2: after the reviewed pixel-layout stage the contract must still hold."""
+
+    @classmethod
+    def setUpClass(cls):
+        VolcanoContextTests.setUpClass.__func__(cls)
+
+    fixture = VolcanoContextTests.fixture
+
+    def layout_fixture(self):
+        from test_part2_context_contract import reflowed
+        rom, manifest = self.fixture()
+        ledger = reflowed(rom, 0xA3D000, manifest[0]['new_len'], C.CASES[0][0])
+        return rom, manifest, ledger
+
+    def test_reviewed_layout_passes_only_with_ledger(self):
+        rom, manifest, ledger = self.layout_fixture()
+        report = C.verify(rom, self.original, manifest, self.codes, ledger)
+        self.assertEqual(report['messages'][0]['layout'], 'reviewed_pixel_layout')
+        self.assertNotIn('layout', report['messages'][1])
+        with self.assertRaisesRegex(ValueError, 'control sequence'):
+            C.verify(rom, self.original, manifest, self.codes)
+
+    def test_injected_control_changes_fail(self):
+        from test_part2_context_contract import swap_wait
+        rom, manifest, ledger = self.layout_fixture()
+        start, length = 0xA3D000, manifest[0]['new_len']
+        payload = bytes(rom[start:start + length])
+        mutations = {
+            'moved_wait': lambda r: swap_wait(r, start, length, 0),
+            'wait_byte': lambda r: r.__setitem__(start + payload.index(b'\x57'), 0x77),
+            'newline_to_page': lambda r: r.__setitem__(start + payload.index(b'\x72'), 0x6B),
+            'extra_page': lambda r: r.__setitem__(start + payload.rindex(b'\x20'), 0x6B),
+            # The in-place sibling keeps its strict pre-layout contract.
+            'sibling_wait': lambda r: r.__setitem__(bytes(r).index(b'\x57', 0xA1D4BC), 0x77),
+        }
+        for name, mutate in mutations.items():
+            changed = bytearray(rom)
+            mutate(changed)
+            with self.subTest(name), self.assertRaises(ValueError):
+                C.verify(changed, self.original, manifest, self.codes, ledger)
+
+
 if __name__ == '__main__':
     unittest.main()

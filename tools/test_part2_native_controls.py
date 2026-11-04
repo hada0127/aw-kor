@@ -13,6 +13,12 @@ ROOT=next(p for p in Path(__file__).resolve().parents if (p/'original').is_dir()
 # Fixed hook bytes from reviewed round11, not a shipped-ROM path dependency.
 HOOK_FIXTURE={10733544: '004a10478102f308', 15925888: '0478417804911d4a3f2932d923020b431b4eb3422dd31b4eb3422ad81a4e1b4fbe4226d232781202707802439a4201d00636f5e7708802041bd5b188144b1840194040014901134a801889180c1c6d01114aad18061c2f1c0fce0fc70fce0fc7261c20352f1c0fce0fc70fce0fc70b4800470498014a3f28094b184760f9520840880000a7e200000000f208a443f208ff7f00000000f00800000006c16100038d60000300000000000000000000000000000000000000000000000000000000'}
 
+# Reviewed colour-remapped A3 glyph copy at 0x08F30440 (60 bytes), the callee of
+# the 2026-11-04 colour-hook version (temp/fix_20261104/re/highlight/asm/color_copy.bin).
+COLOR_COPY_FILE=0xF30440
+COLOR_COPY=bytes.fromhex('061c2f1c4b4601332022102a00d1261c30880236012b0cd000210500cd402d072d0f092d'
+                         '02d11d008d40401904311029f3d138800237013ae7d17047')
+
 class NativePart2Tests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -53,6 +59,55 @@ class NativePart2Tests(unittest.TestCase):
         for region in bad:
             with self.subTest(region=region.hex()):
                 with self.assertRaises(N.NativeConsumerError):profile(region)
+
+    def test_a3_colour_copy_hook_version_is_exact(self):
+        # 2026-11-04 T2.7: only the raw Korean copy (+0x54..+0x6E) becomes bl 0x08F30440 + nops.
+        base=0xF30280;hook=bytearray(bytes.fromhex(HOOK_FIXTURE[base]))
+        self.assertEqual(hook[0x54:0x6E].hex(),'061c2f1c0fce0fc70fce0fc7261c20352f1c0fce0fc70fce0fc7')
+        new=bytearray(hook);new[0x54:0x6E]=bytes.fromhex('00f0b4f8'+'c046'*11)
+        struct.pack_into('<I',new,0x84,0xE352);struct.pack_into('<I',new,0x8C,0x08F24494)
+        self.assertEqual(N.sha(new),N.PATCH_REGION_VERSIONS['a3_glyph_hook'][1])
+        def install(region,callee=COLOR_COPY):
+            rom=bytearray(self.rom);rom[base:base+len(region)]=region
+            if callee is not None:rom[COLOR_COPY_FILE:COLOR_COPY_FILE+len(callee)]=callee
+            return bytes(rom)
+        profile=N.NativeProfile(install(new))
+        self.assertEqual(profile.connections['a3_glyph_hook'],N.sha(new))
+        self.assertEqual(profile.connections['a3_color_copy'],N.sha(COLOR_COPY))
+        for offset in (0x54,0x56,0x58,0x6C):
+            region=bytearray(new);region[offset]^=1
+            with self.subTest(offset=hex(offset)):
+                with self.assertRaises(N.NativeConsumerError):N.NativeProfile(install(region))
+
+    def test_a3_colour_hook_requires_exact_colour_copy_callee(self):
+        # The bl target 0x08F30440 sits outside the hashed hook: missing or
+        # tampered callee bytes must reject the colour-hook version.
+        base=0xF30280;hook=bytearray(bytes.fromhex(HOOK_FIXTURE[base]))
+        new=bytearray(hook);new[0x54:0x6E]=bytes.fromhex('00f0b4f8'+'c046'*11)
+        struct.pack_into('<I',new,0x84,0xE352);struct.pack_into('<I',new,0x8C,0x08F24494)
+        def install(region,callee):
+            rom=bytearray(self.rom);rom[base:base+len(region)]=region
+            rom[COLOR_COPY_FILE:COLOR_COPY_FILE+len(callee)]=callee
+            return bytes(rom)
+        self.assertEqual(N.sha(COLOR_COPY),N.A3_COLOR_COPY['sha256'])
+        self.assertEqual((N.A3_COLOR_COPY['start'],N.A3_COLOR_COPY['end']),
+                         (COLOR_COPY_FILE,COLOR_COPY_FILE+len(COLOR_COPY)))
+        N.NativeProfile(install(new,COLOR_COPY))
+        bad={'missing_zero':bytes(len(COLOR_COPY)),'missing_ff':b'\xff'*len(COLOR_COPY),
+             'truncated':COLOR_COPY[:-2]+b'\0\0'}
+        for offset in (0,1,0x20,len(COLOR_COPY)-2,len(COLOR_COPY)-1):
+            tampered=bytearray(COLOR_COPY);tampered[offset]^=1;bad[f'flip_{offset:#x}']=bytes(tampered)
+        for name,callee in bad.items():
+            with self.subTest(callee=name):
+                with self.assertRaisesRegex(N.NativeConsumerError,'callee'):N.NativeProfile(install(new,callee))
+                with self.assertRaises(N.NativeConsumerError):
+                    N.verify_patch_connections(install(new,callee),('a3_glyph_trampoline','a3_glyph_hook'))
+        # Older hook versions keep the copy inline and need no callee bytes.
+        widened=bytearray(hook);struct.pack_into('<I',widened,0x84,0xE352);struct.pack_into('<I',widened,0x8C,0x08F24494)
+        for region in (hook,widened):
+            with self.subTest(version=N.sha(region)):
+                profile=N.NativeProfile(install(region,bytes(len(COLOR_COPY))))
+                self.assertNotIn('a3_color_copy',profile.connections)
 
     def test_unknown_scope_does_not_promote_aliases_or_padding(self):
         raw=bytes.fromhex('88402088415788404b00')

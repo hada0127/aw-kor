@@ -278,7 +278,9 @@ def decode_cell(rom, original, code, subs, render_char, code_to_syllable, slots)
             return subs[ch] if glyph == tuple(render_char(subs[ch])) else '?'
         return '?'
     if 0x8140 <= value < 0x8400:
-        same = all(_tile(rom, _symbol_slot(original, value, d)) == _tile(original, _symbol_slot(original, value, d))
+        from korean_punct_glyphs import symbol_tile_ok
+        same = all(symbol_tile_ok(value, d, _tile(rom, _symbol_slot(original, value, d)),
+                                  _tile(original, _symbol_slot(original, value, d)))
                    for d in (0, 8))
         return ch if same else '?'
     return ch if '０' <= ch <= '９' else '?'

@@ -12,7 +12,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from qa_visual_regions import MGBADriver, PART1_MENU_PRENAV  # noqa: E402
+from qa_visual_regions import MGBADriver, PART1_MENU_PRENAV, use_legacy_name_grid  # noqa: E402
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -153,7 +153,10 @@ def main() -> int:
     parser.add_argument("--harness", type=Path, default=HARNESS)
     parser.add_argument("--out-dir", type=Path, default=TEMP_OUT)
     parser.add_argument("--doc-dir", type=Path, default=DOC_OUT)
+    parser.add_argument("--legacy-name-grid", action="store_true", help="Use the pre-compose kana name grid route (old ROMs).")
     args = parser.parse_args()
+    if args.legacy_name_grid:
+        use_legacy_name_grid()
 
     if args.out_dir.exists():
         shutil.rmtree(args.out_dir)

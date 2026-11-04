@@ -14,11 +14,25 @@ from build_korean_full import normalize_korean_terms
 ROOT = Path(__file__).resolve().parent.parent
 PUNCT = str.maketrans({'！': '!', '？': '?', '。': '.', '、': ',',
                       '，': ',', '．': '.', '　': ' '})
+# Dialogue rewrite overlay rows record owner texts folded by
+# dialogue_rewrite_apply.fold (ASCII alnum, '...'); the writer ships the
+# fullwidth/・・・ forms. Only those rows compare under this wider fold, so the
+# legacy rows keep their previous checked/unsupported split.
+OVERLAY_FOLD = {'：': ':', '～': '~', '…': '...'}
+OVERLAY_FOLD.update({chr(0xFF10 + i): chr(0x30 + i) for i in range(10)})
+OVERLAY_FOLD.update({chr(0xFF21 + i): chr(0x41 + i) for i in range(26)})
+OVERLAY_FOLD.update({chr(0xFF41 + i): chr(0x61 + i) for i in range(26)})
+OVERLAY_FOLD = str.maketrans(OVERLAY_FOLD)
+SUPERSEDED_INTENT = 'dialogue-spacing-final-intent-superseded'  # dialogue_rewrite_apply
+# Dialogue rewrite overlay (dialogue_rewrite_apply) control kinds inside an owner row.
+ROW_BREAK_KINDS = ('newline', 'page')
 
 
-def separator_signature(text):
+def separator_signature(text, overlay=False):
     # The builder applies this approved terminology rule before encoding.
     # Country compounds are not evidence of a newly dropped word separator.
+    if overlay:
+        text = text.replace('・・・', '...').translate(OVERLAY_FOLD)
     text = normalize_korean_terms(text.translate(PUNCT)).strip(' \x00▯')
     chars, boundaries = [], set()
     for ch in text:
@@ -31,10 +45,10 @@ def separator_signature(text):
     return ''.join(chars), boundaries
 
 
-def is_jammed(authored, shipped):
+def is_jammed(authored, shipped, overlay=False):
     """Every authored interior separator must survive at the same character boundary."""
-    expected, wanted = separator_signature(authored)
-    actual, present = separator_signature(shipped.replace('\x72\x0a\x09', ' '))
+    expected, wanted = separator_signature(authored, overlay)
+    actual, present = separator_signature(shipped.replace('\x72\x0a\x09', ' '), overlay)
     return bool(expected and expected == actual and wanted - present)
 
 
@@ -49,7 +63,7 @@ def verify_provenance(rom_path, map_path, manifest_path):
             raise ValueError(f'build metadata provenance mismatch: {path}')
 
 
-def final_owner_spans(writes, rom_size, *, hangul_only=True):
+def final_owner_spans(writes, rom_size, *, hangul_only=True, skip_superseded=False):
     """Resolve chronological writes by byte ownership, including merged spans.
 
     Partial owners cannot safely lend their full authored sentence to a fragment.
@@ -64,7 +78,10 @@ def final_owner_spans(writes, rom_size, *, hangul_only=True):
         if not size:
             continue
         overlap = occupied[addr:addr + size]
-        if entry[5] and (not hangul_only or any('가' <= c <= '힣' for c in entry[5])):
+        # Audit only: a spacing intent superseded by a dialogue rewrite no longer
+        # owns its text (the rewrite's relocation record does); it only occupies bytes.
+        if (entry[5] and not (skip_superseded and entry[7] == SUPERSEDED_INTENT)
+                and (not hangul_only or any('가' <= c <= '힣' for c in entry[5]))):
             if not any(overlap):
                 owners[addr] = entry
             elif not all(overlap):
@@ -185,14 +202,49 @@ def decode_payload(payload, codes):
     return decode_enc(out, codes).rstrip(' \u3000\x00▯')
 
 
+def overlay_row_bytes(rom, m, key):
+    """Display bytes of one row of a dialogue-rewrite overlay record.
+
+    Overlay fragments (dialogue_rewrite_apply.render) keep the row's own native
+    controls inside the fragment. Tokenize the whole message so a control byte
+    is never read as a glyph: a row/page break separates words, every other
+    control draws nothing. Fragment joiners are the recorded separators.
+    """
+    from dialogue_pixel_layout import tokenize
+    target, size = int(m['new_addr'], 16), int(m['new_len'])
+    game = 'p1' if int(m['msg'], 16) >= 0xB00000 else 'p2'
+    tokens = tokenize(bytes(rom[target:target + size]), game)
+    parts = fragments(m, key)
+    joins = m.get('source_fragment_joiners', {}).get(key, ['8140'] * (len(parts) - 1))
+    out = bytearray()
+    for i, (off, length) in enumerate(parts):
+        if i:
+            out.extend(bytes.fromhex(joins[i - 1]))
+        for t in tokens:
+            if not off <= t['offset'] < off + length:
+                continue
+            if t['offset'] + len(t['raw']) > off + length:
+                raise ValueError(f'overlay fragment cuts a token: {m["msg"]} {key}')
+            if t['kind'] in ('glyph', 'space'):
+                out.extend(t['raw'])
+            elif t['kind'] in ROW_BREAK_KINDS:
+                out.extend(b'\x81\x40')
+    return bytes(out)
+
+
+def has_hangul(text):
+    return any('가' <= ch <= '힣' for ch in text)
+
+
 def rendered_rows(rom, manifest, writes, original=None):
-    owners, unsupported = final_owner_spans(writes, len(rom))
+    owners, unsupported = final_owner_spans(writes, len(rom), skip_superseded=True)
     mapped, ranges = validate_manifest(rom, manifest, original, writes)
     codes = load_syl()
     rows = []
     for addr, m in mapped.items():
         key = f'0x{addr:06X}'
-        payload = row_bytes(rom, m, key)
+        overlay = bool(m.get('rewrite'))
+        payload = overlay_row_bytes(rom, m, key) if overlay else row_bytes(rom, m, key)
         text = m['source_texts'][key]
         parts = fragments(m, key)
         target = int(m['new_addr'], 16)
@@ -209,7 +261,7 @@ def rendered_rows(rom, manifest, writes, original=None):
             text = owner[5]
         rows.append(dict(addr=addr, slot=len(payload), intended=text or '',
                          shipped=decode_payload(payload, codes), relocated=True,
-                         kind='repoint', level=None))
+                         kind='dialogue-rewrite' if overlay else 'repoint', level=None))
     for addr, entry in owners.items():
         containing = [r for r in ranges if r[0] <= addr < r[1]]
         if containing:
@@ -224,20 +276,27 @@ def rendered_rows(rom, manifest, writes, original=None):
     return rows, unsupported
 
 
-def check(rom, manifest, writes, original=None):
+def check(rom, manifest, writes, original=None, *, stats=None):
     rows, unsupported = rendered_rows(rom, manifest, writes, original)
     jams = []
     checked = 0
     for row in rows:
-        expected, _ = separator_signature(row['intended'])
-        shipped, _ = separator_signature(row['shipped'])
-        if not expected or not any('가' <= ch <= '힣' for ch in expected):
+        overlay = row['kind'] == 'dialogue-rewrite'
+        expected, _ = separator_signature(row['intended'], overlay)
+        shipped, _ = separator_signature(row['shipped'], overlay)
+        if not has_hangul(expected) and not has_hangul(shipped):
+            # Control/punctuation-only row (e.g. a lone page break owner): no
+            # Hangul text on either side, like the hangul_only in-place owners.
+            if stats is not None:
+                stats['no_text'] = stats.get('no_text', 0) + 1
+            continue
+        if not expected or not has_hangul(expected):
             unsupported.append((row['addr'], 'no authored Hangul owner'))
         elif expected != shipped:
             unsupported.append((row['addr'], 'wording/control/compact encoding differs; spacing comparison unsupported'))
         else:
             checked += 1
-            if is_jammed(row['intended'], row['shipped']):
+            if is_jammed(row['intended'], row['shipped'], overlay):
                 jams.append((row['addr'], row['intended'], row['shipped']))
     return checked, jams, unsupported
 
@@ -252,12 +311,15 @@ def main():
     args = ap.parse_args()
     try:
         verify_provenance(args.rom, args.map, args.manifest)
+        stats = {}
         count, jams, unsupported = check(args.rom.read_bytes(), json.loads(args.manifest.read_text()),
-            json.loads(args.map.read_text()), (ROOT / 'original/Game Boy Wars Advance 1+2 (Japan).gba').read_bytes())
+            json.loads(args.map.read_text()), (ROOT / 'original/Game Boy Wars Advance 1+2 (Japan).gba').read_bytes(),
+            stats=stats)
     except (OSError, ValueError, KeyError, TypeError) as exc:
         print(f'FAIL: {exc}')
         return 2
-    print(f'final owner rows checked: {count}; final-ROM jams: {len(jams)}; unsupported coverage: {len(unsupported)}')
+    print(f'final owner rows checked: {count}; final-ROM jams: {len(jams)}; unsupported coverage: {len(unsupported)}; '
+          f'no-Hangul rows skipped: {stats.get("no_text", 0)}')
     print('Byte spacing audit only; unsupported rows and renderer attribution are not a verified baseline.')
     if args.list:
         for a, authored, shipped in jams:
@@ -265,7 +327,8 @@ def main():
         for a, reason in unsupported:
             print(f'UNSUPPORTED 0x{a:06X}\t{reason}')
     if args.json:
-        args.json.write_text(json.dumps(dict(checked=count, jams=jams, unsupported=unsupported), ensure_ascii=False, indent=2))
+        args.json.write_text(json.dumps(dict(checked=count, jams=jams, unsupported=unsupported,
+                                             no_text=stats.get('no_text', 0)), ensure_ascii=False, indent=2))
     return int(bool(jams))
 
 

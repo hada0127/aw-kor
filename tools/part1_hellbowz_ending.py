@@ -121,8 +121,104 @@ def match_payload(data, segments):
     return pos
 
 
-def verify(rom, original, segments, encode):
-    """After repoint: final 0x19 command, bounded aligned allocation, complete message."""
+def _pages(payload):
+    """Native control skeleton per page (split after each 6B page control).
+
+    Text = SJIS pairs; 0x20 is padding (ignored); every other byte is a
+    control, kept in order.
+    """
+    pages, current, text, i = [], [], [], 0
+    texts = []
+    while i < len(payload):
+        b = payload[i]
+        if 0x81 <= b <= 0x9F or 0xE0 <= b <= 0xEF:
+            if not current or current[-1] != 'T':
+                current.append('T')
+            text.append(payload[i:i + 2])
+            i += 2
+            continue
+        if text:
+            texts.append(b''.join(text))
+            text = []
+        if b != 0x20:
+            current.append(f'{b:02x}')
+            if b == 0x6B:
+                pages.append(current)
+                current = []
+        i += 1
+    if text:
+        texts.append(b''.join(text))
+    pages.append(current)
+    return [' '.join(page) for page in pages], texts
+
+
+def _page_of_row(segments):
+    """Index of the page holding ADDRESS's row in the contract skeleton."""
+    raw = bytearray()
+    for kind, value in segments:
+        if kind == 'row' and b'\x72\x0a\x09' in value[0]:
+            return len(_pages(bytes(raw))[0]) - 1
+        raw += value if kind == 'gap' else value[0]
+    raise ValueError('Hellbowz two-row segment missing')
+
+
+def _contract_pages(segments):
+    raw = b''.join(value if kind == 'gap' else value[0] for kind, value in segments)
+    return _pages(raw)[0]
+
+
+def _check_two_rows(page_skeleton, payload, page_index):
+    """The documented split: one 72 0A 09 inside the page, both rows <= 176px."""
+    if page_skeleton.split().count('72') != 1 or '72 0a 09' not in page_skeleton:
+        raise ValueError('Hellbowz two-row split changed')
+    start = 0
+    for _ in range(page_index):
+        start = _next_page(payload, start)
+    end = _next_page(payload, start)
+    _, texts = _pages(payload[start:end])
+    if len(texts) != 2 or any(text_segment_cells(t) * 4 > MAX_ROW_PIXELS for t in texts):
+        raise ValueError('Hellbowz two-row text/width invalid')
+    return [text_segment_cells(t) * 4 for t in texts]
+
+
+def _next_page(payload, start):
+    i = start
+    while i < len(payload):
+        b = payload[i]
+        if 0x81 <= b <= 0x9F or 0xE0 <= b <= 0xEF:
+            i += 2
+        elif b == 0x6B:
+            return i + 1
+        else:
+            i += 1
+    return len(payload)
+
+
+def _sha(raw):
+    import hashlib
+    return hashlib.sha256(raw).hexdigest()
+
+
+def _fold(text):
+    import unicodedata
+    return unicodedata.normalize('NFKC', text).replace(' ', '')
+
+
+def verify(rom, original, segments, encode, *, spacing=None, rewrite=None, before=None):
+    """After repoint: final 0x19 command, bounded aligned allocation, complete message.
+
+    Stages (each an established, reviewed representation of this message):
+    - spacing None: pre-spacing state, exactly ``segments``.
+    - spacing = data/dialogue_spacing_repairs.json entry for START, before=None:
+      after the reviewed spacing reflow. Payload must be that entry's
+      ``after_sha256``; every page the entry does not review keeps the
+      contract's native control skeleton; the two-row page keeps its split.
+    - before = this function's pre-overlay report: after the W3 overlay. With
+      a rewrite entry for START the payload must be its ``after_sha256`` and
+      chain from the pre-overlay payload; without one it must be unchanged.
+      Either way the complete control skeleton equals the pre-overlay one
+      and the two-row split/width invariant still holds.
+    """
     from sprite_relocations import SPRITE_STORAGE_START
     rows = layout(original, encode)[ADDRESS]
     if bytes(rom[POINTER - 4:POINTER]) != b'\x19\0\0\0':
@@ -130,9 +226,54 @@ def verify(rom, original, segments, encode):
     target = struct.unpack_from('<I', rom, POINTER)[0] - 0x08000000
     if target == START or target % 4 or not 0xA3D000 <= target < SPRITE_STORAGE_START:
         raise ValueError('Hellbowz ending requires bounded aligned relocation')
+    if spacing is not None:
+        return _verify_reviewed(rom, segments, rows, target, SPRITE_STORAGE_START,
+                                spacing, rewrite, before)
     length = match_payload(bytes(rom[target:SPRITE_STORAGE_START]), segments)
     if target + length > SPRITE_STORAGE_START or rom[target + length - 1] != 0:
         raise ValueError('Hellbowz relocated message is unterminated or out of bounds')
     return {'status': 'PASS', 'target': hex(target), 'length': length, 'rows': list(ROWS),
             'row_pixels': [text_segment_cells(normalize_text_segment(r, True, START)) * 4 for r in rows],
             'live_pixels_verified': False}
+
+
+def _verify_reviewed(rom, segments, rows, target, limit, spacing, rewrite, before):
+    try:
+        end = rom.index(0, target, limit)
+    except ValueError:
+        raise ValueError('Hellbowz relocated message is unterminated or out of bounds') from None
+    payload = bytes(rom[target:end + 1])
+    pages, _ = _pages(payload)
+    row_page = _page_of_row(segments)
+    if int(spacing['source'], 16) != START or spacing.get('profile') != 'p1_portrait':
+        raise ValueError('Hellbowz spacing ledger entry does not own the message')
+    reviewed = {page['page'] for page in spacing['pages']}
+    final_pages = spacing['final_pages']
+    if (row_page in reviewed or row_page >= len(final_pages)
+            or [_fold(t) for t in final_pages[row_page]] != [_fold(t) for t in ROWS]):
+        raise ValueError('Hellbowz spacing ledger is not bound to the two-row contract')
+    if before is None:
+        if _sha(payload) != spacing['after_sha256']:
+            raise ValueError('Hellbowz payload differs from the reviewed spacing result')
+        expected = _contract_pages(segments)
+        if len(pages) != len(expected) or any(
+                a != b for i, (a, b) in enumerate(zip(pages, expected)) if i not in reviewed):
+            raise ValueError('Hellbowz page/newline controls changed outside reviewed spacing')
+    else:
+        if before.get('stage') != 'spacing' or before.get('target') != hex(target):
+            raise ValueError('Hellbowz pre-overlay report missing or relocated')
+        wanted = before['payload_sha256']
+        if rewrite is not None:
+            if int(rewrite['source'], 16) != START or rewrite['before_sha256'] != wanted:
+                raise ValueError('Hellbowz rewrite does not chain from the pre-overlay payload')
+            wanted = rewrite['after_sha256']
+        if _sha(payload) != wanted:
+            raise ValueError('Hellbowz payload differs from the reviewed overlay result')
+        if pages != before['controls']:
+            raise ValueError('Hellbowz native controls changed through the overlay')
+    widths = _check_two_rows(pages[row_page], payload, row_page)
+    return {'status': 'PASS', 'target': hex(target), 'length': len(payload),
+            'stage': 'spacing' if before is None else 'overlay',
+            'payload_sha256': _sha(payload), 'controls': pages,
+            'rewritten': rewrite is not None and before is not None,
+            'row_pixels': widths, 'live_pixels_verified': False}

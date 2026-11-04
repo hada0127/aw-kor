@@ -173,5 +173,119 @@ class HellbowzVerifyTests(unittest.TestCase):
                 hellbowz.verify(rom, ORIG, self.expected, self.encode)
 
 
+class HellbowzReviewedStageTests(unittest.TestCase):
+    """B2: the contract on the reviewed spacing state and through the W3 overlay."""
+    TARGET = 0xA3D000
+
+    def setUp(self):
+        codes = {s: int(c, 16) for s, c in json.loads(Path(builder.SYLCODE).read_text()).items()}
+        self.encode = lambda text, address: builder.encode_required_full_fidelity(
+            text, codes, collections.Counter(), address)
+        filler = self.encode('가나', hellbowz.ADDRESS)
+        runs, end = hellbowz._runs(ORIG)
+        segments, cursor = [], hellbowz.START
+        for a, b in runs:
+            segments.append(('gap', ORIG[cursor:a]))
+            if a == hellbowz.ADDRESS:
+                rows = hellbowz.layout(ORIG, self.encode)[hellbowz.ADDRESS]
+                segments.append(('row', (b'\x72\x0a\x09'.join(
+                    hellbowz.normalize_text_segment(r, True, hellbowz.START) for r in rows),)))
+            else:
+                segments.append(('row', (filler,)))
+            cursor = b
+        segments.append(('gap', ORIG[cursor:end]))   # _runs end includes the NUL
+        self.segments = tuple(segments)
+        self.payload = b''.join(v if k == 'gap' else v[0] for k, v in segments)
+        self.rom = self.install(bytearray(ORIG), self.payload)
+        self.spacing = {'source': '00DD0BB0', 'profile': 'p1_portrait', 'pages': [{'page': 6}],
+                        'final_pages': [['가나'], list(hellbowz.ROWS)] + [['가나']] * 5,
+                        'after_sha256': hellbowz._sha(self.payload)}
+
+    def install(self, rom, payload):
+        rom[self.TARGET:self.TARGET + len(payload) + 8] = payload + b'\0' * 8
+        struct.pack_into('<I', rom, hellbowz.POINTER, 0x08000000 + self.TARGET)
+        return rom
+
+    def page_offset(self, payload, page):
+        offset = 0
+        for _ in range(page):
+            offset = hellbowz._next_page(payload, offset)
+        return offset
+
+    def spacing_report(self):
+        return hellbowz.verify(self.rom, ORIG, self.segments, self.encode, spacing=self.spacing)
+
+    def test_reviewed_spacing_page_may_move_controls_others_may_not(self):
+        report = self.spacing_report()
+        self.assertEqual((report['stage'], report['payload_sha256']), ('spacing', self.spacing['after_sha256']))
+        for page, ok in ((6, True), (2, False), (1, False)):
+            payload = bytearray(self.payload)
+            at = self.page_offset(payload, page) + 2   # 0a 09 0a 09 -> 0a 09 09 0a
+            payload[at:at + 2] = b'\x09\x0a'
+            rom = self.install(bytearray(ORIG), bytes(payload))
+            spacing = {**self.spacing, 'after_sha256': hellbowz._sha(bytes(payload))}
+            with self.subTest(page=page):
+                if ok:
+                    hellbowz.verify(rom, ORIG, self.segments, self.encode, spacing=spacing)
+                else:
+                    with self.assertRaises(ValueError):
+                        hellbowz.verify(rom, ORIG, self.segments, self.encode, spacing=spacing)
+
+    def test_spacing_stage_requires_reviewed_bytes_and_bound_rows(self):
+        rom = bytearray(self.rom)
+        rom[self.TARGET + 3] ^= 1
+        with self.assertRaisesRegex(ValueError, 'reviewed spacing'):
+            hellbowz.verify(rom, ORIG, self.segments, self.encode, spacing=self.spacing)
+        for bad in ({**self.spacing, 'pages': [{'page': 1}]},
+                    {**self.spacing, 'final_pages': [['가나'], ['앞으로 한 걸음', '더 가면']] + [['가나']] * 5},
+                    {**self.spacing, 'source': '00DD0A7C'}):
+            with self.assertRaises(ValueError):
+                hellbowz.verify(self.rom, ORIG, self.segments, self.encode, spacing=bad)
+
+    def overlay(self, payload, rewrite=True, before=None):
+        before = before or self.spacing_report()
+        rom = self.install(bytearray(ORIG), payload)
+        entry = ({'source': '0xDD0BB0', 'before_sha256': before['payload_sha256'],
+                  'after_sha256': hellbowz._sha(payload)} if rewrite else None)
+        return hellbowz.verify(rom, ORIG, self.segments, self.encode,
+                               spacing=self.spacing, rewrite=entry, before=before)
+
+    def test_overlay_rewrite_keeps_controls_and_split(self):
+        payload = self.payload.replace(self.encode('가나', 0)[:2], self.encode('다', 0), 1)
+        report = self.overlay(payload)
+        self.assertEqual((report['stage'], report['rewritten']), ('overlay', True))
+        # No rewrite entry: the overlay must leave the message unchanged.
+        self.assertEqual(self.overlay(self.payload, rewrite=False)['stage'], 'overlay')
+        with self.assertRaises(ValueError):
+            self.overlay(payload, rewrite=False)
+
+    def test_injected_control_change_through_overlay_fails(self):
+        split = self.payload.index(b'\x72\x0a\x09')
+        mutations = {
+            'split_to_page': self.payload[:split] + b'\x6b' + self.payload[split + 1:],
+            'split_removed': self.payload[:split] + self.payload[split + 3:],
+            'extra_newline': self.payload[:4] + b'\x72\x0a\x09' + self.payload[4:],
+            'dropped_page': self.payload.replace(b'\x6b', b'', 1),
+        }
+        for name, payload in mutations.items():
+            with self.subTest(name), self.assertRaises(ValueError):
+                self.overlay(payload)   # even with a rewrite entry chained to the mutation
+
+    def test_overlay_chain_and_width(self):
+        before = self.spacing_report()
+        rom = bytearray(self.rom)
+        stale = {'source': '0xDD0BB0', 'before_sha256': '0' * 64,
+                 'after_sha256': before['payload_sha256']}
+        with self.assertRaisesRegex(ValueError, 'chain'):
+            hellbowz.verify(rom, ORIG, self.segments, self.encode,
+                            spacing=self.spacing, rewrite=stale, before=before)
+        split = self.payload.index(b'\x72\x0a\x09')
+        wide = self.payload[:split] + self.encode('가' * 30, 0) + self.payload[split:]
+        with self.assertRaisesRegex(ValueError, 'width'):
+            self.overlay(wide)
+        with self.assertRaisesRegex(ValueError, 'pre-overlay report'):
+            self.overlay(self.payload, before={**before, 'stage': 'overlay'})
+
+
 if __name__ == '__main__':
     unittest.main()

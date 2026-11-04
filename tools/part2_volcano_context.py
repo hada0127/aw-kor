@@ -4,6 +4,7 @@ import struct
 
 import part2_native_controls as NC
 from qa_part2_physical_rows import tokenize, assemble_rows
+from part2_context_contract import layout_rows, check_layout_representation
 from sprite_relocations import SPRITE_STORAGE_START
 
 CASES = (
@@ -17,7 +18,12 @@ CASES = (
 )
 
 
-def verify(rom, original, manifest, syllable_codes):
+def verify(rom, original, manifest, syllable_codes, layout_repairs=None):
+    """``layout_repairs``: the reviewed pixel-layout ledger once that stage ran.
+
+    None = pre-layout state. Given, a ledger entry for a case requires its
+    reviewed re-wrap with the same wording and text-relative waits.
+    """
     options = dict(consumer=NC.CONSUMER, native_profile=NC.NativeProfile(rom))
     codes = {int(v, 16) if isinstance(v, str) else int(v): k
              for k, v in syllable_codes.items()}
@@ -45,6 +51,20 @@ def verify(rom, original, manifest, syllable_codes):
         tokens = tokenize(bytes(rom[target:target + length]), **options)
         controls = lambda ts: [t['raw'] for t in ts
                               if t['kind'] in ('same_row', 'newline', 'page', 'end')]
+        expected_joins = ((('그렇군。', '그렇군。결국은、', expected[0], expected[0]), ())
+                          if source == 0xA1D444 else (('내　작전에　참견하고　싶다면、',), ()))
+        source_rows = ((0, 0, expected[0]), (0, 1, expected[1]))
+        reflowed = layout_rows(source, source_rows, layout_repairs)
+        if reflowed is not None:
+            rows, unknown, terminated = assemble_rows(tokens, codes, 'story_layout_unverified', **options)
+            if unknown or not terminated:
+                raise ValueError('Volcano complete context changed')
+            waits = check_layout_representation(tokens, rows, reflowed, source_rows, expected_joins, 'Volcano')
+            if waits != [t['raw'] for t in tokenize(old, **options) if t['kind'] == 'same_row']:
+                raise ValueError('Volcano native control sequence changed')
+            reports.append({'source': hex(source), 'target': hex(target),
+                            'rows': tuple(t for _, _, t in reflowed), 'layout': 'reviewed_pixel_layout'})
+            continue
         if controls(tokens) != controls(tokenize(old, **options)):
             raise ValueError('Volcano native control sequence changed')
         rows, unknown, terminated = assemble_rows(tokens, codes, 'story_layout_unverified', **options)
@@ -54,8 +74,6 @@ def verify(rom, original, manifest, syllable_codes):
                 or any(not r['controls_understood'] for r in rows)):
             raise ValueError('Volcano complete context changed: ' + repr(actual))
         joins = tuple(tuple(j['left'] for j in r['same_row_joins']) for r in rows)
-        expected_joins = ((('그렇군。', '그렇군。결국은、', expected[0], expected[0]), ())
-                          if source == 0xA1D444 else (('내　작전에　참견하고　싶다면、',), ()))
         if joins != expected_joins:
             raise ValueError('Volcano text-relative wait positions changed')
         reports.append({'source': hex(source), 'target': hex(target), 'rows': actual})

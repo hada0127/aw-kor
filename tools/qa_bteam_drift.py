@@ -11,6 +11,11 @@
 짜옹이 본인이 의도적으로 B팀 문구를 바꾸려면: 편집 후 `--accept`로 baseline을 재생성한다
 (의도적 변경만 통과시키고, 그 외 우발 변형은 차단).
 
+사용자 일괄 승인 재작성(2026-11-04)은 `data/bteam_approved_rewrites.json` 원장에
+(주소, from=baseline, to=현재 override)로 등재하고 파일 SHA256을
+`APPROVED_REWRITE_LEDGER_DIGEST`에 고정한다. baseline은 바꾸지 않으며 `--accept`도
+원장 주소의 baseline을 유지한다.
+
 사용:
   python3 tools/qa_bteam_drift.py            # drift 있으면 출력 + 비0 종료
   python3 tools/qa_bteam_drift.py --accept   # 현재 override로 baseline 갱신(의도적 변경 확정)
@@ -85,7 +90,13 @@ def load_overrides() -> dict:
 # changing B-team wording needs a reviewed code change of this pin.
 # The 2026-10-07 consensus re-keys two misaligned entries only; see
 # temp/claude_2026-10-07/plan/bteam_final_decisions.tsv.
-PINNED_CORE_DIGEST = '2d44431b1d6c2c3a114d861b962b51935ea8349569f911f018894d4a99aae9de'
+# 2026-11-04: re-pinned after 0x00DF5E12/0x00A1B469 moved into the user-approved
+# exception table (temp/fix_20261104/inputs.md msg3/5); no other core entry changed.
+# 2026-11-04: re-pinned after 0x00A2CB8C (shifted ハチ key -> イワン 이반) moved into the
+# exception table (inputs.md msg7/8, names_audit 1-1); no other core entry changed.
+# 2026-11-04: re-pinned after 0x00DF8EAE (Catherine first question -> banmal) moved into the
+# exception table (inputs.md msg7-8); no other core entry changed.
+PINNED_CORE_DIGEST = 'a23c220b356433dfdc0465204c3d84d64764645c418d7107166d2604b8a66297'
 ALIGNMENT_RESTORE_ADDRESSES = frozenset({0x00A19300, 0x00A1B3C8})
 ALIGNMENT_COMPOSITE_NEXT = {0x00A19300: 0x00A1930F}
 ALIGNMENT_LEGACY_KEYS = {
@@ -420,6 +431,13 @@ APPROVED_EXCEPTIONS = {
     '0x00A2D814': ('결전 전', '최종결전!'),
     '0x00DF8E16': ('게임보이 워즈에 오신 걸 환영해요!', '어드밴스 워즈에 오신 걸 환영해요!'),
     '0x00DF948E': ('그렇다면, 간단하게 게임보이 워즈에', '그렇다면, 간단하게 어드밴스 워즈에'),
+    # 2026-11-04 user (temp/fix_20261104/inputs.md msg3/5): EXT_COMPARE defects.
+    '0x00DF5E12': ('당신에게는,코스모 랜드에 대해', '코스모 랜드에 대해'),
+    '0x00A1B469': ('그건 안 돼.', '하지만요...'),
+    # 2026-11-04 user (inputs.md msg7/8): Part 2 CO name table key shift (names_audit 1-1).
+    '0x00A2CB8C': ('하치', '이반'),
+    # 2026-11-04 user (inputs.md msg7-8): Catherine first question, banmal; exact 34-byte slot.
+    '0x00DF8EAE': ('혹시, 이 게임은 처음이신가요?', '너, 혹시 이 게임은 처음이니?'),
 }
 
 # Exact user-approved Part 2 prologue renderer exceptions.  These rows record
@@ -478,10 +496,134 @@ def exception_errors(base: dict, overrides: dict) -> list:
     return errors
 
 
-def check(base: dict, overrides: dict, pinned: str = None) -> dict:
+# Bulk user-approved B-team rewrites (2026-11-04 humanizer, plan D3). The
+# baseline keeps the original B-team text; each ledger entry approves exactly
+# (address, from=baseline, to=current override). The ledger file bytes are
+# pinned here, so adding or editing an entry is a reviewed code change.
+APPROVED_REWRITE_LEDGER = os.path.join(BASE, 'data', 'bteam_approved_rewrites.json')
+APPROVED_REWRITE_LEDGER_DIGEST = 'af0c08a004594b0acf7edf658d786750f5f920282fb2d9f112e3a1ed3b26d0ab'
+LEDGER_REQUIRED_FIELDS = ('from', 'to', 'batch', 'reviewed_by', 'review_ref')
+
+
+def load_ledger_bytes(path: str = None) -> bytes:
+    return Path(path or APPROVED_REWRITE_LEDGER).read_bytes()
+
+
+def ledger_entries(ledger_bytes: bytes) -> dict:
+    """Parsed entries without validation; non-dict content yields {}."""
+    try:
+        data = json.loads(ledger_bytes.decode('utf-8'))
+    except (UnicodeDecodeError, ValueError):
+        return {}
+    entries = data.get('entries') if isinstance(data, dict) else None
+    return entries if isinstance(entries, dict) else {}
+
+
+def ledger_errors(base: dict, overrides: dict, ledger_bytes: bytes,
+                  pinned: str = None) -> list:
+    """Each ledger entry is valid only for its exact (address, from, to) tuple."""
+    errors = []
+    pinned = APPROVED_REWRITE_LEDGER_DIGEST if pinned is None else pinned
+    if hashlib.sha256(ledger_bytes).hexdigest() != pinned:
+        errors.append('approved rewrite ledger digest mismatch (APPROVED_REWRITE_LEDGER_DIGEST)')
+    try:
+        data = json.loads(ledger_bytes.decode('utf-8'))
+    except (UnicodeDecodeError, ValueError) as exc:
+        return errors + [f'approved rewrite ledger is not valid JSON: {exc}']
+    if not isinstance(data, dict) or not isinstance(data.get('entries'), dict):
+        return errors + ['approved rewrite ledger needs an "entries" object']
+    top_approved = data.get('approved')
+    recorded = base.get('_user_approved_exceptions', {})
     expected = base.get('overrides', {})
+    for addr, entry in data['entries'].items():
+        if norm(addr) != addr:
+            errors.append(f'{addr}: ledger key is not a normalized 0x%08X address')
+            continue
+        if addr in APPROVED_EXCEPTIONS or addr in recorded:
+            errors.append(f'{addr}: ledger entry overlaps an individually approved exception')
+            continue
+        if not isinstance(entry, dict):
+            errors.append(f'{addr}: malformed ledger entry')
+            continue
+        missing = [f for f in LEDGER_REQUIRED_FIELDS
+                   if not isinstance(entry.get(f), str) or not entry[f]]
+        approved = entry.get('approved', top_approved)
+        if not isinstance(approved, str) or not approved:
+            missing.append('approved')
+        if missing:
+            errors.append(f'{addr}: ledger entry missing {", ".join(missing)}')
+            continue
+        if addr not in expected:
+            errors.append(f'{addr}: ledger address is not a B-team baseline address')
+            continue
+        if entry['from'] != expected[addr]:
+            errors.append(f'{addr}: ledger "from" differs from the B-team baseline')
+        if entry['from'] == entry['to']:
+            errors.append(f'{addr}: ledger entry does not change the text')
+        if overrides.get(addr) != entry['to']:
+            errors.append(f'{addr}: override differs from the ledger "to" text')
+    return errors
+
+
+def rewrite_owner_texts(rewrites: dict = None, path: str = None) -> tuple[dict, list]:
+    """Per-row final text of the W3 overlay (data/dialogue_rewrites.json).
+
+    ``dialogue_rewrite_apply`` owns the format: each accepted message records
+    ``owner_texts`` (row key -> rewritten row text), and the same value becomes
+    the ledger ``to`` of every B-team row in it. A message without that record
+    cannot prove which protected rows it rewrote, so it is an error.
+    Returns ({0x%08X address: text}, errors).
+    """
+    from dialogue_rewrite_apply import REWRITES, key8, load_rewrites
+    errors = []
+    if rewrites is None:
+        try:
+            rewrites = load_rewrites(path or REWRITES)
+        except (OSError, ValueError, TypeError, AttributeError) as exc:
+            return {}, [f'dialogue rewrite overlay unreadable: {exc}']
+    texts, owner = {}, {}
+    for key, entry in sorted(rewrites.get('messages', {}).items()):
+        rows = entry.get('owner_texts') if isinstance(entry, dict) else None
+        if not isinstance(rows, dict) or not rows:
+            errors.append(f'{key}: dialogue rewrite lacks owner_texts (rewritten rows unproven)')
+            continue
+        for row, text in rows.items():
+            try:
+                addr = key8(int(row, 16))
+            except (TypeError, ValueError):
+                errors.append(f'{key}: invalid owner_texts row key {row!r}')
+                continue
+            if not isinstance(text, str):
+                errors.append(f'{key}: owner_texts {addr} is not text')
+                continue
+            if addr in owner and owner[addr] != key:
+                errors.append(f'{addr}: row owned by two dialogue rewrites ({owner[addr]}, {key})')
+                continue
+            texts[addr], owner[addr] = text, key
+    return texts, errors
+
+
+def check(base: dict, overrides: dict, pinned: str = None, *,
+          ledger_bytes: bytes = None, ledger_pinned: str = None,
+          rewrites: dict = None) -> dict:
+    """Source gate on the effective final text: overrides, then the W3 overlay.
+
+    W3 rewrites replace whole messages after every override stage, so each
+    protected row they own is compared by its rewritten text. An unlisted
+    change therefore stays drift; a listed one must match the ledger exactly.
+    """
+    expected = base.get('overrides', {})
+    rewritten, rewrite_errors = rewrite_owner_texts(rewrites)
+    overrides = dict(overrides)
+    overrides.update({a: t for a, t in rewritten.items() if a in expected})
+    if ledger_bytes is None:
+        ledger_bytes = load_ledger_bytes()
+    approved_rewrites = ledger_entries(ledger_bytes)
     drift = [(a, w, overrides[a]) for a, w in expected.items()
              if a in overrides and overrides[a] != w
+             and not (isinstance(approved_rewrites.get(a), dict)
+                      and approved_rewrites[a].get('from') == w
+                      and approved_rewrites[a].get('to') == overrides[a])
              and not (int(a, 16) == 0xA34B6C
                       and w == '예　아뇨'
                       and overrides[a] == '　예　　　아뇨')]
@@ -490,7 +632,8 @@ def check(base: dict, overrides: dict, pinned: str = None) -> dict:
     # ROM gate still protects the corrected source addresses and fails today.
     missing = [(a, w) for a, w in expected.items()
                if a not in overrides and overrides.get(ALIGNMENT_LEGACY_KEYS.get(a)) != w]
-    errors = exception_errors(base, overrides)
+    errors = rewrite_errors + exception_errors(base, overrides)
+    errors += ledger_errors(base, overrides, ledger_bytes, ledger_pinned)
     pinned = PINNED_CORE_DIGEST if pinned is None else pinned
     if core_digest(base) != pinned:
         errors.append('baseline entries outside the approved exceptions changed (core digest mismatch)')
@@ -517,10 +660,19 @@ def authorized_dcf_a8c_reflow(rom: bytes, message: dict) -> bool:
     return rom[target + first_off + first_len:target + next_off] == b'\x72\x0a\x09'
 
 
-def accept(base: dict, overrides: dict, *, allow_bteam_changes: bool = False, pinned: str = None) -> dict:
-    """New baseline from current overrides. Refuses to widen beyond the exceptions."""
+def accept(base: dict, overrides: dict, *, allow_bteam_changes: bool = False, pinned: str = None,
+           ledger_bytes: bytes = None) -> dict:
+    """New baseline from current overrides. Refuses to widen beyond the exceptions.
+
+    Ledger addresses keep their B-team baseline text: bulk rewrites are
+    approved by the pinned ledger, never by re-snapshotting the baseline.
+    """
+    if ledger_bytes is None:
+        ledger_bytes = load_ledger_bytes()
+    keep = ledger_entries(ledger_bytes)
     new = dict(base)
-    new['overrides'] = {a: overrides[a] for a in base.get('overrides', {}) if a in overrides}
+    new['overrides'] = {a: (base['overrides'][a] if a in keep else overrides[a])
+                        for a in base.get('overrides', {}) if a in overrides}
     new['count'] = len(new['overrides'])
     if exception_errors(new, overrides):
         raise ValueError('approved exceptions do not match the current overrides')
@@ -536,12 +688,19 @@ def accept(base: dict, overrides: dict, *, allow_bteam_changes: bool = False, pi
 
 
 def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
-              map_rom_path: str | None = None, *, observations=None) -> list[dict]:
+              map_rom_path: str | None = None, *, observations=None,
+              ledger_bytes: bytes = None, ledger_pinned: str = None) -> list[dict]:
     """Compare protected text with final ROM bytes, including relocated messages.
 
     Relocation metadata records each original line's final byte span. Reject
     stale write metadata before checking text so a mismatched map cannot pass.
     """
+    if ledger_bytes is None:
+        ledger_bytes = load_ledger_bytes()
+    ledger_pinned = APPROVED_REWRITE_LEDGER_DIGEST if ledger_pinned is None else ledger_pinned
+    if hashlib.sha256(ledger_bytes).hexdigest() != ledger_pinned:
+        raise ValueError('approved rewrite ledger digest mismatch')
+    approved_rewrites = ledger_entries(ledger_bytes)
     rom = Path(rom_path).read_bytes()
     map_rom = Path(map_rom_path).read_bytes() if map_rom_path else rom
     if len(map_rom) != len(rom):
@@ -756,22 +915,36 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
             actual = '<no text write in integrity map>'
             matched = False
             cause = 'protected address has no final text write evidence'
-        if not matched:
+        ledger_owned = key in approved_rewrites
+        if ledger_owned:
+            # A ledger-owned row must ship the approved rewrite: once its
+            # (address, from=baseline) binding is valid, only the rendered
+            # "to" passes. The baseline-equivalence fallbacks below would
+            # otherwise accept the old wording that the rewrite replaced.
+            rewrite = approved_rewrites[key]
+            bound = (isinstance(rewrite, dict) and rewrite.get('from') == baseline
+                     and isinstance(rewrite.get('to'), str) and bool(rewrite['to']))
+            matched = bound and (display_equivalent(actual, addr, actual=True)
+                                 == display_equivalent(rewrite['to'], addr))
+            if not matched and not actual.startswith('<'):
+                cause = ('ledger-owned row differs from approved rewrite "to"' if bound
+                         else 'ledger entry not bound to the B-team baseline')
+        if not matched and not ledger_owned:
             matched = matches_reviewed_bteam_spacing(addr, baseline, actual)
-        if not matched and key in base.get('_user_approved_exceptions', {}):
+        if not matched and not ledger_owned and key in base.get('_user_approved_exceptions', {}):
             exception = base['_user_approved_exceptions'][key]
             if exception.get('renderer_only'):
                 matched = actual == exception['to']
-        if not matched:
+        if not matched and not ledger_owned:
             matched = round2_width_equivalent(baseline, actual, addr)
-        if not matched and key in APPROVED_EXCEPTIONS and 0xA2D55C <= addr <= 0xA2D8A8:
+        if not matched and not ledger_owned and key in APPROVED_EXCEPTIONS and 0xA2D55C <= addr <= 0xA2D8A8:
             # The approved M29 pair title is drawn by the strict pair-title
             # writer, which emits the original fullwidth glyphs (！) like the
             # other FIX_GATE mission titles; words and order stay exact.
             matched = actual == original_glyph_encoding(baseline)
-        if not matched and addr in ROUND2_PREFIX_GLYPH_ROWS and addr in FIX_GATE_ADDRESSES:
+        if not matched and not ledger_owned and addr in ROUND2_PREFIX_GLYPH_ROWS and addr in FIX_GATE_ADDRESSES:
             matched = actual == '　' * ROUND2_PREFIX_GLYPH_ROWS[addr] + display_equivalent(baseline, addr)
-        if not matched and objective_start is not None:
+        if not matched and not ledger_owned and objective_start is not None:
             matched = round2_objective_equivalent(rom, baseline, actual, addr, objective_start)
         if addr in DEFERRED_ADDRESSES:
             matched = False  # Reviewed decision withholds acceptance, even on a later ROM.
@@ -786,6 +959,7 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
                                        'FIX_GATE_BLOCKED' if addr in COMPACT_GLYPH_ADDRESSES else
                                        'ALIGNMENT_RESTORE' if addr in ALIGNMENT_RESTORE_ADDRESSES else
                                        'NEW_STRICT_MISMATCH' if addr in NEW_STRICT_ADDRESSES else
+                                       'APPLY_LEDGER_REWRITE' if ledger_owned else
                                        'RESTORE_BASELINE'})
     return issues
 

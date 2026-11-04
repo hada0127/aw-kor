@@ -27,9 +27,10 @@ class PoliteChoiceTests(unittest.TestCase):
   for a in (0xDF8ED0,0xDF8ED1,0xDF8ED2,0xDF96B2,0xDF9AFC,0xA3D000+30):
    r=self.fixture();r[a]^=1
    with self.assertRaises(ValueError):C.verify(r,self.original,self.encode)
- def test_old_informal_first_question_rejected(self):
-  r=self.fixture();p=self.encode('이 게임은 처음이야?',0xDF8EAE);r[0xDF8EAE:0xDF8ED0]=p+b' '*(34-len(p))
-  with self.assertRaisesRegex(ValueError,'first-game'):C.verify(r,self.original,self.encode)
+ def test_old_first_questions_rejected(self):
+  for old in ('이 게임은 처음이야?','혹시, 이 게임은 처음이신가요?'):
+   r=self.fixture();p=self.encode(old,0xDF8EAE);r[0xDF8EAE:0xDF8ED0]=p+b' '*(34-len(p))
+   with self.assertRaisesRegex(ValueError,'first-game'):C.verify(r,self.original,self.encode)
  def test_alias_and_storage_boundaries(self):
   original=bytearray(self.original);struct.pack_into('<I',original,0x100,0x08DF9698)
   with self.assertRaisesRegex(ValueError,'original'):C.source_guard(original)
