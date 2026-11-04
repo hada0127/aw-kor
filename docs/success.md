@@ -4222,3 +4222,15 @@ Astra 최종 델타 `temp/spacing_followup/astra_delta1_review.md`(gpt-6-astra/h
 - 문장부호 그림: `tools/korean_punct_glyphs.py`, `python3 -m unittest tools.test_korean_punct_glyphs` 7 OK.
 - W3 대사: `python3 tools/dialogue_rewrite_apply.py --rom temp/fix_20261104/final2/finalbase.gba --manifest … --map … --batches … --external …`(명령 원문 `temp/fix_20261104/final2/apply.cmd`) → 3,676메시지 적용, overlay 0xA8D84C~0xAB6DE0. 외부판 복사 검사 `--check-external` 10자 넘는 일치 0.
 - 보고서(항목별 한국어 설명) [`docs/reports/FIX_2026-11-04.md`](reports/FIX_2026-11-04.md).
+
+## 2026-11-05 fixB — 「게임보이 워즈 어드밴스」 표기 복귀 · 11-04 남은 한계 해결 (후보, 정본 아님)
+
+- 후보 `output/game_wars_korean_candidate_20261104_fixB.gba` SHA-256 `0983d1eb93b12f09d5536a26807077f61ed1b8ecca1449e60c0f3cbd9bb9d1a8` CRC32 `ABA0BDD3`. 재현: `temp/fix_20261104/fixB/final/make_snap.sh` 로 스냅샷(HEAD `d8d6a24` + 작업트리)을 만들고 `temp/fix_20261104/fixB/final/build.sh`(스냅샷 안에서 `AW_FONT_DIR=~/aw-fonts memcap -- nice -n 15 python3 tools/build_korean_full.py --no-sync-outputs …`) → exit 0. 해시 `fixB/final/fixB.hash.txt`. 정본 b44·dist 불변. Astra delta C3 APPROVED.
+- 게이트 46/46 exit 0: `temp/fix_20261104/fixB/final/gates_fixB/SUMMARY_final.txt`(p1_punctuation·obj_title_cells 포함). 단위: `fixB/final/unit_final/run_units.sh fixB|head` → HEAD 대비 새 실패 0(`UNIT_TESTS_FINAL.md`).
+- W3 전체 재적용(빈 원장부터): `temp/fix_20261104/fixB/C2/apply.sh` → accepted 3,711, overlay `0xA8D84C..0xAB7BC0`, 원장 digest `4e1313a7…`.
+- 이름 저장(현재 후보): `cd temp/fix_20261104/fixB/C3evidence && memcap -n aw-c3-chainA -- bash py/chainA.sh` → 주인공 SRAM `0xE372=92af888a0040814081408140`(「한글」), 맵 이름 SRAM `0xE506`=「요하개다한글지도」, cold boot 재로드 동일. 기반 SRAM `743cbb8e…` = 참조 일치.
+- 2편 잉크·강조색: `memcap -n aw-c3-chainK -- bash py/chainK.sh` → 12 소비자 210쌍 JP 와 주 잉크 동일, 옛 갈색 0. 해안 0x94F·본부 0x94B 강조 JP 동일.
+- 로고: `python3 temp/fix_20261104/fixB/final/logo_vs_b16.py <후보> output/game_wars_korean_candidate_20261012_b16.gba <out>` → 타이틀 OBJ 4블록 differing_bytes 0.
+- 2편 스플래시 한 줄 「게임보이 워즈 어드밴스 2」(size 13, 155×12px) 정상 키 화면 `fixB/build/1_A/screens/sheet_p2_splash.png`.
+- 2편 컷인 「야마토다마시이」: 사전 0xFD0160(64칸) 재배치 후 화면 `fixB/final/q/sheet_cutin.png`(파워 게이지 CHEAT).
+- 보고서 [`docs/reports/FIX_2026-11-05.md`](reports/FIX_2026-11-05.md).
