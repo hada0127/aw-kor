@@ -1685,3 +1685,17 @@ Round 4에서 DOWN/UP으로 도움말 두 페이지를 원본/후보 같은 SRAM
 - 2026-10-26 보충: 위 제약은 당시 하네스에 해당한다. 현재 소스에는 두 카트리지용 `--rom2 CLIENT_ROM`이 있으며, linked state 재개에는 `savepair/loadpair`를 사용한다. 예전 `savestate/loadstate` 개별 코어 명령은 링크 안전성을 보장하지 않는다. W3의 b43+ staged replay 실패는 이를 사용한 경로이며, 당시 ROM 자체 결함의 증거가 아니다. 새 경로의 검증 결과는 `temp/unseen_20261026/w9/REPORT_r2.md`를 따른다. 같은 실행의 화면 일치가 별도 프로세스의 CPU 위상 동일성까지 증명하지는 않는다.
 - `qa_text_fit` overflow 출력 수(273)는 `check_text` 이벤트 수이고 고유 주소 수(259)가 아니다. 13주소가 같은 인자로 여러 번 불린다. 「고유 주소 수 = 출력 수」를 요구한 첫 비교는 EXIT 3이었다. 이벤트 수·고유 (주소, 유형) 집합·발생 횟수를 따로 대조한다([`PHASE_B_QA.md`](reports/name_grid_2026-10-23/PHASE_B_QA.md) §3).
 - 하네스: 생성된 mGBA `flags.h`만 따르면 라이브러리 실제 `C_DEFINES`(`ENABLE_DIRECTORIES` 등)와 struct 배치가 달라 SIGSEGV가 난다. `flags.make`의 `C_DEFINES` 전체를 쓴다. macOS에서 `nice`(SIP 보호 바이너리)를 거치면 `DYLD_LIBRARY_PATH`가 지워져 dyld 실패가 난다. 실행 파일 rpath `@executable_path/build`가 공식 build 폴더를 가리키도록 symlink를 둔다(T5 `harness/build`).
+
+## 2026-11-04 fix_20261104 실패·막다른 길 (재시도 조건 포함)
+
+- **재배치 메시지 길이를 바꾸는 수정은 기존 파이프라인 안에서 못 한다.** `b830ac`·`b82fac`·`ec312c`·`d821f0` 계약이 기존 재배치 배치를 바이트 단위로 고정해서, 앞 메시지 1바이트만 길어져도 `B830AC candidate table/pointer changed`·`B82FAC scoped arena/high-water` 로 빌드가 실패했다(T2 부호 추가 시도). 계약을 웨이브마다 다시 고정하는 대신, 기존 재배치는 그대로 두고 마지막 단계 overlay 로 옮기는 방식(C안)을 택했다. 정확 바이트 pin 이 걸린 메시지(95)는 overlay 로도 안 바꾼다 — 바꾸려면 해당 계약의 좁은 재고정과 리뷰가 먼저다.
+- **고정 기준 빌드에 승인 원장을 그대로 두면 실패한다.** 빈 재작성(overlay 없음) 스냅샷에 실제 원장을 넣으면 빌더가 「B-team approved rewrites not shipped (1099)」로 멈추고(`final2/finalbase_build_attempt1_fail.log`), 원장만 비우고 digest pin 을 안 바꾸면 `approved rewrite ledger digest mismatch`(`attempt2`). 기준 빌드는 빈 원장 + 그 digest 로 pin 을 같이 바꾼다(`final2/make_snap.sh … empty`).
+- **ROM 원장 매칭을 기준선 실패 뒤에만 하면 안 된다.** 처음 구현은 기준선 문구가 맞으면 원장 `to` 를 안 봐서 옛 문구도 통과했다(리뷰 B3). 원장 주소는 `to` 만 통과시킨다.
+- **overlay 전에 실패한 계약 검사를 일괄 면제하면 안 된다.** `part2_context`·`hellbowz_ending`·`part2_volcano_context` 를 「원래 실패」로 빼던 방식은 새 실패도 같이 숨긴다(리뷰 B2). 각 검사가 재배치/간격 표현을 이해하도록 고치고 overlay 전후에 다시 돈다.
+- **용어 ROM 게이트를 무결성 맵 항목마다 따로 읽으면 안 된다.** overlay 로 버려진 옛 슬롯과 native 제어 바이트까지 읽어 2,940건 오탐이 났다(리뷰 B5). 활성 포인터·manifest 소유만 디코드하고 「몹시」 같은 일반어를 이름과 구분한다.
+- **P071 1차 수정 실패.** 「위에서」를 넣은 r1 은 화면에서 「보병위에서A」로 두 군데 붙었고, 대신 「에서　」로 줄인 안은 「위(の上)」 뜻이 빠져 Astra 가 거부했다(delta r2). 현재 「이 보병 위에 A버튼」으로 수용. 원문대로 「위에서 A 버튼」을 쓰려면 재배치가 필요하다.
+- **결함 #2 「수송선으로」 은 슬롯 안에서 원래 어순으로 못 넣었다.** 8B 행에 「으로 수도에」가 안 들어가 문장을 「수도는 / 수송선으로 보병을 실어 점령하면 돼」로 재구성했다(의미 요소 유지).
+- **trim 훅 손조립 바이트 오류.** 계획 D1 의 손으로 조립한 바이트 2곳(0x1A 분기, 0x36 strb)이 틀렸다. 훅·트램펄린은 clang 으로 어셈블해서 쓴다.
+- **메인 체크아웃에서 동시 빌드 불가.** 다른 워커가 같은 시각 `tools/` 를 바꾸면 빌더가 `Build inputs changed during build; output provenance refused` 로 멈춘다. 항상 스냅샷에서 빌드한다(빌더가 tracked `data/` 도 다시 쓴다).
+- **헤드리스 하네스:** 기존 `temp/mgbah` 는 Mach-O 라 이 PC 에서 Exec format error. `temp/mgbah_linux` 를 쓴다.
+- **문장부호: 0x8145(・) 그림은 바꾸지 않는다.** 한국어 가운뎃점(「해상·공중」 34행)·이름 그리드·소수점이 실제로 쓴다. 말줄임을 위해 바닥 점으로 내리면 이들이 깨진다.

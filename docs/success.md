@@ -4211,3 +4211,14 @@ Astra 최종 델타 `temp/spacing_followup/astra_delta1_review.md`(gpt-6-astra/h
 - 명령·exit·증거 링크: [`docs/reports/name_grid_2026-10-23/PHASE_B_QA.md`](reports/name_grid_2026-10-23/PHASE_B_QA.md). 실기 미검증, Link BLOCKED.
 - T7 소스 반영 commit `4baba1f346c105d72a439f9af164f175a72544a0`: Astra 최종 full→delta2 승인(Critical·필수 지적 없음), 승인 manifest-v3 350파일과 commit blob 동일 및 feature push·main fast-forward·origin/main push 완료는 총괄 ROOT_PROOF 기준이다. 문서 마감 워커의 서버에는 `.git`가 없어 직접 Git 검증은 하지 않았다. secret scan은 staged 350/range 360파일의 후보 176건 때문에 RC1이었고, 전부 수동 오탐 판정·미해결 0·시크릿 0이다. 원문·대상 해시·확인 출처는 [`최종 코드 리뷰`](reports/name_grid_2026-10-23/PHASE_B_CODE_REVIEW.md)에 보존했다. 문서 마감 워커는 별도 변경을 미커밋 상태로 총괄에게 인계했다.
 - 정본은 여전히 b44이고 재배포·dist 변경·full/final/title_test 동기화는 하지 않았다. 2350 중 뢨·썅·쏀·쓩·쭁 5음절의 일반 키열 도달 불가, 실기 미검증·Link BLOCKED를 유지한다.
+
+## 2026-11-04 로고 복귀 · 1편 조합 이름 입력 · 비교 결함 · 대사 자연화 (후보, 정본 아님)
+
+- 후보 `output/game_wars_korean_candidate_20261104_fixA.gba` SHA-256 `f9129a621d85a39f1b85387b76a4c724c1c095afdde6188b5e363ee5143607c8` CRC32 `9F32439F`. 재현: `temp/fix_20261104/final2/make_snap.sh snap_v3` 로 작업트리 스냅샷을 만들고 `cd temp/fix_20261104/final2/snap_v3 && AW_FONT_DIR=~/aw-fonts memcap -n aw-kor-v3 -- nice -n 15 python3 tools/build_korean_full.py --out ../v3.gba --no-sync-outputs --report ../v3_encode_report.csv` → exit 0. 정본 b44·dist 불변. Astra delta r4 APPROVED.
+- 게이트 `temp/fix_20261104/final2/gates_v3.sh` 36개 중 34개 exit 0(B팀 drift 소스/ROM, lint, text_fit, pixel_layout, renderer_text, integrity_map, jamming, spacing, terms_from_rom, visual_regions, 외부판 복사 검사, 단위 묶음). `p1_punctuation`·`obj_title_cells` 2개는 exit 1(아래 fail.md·todo).
+- 로고: `tools/build_title_hangul.py` = `c20e9e7` 판, `python3 -m unittest tools.test_title_legacy_logo` 7 OK.
+- 1편 조합 이름 입력: `python3 tools/name_compose_p1/build_image_p1.py --check`, `python3 -I tools/test_part1_name_compose_core.py`(29 OK), `python3 -B tools/test_part1_name_compose_build.py --rom <ROM>`(21 OK), `python3 -I tools/test_part1_name_trim_hook.py --rom <ROM>`(14 OK). 정상 입력 「가」 → 인사말 `temp/fix_20261104/final2/screens/v2/p1_greet/`, 2편 G8 「강철」→`884990d3`.
+- 2편 강조색: 0xF30440 색 리맵 복사 루틴. 「로켓포」 빨강(12)·「공격」 파랑(13)이 일본판 VRAM 픽셀과 일치(`temp/fix_20261104/re/highlight/`).
+- 문장부호 그림: `tools/korean_punct_glyphs.py`, `python3 -m unittest tools.test_korean_punct_glyphs` 7 OK.
+- W3 대사: `python3 tools/dialogue_rewrite_apply.py --rom temp/fix_20261104/final2/finalbase.gba --manifest … --map … --batches … --external …`(명령 원문 `temp/fix_20261104/final2/apply.cmd`) → 3,676메시지 적용, overlay 0xA8D84C~0xAB6DE0. 외부판 복사 검사 `--check-external` 10자 넘는 일치 0.
+- 보고서(항목별 한국어 설명) [`docs/reports/FIX_2026-11-04.md`](reports/FIX_2026-11-04.md).
