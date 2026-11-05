@@ -1,6 +1,7 @@
 """Native plate geometry and palette regressions for mode-select graphics."""
 import unittest
 import os
+import hashlib
 from PIL import Image
 import hangul_pixel_fit as fit
 from pathlib import Path
@@ -27,7 +28,8 @@ class ModeMenuStyleTest(unittest.TestCase):
         for off in BIG + SMALL:
             big = off in BIG
             a = obj_canvas(lz77_decompress(self.original, off)[0], 2 if big else 4, 8 if big else 4, 4 if big else 2)
-            b = obj_canvas(lz77_decompress(self.rom, off)[0], 2 if big else 4, 8 if big else 4, 4 if big else 2)
+            live = fit.plate_address(self.rom, off) if big else off
+            b = obj_canvas(lz77_decompress(self.rom, live)[0], 2 if big else 4, 8 if big else 4, 4 if big else 2)
             for y in range(len(a)):
                 for x in range(128):
                     # Only the native text interiors may change.
@@ -99,17 +101,44 @@ class ModeMenuStyleTest(unittest.TestCase):
         with self.assertRaises(AssertionError):
             hdr.verify_header_strings(bad)
 
-    def test_small_labels_keep_native_white_on_color(self):
-        for off in SMALL:
-            p = obj_canvas(lz77_decompress(self.rom, off)[0], 4, 4, 2)
-            values = [p[y][x] for y in range(3, 12) for x in range(4, 124)]
-            self.assertGreater(values.count(1), 12, hex(off))
-            self.assertGreater(values.count(5), 500, hex(off))
-            self.assertEqual(set(values), {1, 5})
+    def test_unselected_small_bars_match_r4_goldens(self):
+        golden = {
+            0x5B8E44: 'f2c62f60e53031fac83a6a327898eb533cb5f6f5a72400b6982c4c701f507c86',
+            0x5B9050: 'e19bc09129e956a33fce9c4339113b4f8f80a677ad4082a06839e97af2cdb6ff',
+            0x5B9378: '88c34a4d6e7390265f0552d947e8c1f16a78ecf6e6ff30b828cd373149bad5e7',
+            0x5B8F48: '424bd02a8131033fb5b2d0a7c04b0a12d2112d1b7aced2b517034372c8fe18e4',
+            0x5B917C: 'fac8249a533cfad896d31a21d45b86d5aac52869f4507885cd60b22a5b25f071',
+            0x5B9280: '0de621b3b2b81968dfb645e78db22bd6fe8c039819f11dab9940b61d20fa0ff6',
+        }
+        for off, digest in golden.items():
+            raw = lz77_decompress(self.rom, off)[0]
+            self.assertEqual(hashlib.sha256(raw).hexdigest(), digest, hex(off))
+
+    def test_selected_plate_subtitle_has_text_width_white_box(self):
+        golden = {
+            0x5B7930: '10245baded86a2a2afb7ea69b301f22af61020f028ea0113f8045bc0c3a45146',
+            0x5B7CB0: 'a50dbe7732faf01100ceeea3923200fe9476969e9edbd1a25528f586d038cf6a',
+            0x5B7F38: '5b7c03ebb017da4813ebbd748ff5d856be90bc82afd44a015ff555eed63624e2',
+            0x5B82B4: 'fb3c5c431a20d183b1d3546bfc3d675ed4753ce69b2c0880bcb8601ed752ee93',
+            0x5B8564: '400049a16ddee8c9dc5760164f26d8d7fa066acabba1dc228bd207fefb9c898a',
+            0x5B8850: 'fb4bb23e94198eee4914d007d7ff63769d12689e3a266e66ad5575da3238d411',
+            0x5B8B20: 'f58aba6e1ed5e267125ed2785807f6c85953e5c5fe3bc2823f402e1bb055f46c',
+        }
+        for off in BIG:
+            live = fit.plate_address(self.rom, off)
+            raw = lz77_decompress(self.rom, live)[0]
+            self.assertEqual(hashlib.sha256(raw).hexdigest(), golden[off], hex(off))
+            p = obj_canvas(raw, 2, 8, 4)
+            cols = [x for x in range(4, 124) if any(p[y][x] == 1 for y in range(23, 30))]
+            self.assertTrue(cols, hex(off))
+            left, right = min(cols), max(cols)
+            self.assertTrue(all(p[y][x] == 5 for y in range(23, 30) for x in (left-1, right+1, 4, 123)), hex(off))
+            self.assertTrue(any(p[y][x] == 5 for y in range(23, 30) for x in range(left, right+1)), hex(off))
+            self.assertLess(right-left+1, 120, hex(off))
 
     def test_large_ink_clears_lower_band(self):
         for off in BIG:
-            p = obj_canvas(lz77_decompress(self.rom, off)[0], 2, 8, 4)
+            p = obj_canvas(lz77_decompress(self.rom, fit.plate_address(self.rom, off))[0], 2, 8, 4)
             ys = [y for y in range(2, 22) if any(5 <= v <= 12 for v in p[y][4:124])]
             self.assertGreater(max(ys) - min(ys) + 1, 16, hex(off))
             self.assertEqual(set(p[22][3:125]), {1})
@@ -117,7 +146,7 @@ class ModeMenuStyleTest(unittest.TestCase):
     def test_complete_ink_on_shared_baseline_in_final_rom(self):
         rom = Path(os.environ['AW_TEST_ROM']).read_bytes() if os.environ.get('AW_TEST_ROM') else self.rom
         for off, text in zip(BIG, fit.PLATE_LABELS):
-            grid = obj_canvas(lz77_decompress(rom, off)[0], 2, 8, 4)
+            grid = obj_canvas(lz77_decompress(rom, fit.plate_address(rom, off))[0], 2, 8, 4)
             layer = Image.new('L', (128, 32)); layer.putdata([v for row in grid for v in row])
             records = fit.verify_plate_ink(layer, text)
             ox, oy = fit.PLATE_ORIGIN
@@ -135,7 +164,8 @@ class ModeMenuStyleTest(unittest.TestCase):
             self.assertEqual(len(set(idx)), len(text), text)
             self.assertEqual(used & set(fit.PLATE_BODY_INDICES), set(idx), text)
             self.assertTrue(all(grid[22][x] == 1 for x in range(4,124)))
-            self.assertTrue(all(grid[y][x] == 5 for y in range(23,30) for x in range(4,124)))
+            self.assertTrue(any(grid[y][x] == 1 for y in range(23,30) for x in range(4,124)))
+            self.assertTrue(all(grid[y][x] in (1, 2, 3, 5) for y in range(23,30) for x in range(4,124)))
 
     def test_clipped_or_shifted_syllable_rejected(self):
         for text in ('편집', '통신'):
@@ -169,7 +199,7 @@ class ModeMenuStyleTest(unittest.TestCase):
         # JP words fill x=4..123, y=2..21; Korean fills the 20px cap band and
         # most of the width allowed by natural Hangul proportions (declared scale).
         for off, text in zip(BIG, fit.PLATE_LABELS):
-            grid = obj_canvas(lz77_decompress(self.rom, off)[0], 2, 8, 4)
+            grid = obj_canvas(lz77_decompress(self.rom, fit.plate_address(self.rom, off))[0], 2, 8, 4)
             pts = [(x, y) for y in range(2, 22) for x in range(4, 124) if grid[y][x] in fit.PLATE_BODY_INDICES]
             ys = [y for _, y in pts]; xs = [x for x, _ in pts]
             self.assertEqual((min(ys), max(ys)), (2, 21), text)
@@ -183,6 +213,14 @@ class ModeMenuStyleTest(unittest.TestCase):
             self.assertEqual(len(original), len(result))
             self.assertLessEqual(used, capacity)
             allowed[off:off + capacity] = b'\1' * capacity
+        for off in BIG:
+            live = fit.plate_address(self.rom, off)
+            if live != off:
+                raw, used = lz77_decompress(self.rom, live)
+                self.assertEqual(len(raw), 2048)
+                allowed[live:live + used] = b'\1' * used
+                for loc in fit.PLATE_LOADERS[off]:
+                    allowed[loc:loc + 4] = b'\1' * 4
         self.assertFalse(any(a != b and not permitted for a, b, permitted in zip(self.original, self.rom, allowed)))
 
 

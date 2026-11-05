@@ -189,6 +189,10 @@ class FontRuleTests(unittest.TestCase):
                 changed['capture_archive'][name + '_sha256'] = '0' * 64
                 with self.assertRaisesRegex(AssertionError, 'receipt changed'):
                     aw_fonts._check_candidate_capture(changed, proof['rom_sha256'])
+            changed = copy.deepcopy(proof)
+            changed['frame_sha256'] = '0' * 64
+            with self.assertRaisesRegex(AssertionError, 'frame changed'):
+                aw_fonts._check_candidate_capture(changed, proof['rom_sha256'])
 
     def test_final_line_height_includes_outline(self):
         self.assertEqual(aw_fonts.drawn_line_height({(0, 2), (1, 15)}, 1, 1), 16)

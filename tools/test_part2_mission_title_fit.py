@@ -157,10 +157,11 @@ class MissionTitleFitTests(unittest.TestCase):
                 builder._mission_title_hangul_glyph('한')
 
     def test_hangul_glyph_ink_bounds_and_glyph_payload_hashes(self):
+        # gfx T5 (2026-11-05): b30 face/rim kept; partial rim pixels take 9/8/7.
         titles = {
-            '레드스타 진군!': 'c6376f19ef96d391b4a4954c58d95ac97d6ad836f06c1d856a4a7015a2d1bd49',
-            '최종결전!': 'bfc602aa1d15d000a1f2f159475479a3be74d906e66f6b1f22ea47a9123a512e',
-            '검은 악마를 막아라!': '8ee82faa835a01afb192396fc873734387cd4a7c1da21347ace84b32e5616834',
+            '레드스타 진군!': 'f3541ff817d68ed9d683f92e95285bb231ace949d297a779e2ac6ef2428803a8',
+            '최종결전!': '2806c7c323c047ec4240794ddb55f6c8b73e328b3811a1cfe7f61fdf9b037799',
+            '검은 악마를 막아라!': '8b6d0d5f2b378135ea69e7f2c1c562830cef82569cf94bdab86881c231d6a805',
         }
         for title, expected in titles.items():
             raw = bytearray()

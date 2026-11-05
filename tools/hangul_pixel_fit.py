@@ -243,6 +243,25 @@ PLATE_HEIGHT = 20
 PLATE_ORIGIN = (4, 2)
 PLATE_WIDTH = 120
 PLATE_LABELS = ('캠페인', '자유전', '상점', '편집', '통신', '트라이얼', '사운드룸')
+PLATE_LOADERS = {
+    0x5B7930: (0xA3BC28, 0xA3BC60),
+    0x5B7CB0: (0xA3BC30,), 0x5B7F38: (0xA3BC38,),
+    0x5B82B4: (0xA3BC40,), 0x5B8564: (0xA3BC48,),
+    0x5B8850: (0xA3BC50,), 0x5B8B20: (0xA3BC58,),
+}
+
+
+def plate_address(rom, source):
+    """Resolve every native loader of a selected Part 2 mode plate."""
+    import struct
+    addresses = {struct.unpack_from('<I', rom, loc)[0] - 0x08000000
+                 for loc in PLATE_LOADERS[source]}
+    if len(addresses) != 1:
+        raise AssertionError(f'Part 2 mode plate loaders disagree: {source:06X}')
+    address = addresses.pop()
+    if address != source and not 0xFD9000 <= address < 0xFDB000:
+        raise AssertionError(f'Part 2 mode plate loader outside allocation: {source:06X}')
+    return address
 PLATE_MAX_WIDTH_SCALE = 1.9    # declared wide setting; shape oracle checks it
 PLATE_MIN_GAP = 2
 PLATE_MAX_GAP = 8

@@ -6,6 +6,10 @@ A 2026-05-30 Part 2 overlay pass wrote '육' over 防 by mistake. Both are redra
 as one-syllable Korean labels in the original style: white ink (1) with a 1px
 dark outline (15), glyph rows 4..10 / outline rows 3..11 like the source kanji.
 방 = 방어 (defense), 내 = 내구 (durability).
+방 uses the same 8x8 hand-pixeled design as the battle DEF card
+(build_korean_full.BATTLE_DEF_GLYPH): ㅂ, ㅏ three columns apart and ㅇ one
+row below, so the 1px outline never joins the light strokes. Glyph rows/cols
+4..11, outline 3..12.
 """
 import hashlib
 import os
@@ -14,13 +18,29 @@ BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # (offset, Korean label, sha256 of the original 128-byte 防 / 耐 block)
 LABELS = ((0xB93BD0, '방', 'e71ad7839f45850ff6096806e4759fb036b351f4771145a68e0918e062164407'),
           (0xB93C50, '내', 'a154db90daf47be12c5f60318b704f3626ae5c5536f5f2ca534f4540cb97af70'))
+DEFENSE_GLYPH_8 = (
+    'X.X...X.',
+    'XXX...XX',
+    'X.X...X.',
+    'XXX...X.',
+    '........',
+    '..XXX...',
+    '.X...X..',
+    '..XXX...',
+)
+DEFENSE_GLYPH_ORIGIN = (4, 4)
 
 
 def render_outlined_16(ch, font):
     from bdf import glyph_grid
-    grid, w, h, xo, yo = glyph_grid(font[ord(ch)])
-    x0 = (16 - w) // 2
-    glyph = {(x0 + c + xo, 4 + r + yo) for r in range(h) for c in range(w) if grid[r][c]}
+    if ch == '방':
+        gx, gy = DEFENSE_GLYPH_ORIGIN
+        glyph = {(gx + c, gy + r) for r, row in enumerate(DEFENSE_GLYPH_8)
+                 for c, value in enumerate(row) if value == 'X'}
+    else:
+        grid, w, h, xo, yo = glyph_grid(font[ord(ch)])
+        x0 = (16 - w) // 2
+        glyph = {(x0 + c + xo, 4 + r + yo) for r in range(h) for c in range(w) if grid[r][c]}
     outline = {(x + dx, y + dy) for x, y in glyph for dx in (-1, 0, 1) for dy in (-1, 0, 1)
                if (x + dx, y + dy) not in glyph}
     if any(not (0 <= x < 16 and 1 <= y < 14) for x, y in glyph | outline):

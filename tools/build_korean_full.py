@@ -19,6 +19,7 @@ build_korean_poc.stage_b 의 메커니즘(FONT_BASE repoint + 한글 글리프 �
 """
 import unicodedata
 import argparse, collections, csv, hashlib, json, os, re, struct, sys
+from pathlib import Path
 from functools import lru_cache
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -30,7 +31,7 @@ if __name__ == '__main__':
     atexit.register(EDITOR_LOCK.__exit__)
 from glyph_dictionary_sources import GLYPH_DICTIONARY_TEXT_ADDRS, is_glyph_dictionary_address
 import build_korean_poc as P
-from sprite_relocations import RELOCATIONS, SPRITE_STORAGE_START, resolve_sprite_offset
+from sprite_relocations import RELOCATIONS, SPRITE_STORAGE_START, resolve_sprite_offset, resolve_sprite_allocation
 
 BASE = P.BASE
 
@@ -6880,10 +6881,22 @@ def patch_part2_damage_label_obj(rom):
 
 def patch_part2_mode_menu_obj_labels(rom):
     """Redraw Part 2 mode menu OBJ labels that are stored as LZ77 tile blocks."""
+    from pathlib import Path
     from PIL import Image, ImageDraw, ImageFont
     from bdf import load_bdf, glyph_grid
     from lz77_compress import lz77_compress_optimal
     from lz77_scan import lz77_decompress
+    import struct
+
+    from hangul_pixel_fit import PLATE_LOADERS as plate_loaders
+    relocation_start, relocation_end = 0xFD9000, 0xFDB000
+    relocation_cursor = relocation_start
+    original_rom = (Path(BASE) / 'original/Game Boy Wars Advance 1+2 (Japan).gba').read_bytes()
+    if any(original_rom[relocation_start:relocation_end]) or any(rom[relocation_start:relocation_end]):
+        raise AssertionError('Part 2 mode plate relocation area occupied')
+    if any(relocation_start + 0x08000000 <= value < relocation_end + 0x08000000
+           for value in memoryview(original_rom).cast('I')):
+        raise AssertionError('Part 2 mode plate relocation area referenced')
 
     font_bold = os.path.join(BASE, 'reference/fonts/Galmuri11-Bold.ttf')
     font_cond = os.path.join(BASE, 'reference/fonts/Galmuri11-Condensed.ttf')
@@ -6957,6 +6970,13 @@ def patch_part2_mode_menu_obj_labels(rom):
                         px[dx, dy] = fill_idx
             x += w + spacing
 
+    subtitles = {
+        '캠페인': 'CAMPAIGN', '자유전': 'FREE BATTLE',
+        '상점': 'WARS SHOP', '편집': 'EDIT MODE',
+        '통신': 'LINK MODE', '트라이얼': 'TRIAL MODE',
+        '사운드룸': 'SOUND ROOM',
+    }
+
     def make_big_logo(text, native):
         # Native 128x32 plate: frame, white 120x20 letter field, colored
         # caption band. JP treatment (b19): Hada Sans Bold fills the JP 20px cap
@@ -6965,13 +6985,35 @@ def patch_part2_mode_menu_obj_labels(rom):
         layer = Image.new('L', (128, 32))
         layer.putdata([v for row in native for v in row])
         ImageDraw.Draw(layer).rectangle((4, 2, 123, 21), fill=1)
-        # The seven-row native caption strip cannot hold Galmuri9. Native
-        # Galmuri7 closes the ㅌ/ㄹ/ㅂ counters in these labels; use the approved
-        # blank-strip fallback instead of preserving Japanese or squashing ink.
+        # The seven-row JP caption strip carries a white word with the native
+        # blue edge shades. Keep its geometry and palette indices.
         ImageDraw.Draw(layer).rectangle((4, 23, 123, 29), fill=5)
         from hangul_pixel_fit import paint_plate, verify_plate_ink
         paint_plate(layer, text)
         verify_plate_ink(layer, text)
+        caption = subtitles[text]
+        font_path = aw_fonts.hadasans_path()
+        mask = Image.new('L', (120 * 4, 7 * 4), 0)
+        draw = ImageDraw.Draw(mask)
+        for size in range(44, 23, -1):
+            font = ImageFont.truetype(font_path, size)
+            box = draw.textbbox((0, 0), caption, font=font)
+            if box[2] - box[0] <= 120 * 4 and box[3] - box[1] <= 7 * 4:
+                break
+        else:
+            raise aw_fonts.FontFitError(f'mode subtitle does not fit: {caption}')
+        x = (mask.width - (box[2] - box[0])) // 2 - box[0]
+        y = (mask.height - (box[3] - box[1])) // 2 - box[1]
+        draw.text((x, y), caption, font=font, fill=255)
+        mask = mask.resize((120, 7), Image.Resampling.LANCZOS)
+        ink_x = [xx for xx in range(120) if any(mask.getpixel((xx, yy)) >= 88 for yy in range(7))]
+        left, right = min(ink_x), max(ink_x)
+        ImageDraw.Draw(layer).rectangle((max(4, left + 3), 23, min(123, right + 5), 29), fill=1)
+        for yy in range(7):
+            for xx in range(120):
+                coverage = mask.getpixel((xx, yy))
+                if coverage >= 128:
+                    layer.putpixel((xx + 4, yy + 23), 5)
         return layer
 
     def make_small_button(text):
@@ -7006,6 +7048,7 @@ def patch_part2_mode_menu_obj_labels(rom):
         return bytes(out)
 
     def patch_lz(off, replacements, label):
+        nonlocal relocation_cursor
         dec = lz77_decompress(rom, off)
         if dec is None:
             raise AssertionError(f'invalid Part 2 mode menu LZ77 block {label} at 0x{off:X}')
@@ -7014,11 +7057,30 @@ def patch_part2_mode_menu_obj_labels(rom):
         for pos, payload in replacements:
             buf[pos:pos + len(payload)] = payload
         comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
-        if len(comp) > consumed:
-            raise AssertionError(
-                f'Part 2 mode menu {label} grew: {len(comp)} > {consumed} at 0x{off:X}'
-            )
-        rom[off:off + consumed] = comp + b'\x00' * (consumed - len(comp))
+        if len(comp) > consumed and off in plate_loaders:
+            refs = plate_loaders[off]
+            pointer = struct.pack('<I', off + 0x08000000)
+            if original_rom.count(pointer) != len(refs) or any(
+                    original_rom[loc:loc + 4] != pointer or rom[loc:loc + 4] != pointer
+                    for loc in refs):
+                raise AssertionError(f'Part 2 mode plate loader references changed: {label}')
+            destination = relocation_cursor
+            relocation_cursor = (destination + len(comp) + 3) & ~3
+            if relocation_cursor > relocation_end:
+                raise AssertionError('Part 2 mode plate relocation overflow')
+            rom[destination:destination + len(comp)] = comp
+            for loc in refs:
+                struct.pack_into('<I', rom, loc, destination + 0x08000000)
+            # The old compressed allocation is retired, with bytes unchanged.
+            if rom[off:off + consumed] != original_rom[off:off + consumed]:
+                raise AssertionError('Part 2 mode plate retired allocation changed')
+            assert lz77_decompress(rom, destination)[0] == bytes(buf)
+        else:
+            if len(comp) > consumed:
+                raise AssertionError(
+                    f'Part 2 mode menu {label} grew: {len(comp)} > {consumed} at 0x{off:X}'
+                )
+            rom[off:off + consumed] = comp + b'\x00' * (consumed - len(comp))
         return len(replacements)
 
     patched = 0
@@ -7767,7 +7829,7 @@ def patch_part1_battle_day_banner(rom):
     from lz77_scan import lz77_decompress
 
     def font_for(text, max_size, width, height, stroke):
-        font_path = require_font(OKDANDAN_FONT, 'OkDanDan')
+        font_path = aw_fonts.okdandan_path()
         probe = Image.new('L', (width, height), 0)
         draw = ImageDraw.Draw(probe)
         for size in range(max_size, 11, -1):
@@ -7789,7 +7851,7 @@ def patch_part1_battle_day_banner(rom):
             y = (height - text_height) // 2 - box[1] + y_adjust
             origins = [(x, y)]
         else:
-            font_path = require_font(OKDANDAN_FONT, 'OkDanDan')
+            font_path = aw_fonts.okdandan_path()
             probe = Image.new('L', (width, height), 0)
             draw = ImageDraw.Draw(probe)
             for size in range(max_size, 11, -1):
@@ -8322,6 +8384,9 @@ def patch_part2_mission_start_obj(rom):
     # Large banner: OkDanDan (2026-10-08 font rule; was Galmuri11-Condensed x2).
     # Same ink 10 + drop shadow 14 as the Galmuri version, 1px shadow at +1,+1.
     aw_fonts.draw_okdandan(pixels, banner_text, (2, 3, 126, 29), 26, ink=10, shadow=14)
+    # gfx T5: same OBJ6 body-corner AA (index 11) as the mission titles.
+    from part1_m19_title import soften_mission_body
+    soften_mission_body(pixels)
     # Native 戦闘開始 art crosses x=64 (19 rows): cells drawn edge to edge.
     aw_fonts.check_cells(pixels, (64,), 'Part 2 battle start banner',
                          native=aw_fonts.obj_canvas(tile_data, 2, 8, 4))
@@ -8557,7 +8622,16 @@ def patch_part2_battle_start_day_overlay_obj(rom):
     from lz77_scan import lz77_decompress
 
     from aw_fonts import hadasans_path, hadasans_black_path
+    from sprite_text_aa import palette_blend_index
     bold_path, black_path = hadasans_path(), hadasans_black_path()
+    # Original Part 2 battle-overlay OBJ bank 3 (data/sprite_palettes.json).
+    # The tile writer changes indices only; PRAM remains native.  These are
+    # the existing shadow/outline/face intermediates, not new colors.
+    palette = ((189, 189, 213), (255, 230, 230), (255, 213, 213),
+               (255, 189, 189), (180, 180, 180), (255, 65, 65),
+               (139, 139, 139), (255, 115, 115), (255, 156, 156),
+               (82, 82, 82), (205, 32, 32), (222, 222, 222),
+               (172, 0, 0), (0, 0, 0), (230, 230, 255), (255, 255, 255))
 
     def glyph_chunk(ch):
         # The native 32x32 cells use OBJ palette 3: white face (15), grey
@@ -8586,13 +8660,26 @@ def patch_part2_battle_start_day_overlay_obj(rom):
         edge = weight.filter(ImageFilter.MaxFilter(5))
         shade = Image.new('L', (32, 32), 0)
         shade.paste(edge.crop((0, 0, 31, 31)), (1, 1))
+        # Keep the approved b29r2 binary face core (f >= 150) unchanged.
+        # The coverage ramp below only changes pixels outside that core.
         pixels = []
         for yy in range(32):
             for xx in range(32):
                 f, e, s = canvas.getpixel((xx, yy)), edge.getpixel((xx, yy)), shade.getpixel((xx, yy))
-                pixels.append(15 if f >= 150 else 11 if f >= 45 else
-                              13 if e >= 90 else 6 if e >= 30 else
-                              9 if s >= 70 else 0)
+                # gfx T5: the face edge gets JP's two-step 11 (light) / 6
+                # (mid) grey ramp by coverage (fixB used 11 for all f >= 45).
+                # The outline's outer edge keeps the approved b29r2 rule.
+                if f >= 150:
+                    value = 15
+                elif f >= 30 and e >= 30:
+                    value = palette_blend_index(6, 15, f, (6, 11, 15), (palette,))
+                elif e >= 90:
+                    value = 13
+                elif e >= 30:
+                    value = 6
+                else:
+                    value = 9 if s >= 70 else 0
+                pixels.append(value)
         out = bytearray(512)
         for ty in range(4):
             for tx in range(4):
@@ -8829,10 +8916,23 @@ def patch_part2_result_summary_obj(rom):
     return 1
 
 
+# Live screen colors of the JP 作戦成功 OBJ sheet (0x930520 decoded indices
+# matched pixel-for-pixel to temp/unseen_20261026/w8/live/original/host_01_p0.png;
+# index 5 = the y=15..16 white band, index 0 transparent). Selection only; the
+# PRAM is never written. The failure sheets' live palette is unverified, so
+# they keep the binary W8/banner3 edge.
+PART2_RESULT_SUCCESS_PALETTE = (
+    (0, 0, 0), (255, 231, 66), (255, 239, 107), (255, 247, 148), (255, 255, 206),
+    (255, 255, 255), (222, 231, 255), (189, 189, 255), (165, 165, 255), (140, 148, 255),
+    (255, 198, 8), (181, 115, 16), (107, 107, 173), (66, 66, 132), (90, 66, 41), (0, 0, 0))
+PART2_RESULT_SUCCESS_AA_RAMP = (14, 13, 12, 11, 10)
+
+
 def _part2_result_banner_art(native, text, *, cracked=False):
     """Four native 32px OBJ cells, retaining the source's indexed color ramp."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from PIL import Image, ImageDraw, ImageFilter, ImageFont
+    from sprite_text_aa import palette_blend_index
     from aw_fonts import hadasans_path, hadasans_black_path
 
     if len(native) != 64 * 32 or len(text) != 4:
@@ -8894,6 +8994,7 @@ def _part2_result_banner_art(native, text, *, cracked=False):
                max(b[2] for b in boxes), max(b[3] for b in boxes))
         face = Image.new('L', (32, 32), 0)
         face.paste(layers[0].crop(box).resize((27, 27), Image.Resampling.LANCZOS), (2, 2))
+        soft = face.copy()
         face = face.point(lambda v: 255 if v >= 110 else 0)
         if cracked:
             # Remove small pieces of the face at source fracture crossings.
@@ -8946,6 +9047,13 @@ def _part2_result_banner_art(native, text, *, cracked=False):
                     for col in range(8):
                         x, y = tx * 8 + col, ty * 8 + row
                         value = rows[y] if face.getpixel((x, y)) else 14 if edge.getpixel((x, y)) else 0
+                        if value == 14 and not cracked and soft.getpixel((x, y)):
+                            # gfx T5: partial face coverage on the 1px outline
+                            # takes JP's own outline->face steps (12/13 under
+                            # the lavender rows, 11/10 under the yellow rows).
+                            value = palette_blend_index(
+                                14, rows[y], soft.getpixel((x, y)), PART2_RESULT_SUCCESS_AA_RAMP,
+                                (PART2_RESULT_SUCCESS_PALETTE,))
                         if cracked and face.getpixel((x, y)):
                             damage = (chip[sprite][y] >> (x * 4)) & 15
                             if (x, y) in white_crack:
@@ -9176,12 +9284,19 @@ def patch_part2_air_mission_title_obj(rom):
     dst = canvas.load()
     stroke_px = stroke_mask.load()
     fill_px = fill_mask.load()
+    from part1_m19_title import MISSION_OBJ6_RGB
+    from sprite_text_aa import palette_blend_index
     for yy in range(32):
         for xx in range(128):
             if stroke_px[xx, yy]:
                 dst[xx, yy] = 15
-            if fill_px[xx, yy]:
+            if fill_px[xx, yy] >= 128:
                 dst[xx, yy] = 10
+            elif fill_px[xx, yy]:
+                # gfx T5: partial face coverage over the 15 outline takes the
+                # mission-start OBJ6 grey steps 13/12/11 (same occupied mask).
+                dst[xx, yy] = palette_blend_index(15, 10, fill_px[xx, yy], (15, 13, 12, 11),
+                                                  (MISSION_OBJ6_RGB,))
 
     grid = [[canvas.getpixel((xx, yy)) for xx in range(128)] for yy in range(32)]
     aw_fonts.check_cells(grid, (64,), 'Part 2 air mission title', native=aw_fonts.obj_canvas(data, 2, 8, 4))
@@ -9259,6 +9374,13 @@ def patch_part2_air_supremacy_title_obj(rom):
                 dst[xx, yy] = 14
             if fill_px[xx, yy] >= 190:
                 dst[xx, yy] = 10
+            elif fill_px[xx, yy] >= 40 and stroke_px[xx, yy] >= 70:
+                # gfx T5: partial face coverage over the 14 outline takes the
+                # mission-start OBJ6 grey steps (binary 10 face unchanged).
+                from part1_m19_title import MISSION_OBJ6_RGB
+                from sprite_text_aa import palette_blend_index
+                dst[xx, yy] = palette_blend_index(14, 10, fill_px[xx, yy], (14, 13, 12, 11),
+                                                  (MISSION_OBJ6_RGB,))
 
     grid = [[canvas.getpixel((xx, yy)) for xx in range(128)] for yy in range(32)]
     # Native 空制 art crosses x=64 (14 rows): this consumer draws the cells edge to edge.
@@ -9674,163 +9796,77 @@ def patch_common_battle_ascii_labels(rom, syl_to_code, unmapped):
     return patched
 
 
+# Part 1 battle DEF card (12 native 32x16 BG blocks, BG palette 11).
+# JP draws 'DEF' as light letters (11) each wrapped by a 1px dark outline (7)
+# in x=0..12, y=6..12 (5/13 are D-counter/AA pixels of the same letters).
+# 방 keeps that rule: interior 11, 1px 8-neighbour outline 7 following the
+# glyph, every other pixel the card itself. ㅂ/ㅏ/ㅇ are spaced so their
+# outlines never merge the light strokes (gray card shows between ㅂ and ㅏ,
+# one shared outline row between ㅂ and ㅇ).
+BATTLE_DEF_CARD_OFFSETS = tuple(0xE1B6A4 + 0x100 * k for k in range(12))
+BATTLE_DEF_INTERIOR = 11
+BATTLE_DEF_OUTLINE = 7
+BATTLE_DEF_CARD_FILL = 12
+BATTLE_DEF_GLYPH = (
+    'X.X...X.',
+    'XXX...XX',
+    'X.X...X.',
+    'XXX...X.',
+    '........',
+    '..XXX...',
+    '.X...X..',
+    '..XXX...',
+)
+BATTLE_DEF_GLYPH_ORIGIN = (4, 5)
+
+
+def _battle_def_card_pixel(block, x, y):
+    tile = (y // 8) * 4 + x // 8
+    return (block[tile * 32 + (y % 8) * 4 + (x % 8) // 2] >> (4 * (x % 2))) & 15
+
+
+def battle_def_glyph_pixels():
+    gx, gy = BATTLE_DEF_GLYPH_ORIGIN
+    glyph = {(gx + c, gy + r) for r, row in enumerate(BATTLE_DEF_GLYPH)
+             for c, value in enumerate(row) if value == 'X'}
+    outline = {(x + dx, y + dy) for x, y in glyph for dx in (-1, 0, 1) for dy in (-1, 0, 1)} - glyph
+    return glyph, outline
+
+
+def battle_def_card_background(native):
+    """JP card with its DEF letters/plate replaced by the card's own left edge
+    (transparent 0, white rim 1, border 15) and gray fill."""
+    pixels = {}
+    for y in range(6, 13):
+        for x in range(13):
+            value = _battle_def_card_pixel(native, x, y)
+            if value == 7 or (x <= 11 and value in (5, 11, 13)):
+                pixels[(x, y)] = {0: 0, 1: 1, 2: 15}.get(x, BATTLE_DEF_CARD_FILL)
+    return pixels
+
+
 def patch_battle_defense_label_tiles(rom):
-    """Redraw the raw 32x16 battle HUD DEFENSE labels as Korean."""
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from bdf import load_bdf, glyph_grid
+    """Draw an outlined 방 on the twelve native DEF cards (no plate)."""
+    from pathlib import Path
 
-    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
-
-    def decode_block(off):
-        pixels = [[0] * 32 for _ in range(16)]
-        for tile_idx in range(8):
-            tile_off = off + tile_idx * 32
-            tx = (tile_idx % 4) * 8
-            ty = (tile_idx // 4) * 8
-            for row in range(8):
-                for col in range(8):
-                    b = rom[tile_off + row * 4 + col // 2]
-                    value = (b >> 4) if (col & 1) else (b & 0x0F)
-                    pixels[ty + row][tx + col] = value
-        return pixels
-
-    def encode_block(off, pixels):
-        for tile_idx in range(8):
-            tx = (tile_idx % 4) * 8
-            ty = (tile_idx // 4) * 8
-            tile = bytearray(32)
-            for row in range(8):
-                for col in range(8):
-                    value = pixels[ty + row][tx + col] & 0x0F
-                    bi = row * 4 + col // 2
-                    if col & 1:
-                        tile[bi] = (tile[bi] & 0x0F) | (value << 4)
-                    else:
-                        tile[bi] = (tile[bi] & 0xF0) | value
-            rom[off + tile_idx * 32:off + tile_idx * 32 + 32] = tile
-
-    def draw_label(off, text='방어'):
-        pixels = decode_block(off)
-        for y in range(4, 14):
-            for x in range(31):
-                pixels[y][x] = 15
-        cursor = 8
-        for ch in text:
-            grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
-            for row in range(h):
-                for col in range(w):
-                    if not grid[row][col]:
-                        continue
-                    px = cursor + col + xo
-                    py = 5 + row
-                    if 0 <= px + 1 < 32 and 0 <= py + 1 < 16:
-                        pixels[py + 1][px + 1] = 14
-                    if 0 <= px < 32 and 0 <= py < 16:
-                        pixels[py][px] = 1
-            cursor += 8
-        encode_block(off, pixels)
-
-    def draw_small_stat_label(off, text='방어'):
-        pixels = [[0] * 32 for _ in range(8)]
-        for tile_idx in range(4):
-            tile_off = off + tile_idx * 32
-            tx = tile_idx * 8
-            for row in range(8):
-                for col in range(8):
-                    b = rom[tile_off + row * 4 + col // 2]
-                    value = (b >> 4) if (col & 1) else (b & 0x0F)
-                    pixels[row][tx + col] = value
-
-        for y in range(7):
-            for x in range(16):
-                pixels[y][x] = 15
-
-        cursor = 0
-        for ch in text:
-            grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
-            for row in range(h):
-                for col in range(w):
-                    if not grid[row][col]:
-                        continue
-                    px = cursor + col + xo
-                    py = row
-                    if 0 <= px + 1 < 16 and 0 <= py + 1 < 7:
-                        pixels[py + 1][px + 1] = 7
-                    if 0 <= px < 16 and 0 <= py < 7:
-                        pixels[py][px] = 11
-            cursor += 8
-
-        for tile_idx in range(4):
-            tx = tile_idx * 8
-            tile = bytearray(32)
-            for row in range(8):
-                for col in range(8):
-                    value = pixels[row][tx + col] & 0x0F
-                    bi = row * 4 + col // 2
-                    if col & 1:
-                        tile[bi] = (tile[bi] & 0x0F) | (value << 4)
-                    else:
-                        tile[bi] = (tile[bi] & 0xF0) | value
-            rom[off + tile_idx * 32:off + tile_idx * 32 + 32] = tile
-
-    def draw_lower_small_stat_label(off, text='방어'):
-        pixels = decode_block(off)
-        for y in range(7, 15):
-            for x in range(20):
-                pixels[y][x] = 15
-
-        cursor = 0
-        for ch in text:
-            grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
-            for row in range(h):
-                for col in range(w):
-                    if not grid[row][col]:
-                        continue
-                    px = cursor + col + xo
-                    py = 7 + row
-                    if 0 <= px + 1 < 20 and 0 <= py + 1 < 15:
-                        pixels[py + 1][px + 1] = 7
-                    if 0 <= px < 20 and 0 <= py < 15:
-                        pixels[py][px] = 11
-            cursor += 8
-
-        encode_block(off, pixels)
-
-    def draw_compact_top_def_label(off, text='방'):
-        pixels = decode_block(off)
-        for y in range(5, 14):
-            for x in range(1, 17):
-                pixels[y][x] = 7
-
-        cursor = 5
-        for ch in text:
-            grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
-            for row in range(h):
-                for col in range(w):
-                    if not grid[row][col]:
-                        continue
-                    px = cursor + col + xo
-                    py = 6 + row
-                    if 0 <= px + 1 < 17 and 0 <= py + 1 < 14:
-                        pixels[py + 1][px + 1] = 12
-                    if 0 <= px < 17 and 0 <= py < 14:
-                        pixels[py][px] = 11
-            cursor += 8
-
-        encode_block(off, pixels)
-
+    original = Path(BASE, 'original/Game Boy Wars Advance 1+2 (Japan).gba').read_bytes()
+    glyph, outline = battle_def_glyph_pixels()
+    if any(not (3 <= x <= 12 and 4 <= y <= 13) for x, y in glyph | outline):
+        raise AssertionError('battle DEF 방 leaves the card interior')
     patched = 0
-    for off in (0xE1B6A4, 0xE1BCA4):
-        draw_label(off)
-        patched += 1
-    for off in (0xE1B7A4, 0xE1BAA4, 0xE1BDA4, 0xE1C0A4):
-        draw_compact_top_def_label(off)
-        patched += 1
-    for off in (0xE1B8A4, 0xE1BEA4):
-        draw_lower_small_stat_label(off)
-        patched += 1
-    for off in (0xE1BA24, 0xE1C024):
-        draw_small_stat_label(off)
+    for off in BATTLE_DEF_CARD_OFFSETS:
+        # Each variant carries different stars/background art. Begin from its
+        # own JP block and alter only the DEF letters and the 방 footprint.
+        native = original[off:off + 0x100]
+        rom[off:off + 0x100] = native
+        values = battle_def_card_background(native)
+        values.update({p: BATTLE_DEF_OUTLINE for p in outline})
+        values.update({p: BATTLE_DEF_INTERIOR for p in glyph})
+        for (x, y), value in values.items():
+            tile = (y // 8) * 4 + x // 8
+            pos = off + tile * 32 + (y % 8) * 4 + (x % 8) // 2
+            shift = 4 * (x % 2)
+            rom[pos] = (rom[pos] & ~(15 << shift)) | (value << shift)
         patched += 1
     return patched
 
@@ -10637,34 +10673,49 @@ def patch_part2_redstar_region_obj(rom):
 def patch_part2_prologue_logo_obj(rom):
     """Replace the Part 2 prologue OBJ logo with Korean text."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from bdf import load_bdf, glyph_grid
-    from lz77_compress import lz77_compress
+    from PIL import Image, ImageDraw, ImageFont
+    from lz77_compress import lz77_compress_optimal
     from lz77_scan import lz77_decompress
 
-    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri11.bdf'))
     width, height = 96, 16
     pixels = [[0] * width for _ in range(height)]
+    scale = 4
+    mask = Image.new('L', (width * scale, height * scale), 0)
+    draw = ImageDraw.Draw(mask)
+    for size in range(92, 55, -1):
+        font = ImageFont.truetype(aw_fonts.hadasans_black_path(), size)
+        box = draw.textbbox((0, 0), '프롤로그', font=font)
+        if box[2] - box[0] <= (width - 2) * scale and box[3] - box[1] <= height * scale:
+            break
+    else:
+        raise aw_fonts.FontFitError('prologue title does not fit')
+    draw.text(((mask.width - (box[2] - box[0])) // 2 - box[0],
+               (mask.height - (box[3] - box[1])) // 2 - box[1]),
+              '프롤로그', font=font, fill=255)
+    mask = mask.resize((width, height), Image.Resampling.LANCZOS)
+    # Keep the approved Hada Sans Black face. The native PROLOGUE contour
+    # follows each letter; the R5 bounding rectangle joined them into a plate.
+    face = [[mask.getpixel((x, y)) >= 160 for x in range(width)] for y in range(height)]
+    for y in range(height):
+        for x in range(width):
+            if face[y][x]:
+                pixels[y][x] = 11
+            elif any(0 <= x + dx < width and 0 <= y + dy < height and face[y + dy][x + dx]
+                     for dy in (-1, 0, 1) for dx in (-1, 0, 1)):
+                pixels[y][x] = 7
 
-    letters = [glyph_grid(font[ord(ch)]) for ch in '프롤로그']
-    scale_x = 2
-    total_width = sum((glyph[1] + 1) * scale_x for glyph in letters) - scale_x
-    cursor = (width - total_width) // 2
-    y0 = 2
-    for grid, w, h, xo, _yo in letters:
-        for row in range(h):
-            for col in range(w):
-                if not grid[row][col]:
-                    continue
-                px0 = cursor + (col + xo) * scale_x
-                py = y0 + row
-                for sx in range(scale_x):
-                    px = px0 + sx
-                    for dx, dy in ((1, 1), (1, 0), (0, 1)):
-                        if 0 <= px + dx < width and 0 <= py + dy < height and pixels[py + dy][px + dx] == 0:
-                            pixels[py + dy][px + dx] = 7
-                    if 0 <= px < width and 0 <= py < height:
-                        pixels[py][px] = 11
-        cursor += (w + 1) * scale_x
+    def is_face(yy, xx):
+        return 0 <= yy < height and 0 <= xx < width and face[yy][xx]
+
+    for y in range(height):
+        for x in range(width):
+            if not face[y][x]:
+                continue
+            for dy, dx in ((-1, -1), (-1, 1), (1, -1), (1, 1)):
+                if (not is_face(y + dy, x) and not is_face(y, x + dx)
+                        and not is_face(y + dy, x + dx)
+                        and is_face(y - dy, x) and is_face(y, x - dx)):
+                    pixels[y][x] = 3
 
     off = 0x5BBB3C
     dec = lz77_decompress(rom, off)
@@ -10693,7 +10744,7 @@ def patch_part2_prologue_logo_obj(rom):
             buf[start:start + 32] = tile
             patched += 1
 
-    comp = lz77_compress(bytes(buf), vram_safe=True)
+    comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
     if len(comp) > consumed:
         raise AssertionError(f'prologue logo LZ77 overflow at 0x{off:X}: {len(comp)} > {consumed}')
     rom[off:off + consumed] = comp + bytes(consumed - len(comp))
@@ -10829,6 +10880,13 @@ MISSION_TITLE_TABLE_RT = 0x08F40000
 MISSION_TITLE_GLYPH_FILE = 0xF42000
 MISSION_TITLE_GLYPH_RT = 0x08F42000
 MISSION_TITLE_HANGUL_ADVANCE = 24  # 22px body + shadow/spacing; native OBJ is 32px.
+# Live OBJ bank 0 of the Part 2 mission-title consumer (fixB cold-boot route
+# temp/fix_20261104/gfx/T5/routes/k_mission1b_fixB a27/a28; PRAM is native).
+MISSION_TITLE_OBJ0_PALETTE = (
+    (0, 0, 0), (230, 230, 222), (139, 139, 139), (65, 65, 65), (98, 98, 98),
+    (197, 197, 189), (255, 255, 255), (246, 246, 246), (230, 230, 230), (213, 213, 213),
+    (172, 172, 172), (148, 148, 148), (41, 41, 41), (16, 16, 16), (0, 0, 0), (0, 0, 0))
+MISSION_TITLE_AA_RAMP = (5, 9, 8, 7)  # rim -> JP's light greys (face 6 is binary)
 MISSION_TITLE_SPACE_ADVANCE = 12   # Half the Hangul cell advance.
 MISSION_TITLE_COMMA_ADVANCE = 12   # Includes the comma's one-pixel shadow.
 
@@ -10902,6 +10960,9 @@ def _mission_title_hangul_glyph(syl):
             ((advance - 1 - (box[2] - box[0])) // 2 - box[0], 1))
         edge = face
     ink, border = face.load(), edge.load()
+    hangul = '가' <= syl <= '힣'
+    if hangul:
+        from sprite_text_aa import palette_blend_index
     pixels = [[0] * 32 for _ in range(32)]
     for y in range(32):
         for x in range(32):
@@ -10911,7 +10972,17 @@ def _mission_title_hangul_glyph(syl):
                 raise AssertionError(f'mission title glyph outside OBJ cell: {syl}')
             if not pixels[y + 1][x + 1]:
                 pixels[y + 1][x + 1] = 10
-            pixels[y][x] = 6 if ink[x, y] >= 128 else 5
+            if ink[x, y] >= 128:
+                pixels[y][x] = 6
+            elif hangul and ink[x, y]:
+                # gfx T5: partial Bold coverage on the rim takes JP's own
+                # light-grey steps 9/8/7 between rim 5 and face 6 (live OBJ
+                # bank 0, k_mission1b fixB a27). The binary b30 face (6), rim
+                # extent, shadow and outer edge are unchanged.
+                pixels[y][x] = palette_blend_index(5, 6, ink[x, y], MISSION_TITLE_AA_RAMP,
+                                                   (MISSION_TITLE_OBJ0_PALETTE,))
+            else:
+                pixels[y][x] = 5
     result = bytearray(512)
     for y in range(32):
         for x in range(32):
@@ -14833,14 +14904,14 @@ class OverrideSnapshot:
 
     def __init__(self, path):
         self.path = path
-        self.raw = open(path, 'rb').read() if os.path.exists(path) else None
+        self.raw = Path(path).read_bytes() if os.path.exists(path) else None
         self.sha256 = hashlib.sha256(self.raw).hexdigest() if self.raw is not None else None
 
     def data(self):
         return json.loads(self.raw.decode('utf-8')) if self.raw is not None else None
 
     def verify_unchanged(self):
-        now = open(self.path, 'rb').read() if os.path.exists(self.path) else None
+        now = Path(self.path).read_bytes() if os.path.exists(self.path) else None
         if now != self.raw:
             raise AssertionError(f'{self.path} changed during the build; output refused')
 
@@ -14888,7 +14959,7 @@ def apply_sprite_overrides(rom, objl_specs=None, ov_path=None, idx_path=None, re
         _write_report(report)
         return {'applied': 0, 'skipped': 0}
     try:
-        raw = ov_snapshot.raw if ov_snapshot is not None else open(ov_path, 'rb').read()
+        raw = ov_snapshot.raw if ov_snapshot is not None else Path(ov_path).read_bytes()
         report['override_sha256'] = hashlib.sha256(raw).hexdigest()
         ov = json.loads(raw.decode('utf-8')) or {}
     except Exception as exc:
@@ -14912,7 +14983,7 @@ def apply_sprite_overrides(rom, objl_specs=None, ov_path=None, idx_path=None, re
         idx_path = os.path.join(BASE, 'data', 'sprites_index.json')
     if os.path.exists(idx_path):
         try:
-            d = json.load(open(idx_path, encoding='utf-8'))
+            d = json.loads(Path(idx_path).read_text(encoding='utf-8'))
             for s in (d.get('sprites', d) if isinstance(d, dict) else d):
                 idx[s['id']] = s
         except Exception:
@@ -15035,14 +15106,19 @@ def apply_sprite_overrides(rom, objl_specs=None, ov_path=None, idx_path=None, re
                 continue
             if typ == 'lz77':
                 from lz77_compress import lz77_compress_optimal
+                from lz77_scan import lz77_decompress
                 comp = lz77_compress_optimal(tiles, vram_safe=True)
-                cap = sp.get('comp_size') or 0
-                if off in RELOCATIONS:
-                    source_off = off
-                    off = resolve_sprite_offset(rom, source_off)
-                    if off == RELOCATIONS[source_off]['destination']:
-                        cap = RELOCATIONS[source_off]['capacity']
+                source_off = off
+                off, cap = resolve_sprite_allocation(rom, source_off, sp.get('comp_size') or 0)
+                if off != source_off:
                     rec_report.update({'source_offset': hex(source_off), 'offset': hex(off)})
+                current = lz77_decompress(rom, off)
+                if current is None or not cap or current[1] > cap or len(current[0]) != size:
+                    why = 'live lz77 stream exceeds allocation or decoded size changed'
+                    skipped.append((sid, why))
+                    rec_report.update({'status': 'skipped', 'reason': why})
+                    report['records'].append(rec_report)
+                    continue
                 rec_report.update({'compressed_size': len(comp), 'comp_size': cap})
                 if not cap or len(comp) > cap:
                     why = 'lz77 재압축 %dB > comp_size %dB' % (len(comp), cap)
@@ -15802,6 +15878,8 @@ def _build(args, publication):
     # CO name plates, continue button (rank labels extend part1_rank_labels).
     import part1_mission_titles as mission_titles
     st['part1_mission_titles'] = mission_titles.patch(rom, orig)
+    for _address, _blob, _label in mission_titles.writes(rom):
+        WRITE_LOG.append([_address, len(_blob), len(_blob), _blob.hex(), None, None, None, _label])
     import part1_campaign_co_name_lz77 as co_name_lz77
     st['part1_campaign_co_name_lz77'] = co_name_lz77.patch(rom, orig)
     import part1_continue_button as continue_button
@@ -24463,6 +24541,8 @@ def _build(args, publication):
     for _address, _blob, _label in power_titles.relocate_dictionary(rom, orig, _display_ov, syl_to_code):
         WRITE_LOG.append([_address, len(_blob), len(_blob), _blob.hex(), None, None, None, _label])
     st['part2_power_title_glyphs'] = power_titles.patch(rom, orig, _display_ov, syl_to_code)
+    for _address, _blob, _label in power_titles.writes(rom)[1:]:
+        WRITE_LOG.append([_address, len(_blob), len(_blob), _blob.hex(), None, None, None, _label])
     power_titles.verify_generated(rom, orig, _display_ov, syl_to_code)
     unit_type_labels.verify(rom, orig)
     purchase_labels.verify_generated(rom, orig)
@@ -24533,8 +24613,8 @@ def _build(args, publication):
     _remaining_days_final_regions = remaining_days.capture_regions(rom, orig)
     _power_title_final_regions = power_titles.capture_regions(
         rom, orig, _display_ov, syl_to_code, editor_result=_sprite_override_result)
-    _power_title_payload = _power_title_final_regions[power_titles.OFFSET]
-    WRITE_LOG.append([power_titles.OFFSET, len(_power_title_payload), len(_power_title_payload),
+    _power_title_payload = _power_title_final_regions[power_titles.ATLAS]
+    WRITE_LOG.append([power_titles.ATLAS, len(_power_title_payload), len(_power_title_payload),
                       _power_title_payload.hex(), None, None, None, 'part2-power-title-final-editor'])
     _purchase_final_regions = purchase_labels.capture_regions(rom, orig)
     for address, payload in _purchase_final_regions.items():

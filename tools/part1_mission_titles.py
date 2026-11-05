@@ -21,17 +21,13 @@ Skipped (owned by other writers): 0xC10B34 / 0xC11D9C / 0xC1205C
 Korean text = B-team mission names (data/bteam_baseline.json, 0xB81D80..0xB82018)
 verbatim when available; see TITLES for per-entry source notes.
 
-Style = M19/M20: OkDanDan-Bold (2026-10-08 font rule: large titles use
-OkDanDan; the earlier Galmuri7 2x / Galmuri11 tiers were replaced), ink 10,
-lower-right shadow 13, 3x3 outline 15.  layout() picks the largest size whose
-ink fits the canvas; render() steps the size down further only when the sheet
-would not recompress into its original allocation, and at <= 16 px (small
-text, 2026-10-08 decision) uses the earlier Galmuri7 2x / Galmuri11 layout.
-patch() refuses ink cut at the canvas edge, and glyphs crossing the 64/128 OBJ
-edges are accepted only because the native sheets of this consumer prove the
-cells are drawn edge to edge (check_cells).  Every sheet is
-recompressed with the project's optimal VRAM-safe LZ77 encoder inside its
-original compressed allocation; pointers never move.
+R4 style: Hada Sans ExtraBold, selected after comparing the upright JP title
+strokes. The largest size that fits each native 128/160x32 canvas is used;
+compression never reduces the font size. Body 10, corner AA 11, shadow 13 and
+outline 15 remain in OBJ bank 6. A sheet that exceeds its native LZ77 slot
+moves into the guarded RELOCATION_START..RELOCATION_END range, its own table
+entries are repointed, and its old allocation is retired unchanged. The
+native 64/128 OBJ seams are checked against the Japanese source art.
 """
 import hashlib
 import struct
@@ -45,6 +41,9 @@ from lz77_compress import lz77_compress_optimal
 
 ROOT = Path(__file__).resolve().parent.parent
 TABLE, TABLE_ENTRIES = 0xE12BF4, 63
+# Proven empty (0 in the original and in the fixB candidate, no reference),
+# after the Part 2 power-title atlas (0xFD3000..0xFD5000).
+RELOCATION_START, RELOCATION_END = 0xFD5000, 0xFD9000
 ROM_BASE = 0x08000000
 INK, SHADOW, OUTLINE = 10, 13, 15
 # Owned by other writers or shared filler; never touched by this module.
@@ -160,8 +159,8 @@ def source_guard(original):
             raise AssertionError('Part 1 mission title skipped sheet left the table')
 
 
-MAX_SIZE = 20  # 20px ~= the native 21-row Japanese title ink
-MIN_SIZE = aw_fonts.GALMURI_MAX_SIZE + 1   # below this the title is small text -> Galmuri
+MAX_SIZE = 24  # Hada Sans ink reaches the native ~21-row Japanese title height
+MIN_SIZE = 9  # preserve the full title in its native cells, without horizontal squeezing
 
 
 @lru_cache(maxsize=None)
@@ -245,41 +244,47 @@ def layout_galmuri(text, width):
 
 
 
-def _ink_okdandan(text, width, size):
-    """OkDanDan ink at one size, centred in x 2..width-3, y 2..29."""
+def _ink_hada(text, width, size):
+    """Hada Sans ExtraBold core from a supersampled AA mask, in native cells."""
+    from PIL import Image, ImageDraw, ImageFont
     text = text.replace('　', '  ')
-    ink, _ = aw_fonts.okdandan_ink(text, (2, 2, width - 2, 30), 0, size=size)
-    return ink
+    scale = 4
+    font = ImageFont.truetype(aw_fonts.hadasans_extrabold_path(), size * scale)
+    probe = Image.new('L', (width * scale * 2, 128 * scale), 0)
+    draw = ImageDraw.Draw(probe)
+    box = draw.textbbox((0, 0), text, font=font)
+    w, h = box[2] - box[0], box[3] - box[1]
+    if w > (width - 4) * scale or h > 26 * scale:
+        raise aw_fonts.FontFitError(f'Hada mission title does not fit: {text}')
+    x = ((width * scale - w) // 2) - box[0]
+    y = ((32 * scale - h) // 2) - box[1]
+    draw.text((x, y), text, font=font, fill=255)
+    mask = probe.crop((0, 0, width * scale, 32 * scale)).resize(
+        (width, 32), Image.Resampling.LANCZOS)
+    return {(x, y) for y in range(32) for x in range(width)
+            if mask.getpixel((x, y)) >= 128}
 
 
 def layout(text, width, max_size=MAX_SIZE):
-    """Return (tier, ink set) centred in a width x 32 canvas.
-
-    tier = 'okdandan<size>' for the largest size <= max_size that fits. Ink must
-    stay within x 1..width-2 and y 1..30 so the outline/shadow never leave the
-    native cells.
-    """
+    """Return the largest fitting Hada Sans ink in a width x 32 canvas."""
     for size in range(max_size, MIN_SIZE - 1, -1):
         try:
-            ink = _ink_okdandan(text, width, size)
-            aw_fonts.require_large_line(ink, 1, 1)
-        except (aw_fonts.FontFitError, aw_fonts.SmallLineError):
+            ink = _ink_hada(text, width, size)
+        except aw_fonts.FontFitError:
             continue
         if any(not (1 <= x < width - 1 and 1 <= y < 31) for x, y in ink):
             raise AssertionError('Part 1 mission title exceeds native OBJ cells')
-        return f'okdandan{size}', ink
+        return f'hadasans{size}', ink
     raise AssertionError(f'Part 1 mission title does not fit {width}px: {text}')
 
 
 def _pixels(text, width, max_size=MAX_SIZE):
-    """max_size None = the Galmuri fallback layout."""
+    """Index the Hada Sans body, AA, shadow and native OBJ outline."""
     if max_size is None:
-        _, ink = layout_galmuri(text, width)
-    else:
-        ink = _ink_okdandan(text, width, max_size)
-        aw_fonts.require_large_line(ink, 1, 1)
-        if any(not (1 <= x < width - 1 and 1 <= y < 31) for x, y in ink):
-            raise AssertionError('Part 1 mission title exceeds native OBJ cells')
+        raise aw_fonts.FontFitError(f'Part 1 mission title cannot fit {width}px: {text}')
+    ink = _ink_hada(text, width, max_size)
+    if any(not (1 <= x < width - 1 and 1 <= y < 31) for x, y in ink):
+        raise AssertionError('Part 1 mission title exceeds native OBJ cells')
     pixels = [[0] * width for _ in range(32)]
     for x, y in ink:
         for dy in (-1, 0, 1):
@@ -289,6 +294,9 @@ def _pixels(text, width, max_size=MAX_SIZE):
         pixels[y + 1][x + 1] = SHADOW
     for x, y in ink:
         pixels[y][x] = INK
+    if max_size is not None:
+        from part1_m19_title import soften_mission_body
+        soften_mission_body(pixels)
     return pixels
 
 
@@ -324,18 +332,15 @@ def _sheets(text, width, max_size):
 
 @lru_cache(maxsize=None)
 def chosen_size(owner):
-    """Largest OkDanDan size (> 16 px) whose sheet(s) also fit the compressed
-    allocation(s); None when only the Galmuri small-text layout fits."""
+    """Largest Hada Sans size that fits width; compression uses relocation."""
     text, width = _text(owner), 160 if owner == EXTENSION_OWNER else 128
-    for size in [*range(MAX_SIZE, MIN_SIZE - 1, -1), None]:
+    for size in range(MAX_SIZE, MIN_SIZE - 1, -1):
         try:
-            sheets = _sheets(text, width, size)
-        except (aw_fonts.FontFitError, aw_fonts.SmallLineError):
+            _sheets(text, width, size)
+        except aw_fonts.FontFitError:
             continue
-        if all(len(lz77_compress_optimal(raw, vram_safe=True)) <=
-               _capacity(owner if key is None else key) for key, raw in sheets.items()):
-            return size   # None: Galmuri fallback
-    raise AssertionError(f'Part 1 mission title compressed allocation overflow {owner:06X}')
+        return size
+    raise aw_fonts.FontFitError(f'Part 1 mission title cannot fit {width}px: {text}')
 
 
 @lru_cache(maxsize=None)
@@ -358,12 +363,36 @@ def _pointer_bytes(rom, indices):
     return b''.join(bytes(rom[TABLE + 4 * i:TABLE + 4 * i + 4]) for i in indices)
 
 
-def compressed(source, capacity):
+def compressed(source, capacity=None):
+    """The sheet's VRAM-safe stream; capacity (if given) must hold it."""
     stream = lz77_compress_optimal(render(source), vram_safe=True)
-    if len(stream) > capacity:
+    if capacity is not None and len(stream) > capacity:
         raise AssertionError(f'Part 1 mission title compressed allocation overflow {source:06X}: '
                              f'{len(stream)} > {capacity}')
     return stream
+
+
+@lru_cache(maxsize=1)
+def relocations():
+    """{source: (destination, stream length)} for streams over their native slot."""
+    cursor, out = RELOCATION_START, {}
+    for source, _, capacity, *_ in _all_blocks():
+        stream = compressed(source)
+        if len(stream) <= capacity:
+            continue
+        out[source] = (cursor, len(stream))
+        cursor = (cursor + len(stream) + 3) & ~3
+    if cursor > RELOCATION_END:
+        raise AssertionError(f'Part 1 mission title relocation area overflow: {cursor:X}')
+    return out
+
+
+def stream_address(rom, source):
+    """Where the consumer reads this sheet: its own (first) table slot."""
+    for block in _all_blocks():
+        if block[0] == source:
+            return struct.unpack_from('<I', rom, TABLE + 4 * block[5][0])[0] - ROM_BASE
+    raise KeyError(f'{source:06X}')
 
 
 def _canvas(raw_main, raw_ext=None):
@@ -404,45 +433,98 @@ def check_cells(original, source=None):
     return at64, at128
 
 
+def _relocation_space_free(rom, original):
+    span = slice(RELOCATION_START, RELOCATION_END)
+    if any(original[span]) or any(rom[span]):
+        raise AssertionError('Part 1 mission title relocation area occupied')
+    low, high = RELOCATION_START + ROM_BASE, RELOCATION_END + ROM_BASE
+    if any(low <= word < high for word in memoryview(bytes(original)).cast('I')):
+        raise AssertionError('Part 1 mission title relocation area referenced')
+
+
 def patch(rom, original):
     source_guard(original)
     check_cells(original)
+    moved = relocations()
+    if moved:
+        _relocation_space_free(rom, original)
     plan = []
     for source, following, capacity, size, _, indices in _all_blocks():
         if (_pointer_bytes(rom, indices) != _pointer_bytes(original, indices)
                 or bytes(rom[source:following]) != original[source:following]):
             raise AssertionError(f'Part 1 mission title {source:06X} already modified by another writer')
-        plan.append((source, capacity, compressed(source, capacity)))
+        stream = compressed(source, None if source in moved else capacity)
+        plan.append((source, capacity, indices, stream))
     # All streams are prepared before the first write: an overflow never leaves a partial patch.
-    for source, capacity, stream in plan:
-        rom[source:source + capacity] = stream + bytes(capacity - len(stream))
-        decoded = lz77_decompress(rom, source)
+    for source, capacity, indices, stream in plan:
+        if source in moved:
+            destination, length = moved[source]
+            if length != len(stream):
+                raise AssertionError(f'Part 1 mission title relocation plan changed {source:06X}')
+            rom[destination:destination + length] = stream
+            for i in indices:
+                struct.pack_into('<I', rom, TABLE + 4 * i, destination + ROM_BASE)
+        else:
+            rom[source:source + capacity] = stream + bytes(capacity - len(stream))
+        decoded = lz77_decompress(rom, stream_address(rom, source))
         if decoded is None or decoded[0] != render(source):
             raise AssertionError(f'Part 1 mission title round trip failed {source:06X}')
     return len(plan)
 
 
+def writes(rom):
+    """[(address, bytes, label)] for relocated streams and their table slots."""
+    out = []
+    for source, (destination, length) in relocations().items():
+        out.append((destination, bytes(rom[destination:destination + length]),
+                    f'part1-mission-title-relocated-{source:06X}'))
+        for block in _all_blocks():
+            if block[0] == source:
+                for i in block[5]:
+                    out.append((TABLE + 4 * i, bytes(rom[TABLE + 4 * i:TABLE + 4 * i + 4]),
+                                'part1-mission-title-relocated-pointer'))
+    return out
+
+
 def capture(rom, original):
     source_guard(original)
+    moved = relocations()
     regions = []
     for source, following, capacity, size, _, indices in _all_blocks():
-        decoded = lz77_decompress(rom, source)
-        if (decoded is None or len(decoded[0]) != size or decoded[1] > capacity
-                or _pointer_bytes(rom, indices) != _pointer_bytes(original, indices)
-                or bytes(rom[source + capacity:following]) != original[source + capacity:following]):
-            raise AssertionError(f'Part 1 mission title final allocation changed {source:06X}')
-        verify_vram_stream(bytes(rom[source:source + capacity]), size)
-        # Approved editor pixel changes remain supported; freeze their final bytes.
-        regions.append((source, bytes(rom[source:following])))
+        if source in moved:
+            destination, length = moved[source]
+            destinations = sorted([at for at, _ in moved.values()] + [RELOCATION_END])
+            capacity = destinations[destinations.index(destination) + 1] - destination
+            pointer = struct.pack('<I', destination + ROM_BASE)
+            decoded = lz77_decompress(rom, destination)
+            if (decoded is None or len(decoded[0]) != size or decoded[1] > capacity
+                    or _pointer_bytes(rom, indices) != pointer * len(indices)
+                    or bytes(rom[source:following]) != original[source:following]):
+                raise AssertionError(f'Part 1 mission title final relocation changed {source:06X}')
+            verify_vram_stream(bytes(rom[destination:destination + decoded[1]]), size)
+            regions.append((source, bytes(rom[source:following])))       # retired native slot
+            regions.append((destination, bytes(rom[destination:destination + capacity])))
+        else:
+            decoded = lz77_decompress(rom, source)
+            if (decoded is None or len(decoded[0]) != size or decoded[1] > capacity
+                    or _pointer_bytes(rom, indices) != _pointer_bytes(original, indices)
+                    or bytes(rom[source + capacity:following]) != original[source + capacity:following]):
+                raise AssertionError(f'Part 1 mission title final allocation changed {source:06X}')
+            verify_vram_stream(bytes(rom[source:source + capacity]), size)
+            # Approved editor pixel changes remain supported; freeze their final bytes.
+            regions.append((source, bytes(rom[source:following])))
         for i in indices:
             regions.append((TABLE + 4 * i, bytes(rom[TABLE + 4 * i:TABLE + 4 * i + 4])))
     return tuple(regions)
 
 
 def expected_region_addresses():
+    moved = relocations()
     out = []
     for source, _, _, _, _, indices in _all_blocks():
         out.append(source)
+        if source in moved:
+            out.append(moved[source][0])
         out.extend(TABLE + 4 * i for i in indices)
     return tuple(out)
 
@@ -457,7 +539,7 @@ def verify(rom, regions):
 
 def generated_matches(rom):
     for source, *_ in _all_blocks():
-        decoded = lz77_decompress(rom, source)
+        decoded = lz77_decompress(rom, stream_address(rom, source))
         if decoded is None or decoded[0] != render(source):
             return False
     return True

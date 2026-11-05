@@ -4234,3 +4234,10 @@ Astra 최종 델타 `temp/spacing_followup/astra_delta1_review.md`(gpt-6-astra/h
 - 2편 스플래시 한 줄 「게임보이 워즈 어드밴스 2」(size 13, 155×12px) 정상 키 화면 `fixB/build/1_A/screens/sheet_p2_splash.png`.
 - 2편 컷인 「야마토다마시이」: 사전 0xFD0160(64칸) 재배치 후 화면 `fixB/final/q/sheet_cutin.png`(파워 게이지 CHEAT).
 - 보고서 [`docs/reports/FIX_2026-11-05.md`](reports/FIX_2026-11-05.md).
+
+## 2026-11-06 그래픽 한글 재디자인 (후보, 정본 아님)
+
+- 후보 `output/game_wars_korean_candidate_20261106_gfx.gba` SHA-256 `ec1638fb106b322c04bf2df4b0449f1c26a15e9007226ed9e065744af20df718` (`temp/fix_20261104/gfx/F1/build_1/candidate.gba` 복사).
+- 빌드: `bash temp/fix_20261104/gfx/F1/build.sh 1` (스냅샷 `F1/source_snap`, `nice -n 15`, Linux 실폰트 `AW_FONT_DIR=~/aw-fonts`) — build_1·build_2 SHA 동일.
+- 게이트: `AW_FIXB_ROOT=temp/fix_20261104/gfx/F1/build_1 AW_FIXB_ROM=temp/fix_20261104/gfx/F1/build_1/candidate.gba MEMCAP_ENABLE=0 bash temp/fix_20261104/final2/gates.sh fixB` → 46/46 exit 0. 모양 감사 `F1/shape_final.log` 실패 0.
+- 리뷰 Astra full `gfx/review/review_full_1.md` → delta `review_delta_1.md` APPROVED. 보고서 [`docs/reports/GRAPHICS_2026-11-06.md`](reports/GRAPHICS_2026-11-06.md).

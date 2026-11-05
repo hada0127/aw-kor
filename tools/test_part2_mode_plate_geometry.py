@@ -72,7 +72,8 @@ class PinnedPlateGeometryTest(unittest.TestCase):
             self.skipTest('AW_TEST_ROM not set')
         rom = Path(os.environ['AW_TEST_ROM']).read_bytes()
         for text, want in PROFILE['labels'].items():
-            raw = lz77_decompress(rom, int(want['asset'], 16))[0]
+            source = int(want['asset'], 16)
+            raw = lz77_decompress(rom, fit.plate_address(rom, source))[0]
             self.assertEqual(hashlib.sha256(raw).hexdigest(), want['decompressed_plate_sha256'], text)
 
     def test_raised_scale_limit_fails(self):

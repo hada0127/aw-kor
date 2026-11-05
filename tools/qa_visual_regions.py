@@ -116,10 +116,11 @@ PART1_OPTION_LAYER_SHA256 = {
     # Linux real-font C5 SHA-256 416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2.
     # Hashes cover the 128x32 indexed layers before LZ77 packing; wars_shop
     # also matches the decompressed C5 ROM option asset at 0x00C03F68.
-    "operation_room": "ba5641f155fc31ceff45211c27bfd060f34eb084a8f80e707d4049718d20015f",
-    "link": "569247b514094928f26e3d20fb2e110e4cf226771f7840994e8015dc246e4c4e",
-    "single_battle": "13003c5491e940e6bef0d0b1b2d474e9a89d4d7aab8e9785ad8b411eee25efd9",
-    "wars_shop": "aab89d57e89f1ef294703dfb44c57a09ecdc64a97b11f6bd79a45d6b9d70a76c",
+    # gfx T5 (2026-11-05): T2 body-edge AA (existing indices) -> new layer goldens.
+    "operation_room": "2c1a4acd3830c930fa9f76ca7ac9556989d335f782ea0a8a39080d016442f54c",
+    "link": "6bbeba5e4f96be76bdbfcb9060e2cb44d784ae6376d791be1a1305e88bfca918",
+    "single_battle": "aeca34f39adc6b67b3e35fb8cd487296f7deee531668c57a2e4ef677bf8f9c82",
+    "wars_shop": "8ea906f25b8b041a1b5b9fff1d28e8798d231e04533b0799f647187e818c2afc",
 }
 # The short 기록 header keeps its original footer and has 27 colored pixels
 # with the approved OkDanDan face (previous Noto: 53). Cold saved-game menu
@@ -235,7 +236,9 @@ def assert_part1_menu_logo_palette(label: str, layer: Image.Image, *, min_gradie
     missing = sorted({9, 10, 14} - values)
     if missing:
         raise AssertionError(f"{label}: missing Part1 logo shadow/outline indices {missing}, values={sorted(values)}")
-    extra = sorted(values - {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14})
+    # gfx T5 (2026-11-05): the T2 generator AA adds existing bank-4 greys 11
+    # (205,197,197) and 13 (98,90,90) at body/outline edges; no PRAM change.
+    extra = sorted(values - {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14})
     if extra:
         raise AssertionError(f"{label}: unexpected Part1 logo palette indices {extra}, values={sorted(values)}")
     if 15 in values:
@@ -243,7 +246,9 @@ def assert_part1_menu_logo_palette(label: str, layer: Image.Image, *, min_gradie
     gradient_pixels = sum(counts.get(idx, 0) for idx in range(1, 8))
     if gradient_pixels < min_gradient_pixels:
         raise AssertionError(f"{label}: too few route-colored gradient pixels ({gradient_pixels} < {min_gradient_pixels})")
-    if counts.get(10, 0) < 90 or counts.get(14, 0) < 120:
+    # gfx T5: T2's body-edge AA moves some white body pixels (10) to the
+    # adjacent grey 11; count both as body so the guard measures body size.
+    if counts.get(10, 0) + counts.get(11, 0) < 90 or counts.get(14, 0) < 120:
         raise AssertionError(f"{label}: outline/body too weak, counts={counts}")
     pixels = sum(counts.values())
     if pixels < 300:
@@ -258,7 +263,9 @@ def assert_part1_option_logo_palette(label: str, layer: Image.Image) -> str:
             counts[int(value)] = counts.get(int(value), 0) + 1
     values = set(counts)
     # The approved C5 상점 ROM plate uses 2/3/4/5/6/9/10/14, without index 1.
-    required = {2, 3, 4, 5, 6, 9, 10, 14} if label == "part1 option wars_shop" else {1, 9, 10, 14}
+    # gfx T5: T2's body-edge AA shades the plate's thin index-2 band, so 2 is
+    # no longer required there (it remains an allowed palette index).
+    required = {3, 4, 5, 6, 9, 10, 14} if label == "part1 option wars_shop" else {1, 9, 10, 14}
     missing = sorted(required - values)
     if missing:
         raise AssertionError(f"{label}: missing Part1 option logo indices {missing}, values={sorted(values)}")

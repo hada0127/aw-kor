@@ -12,11 +12,21 @@ A3B8FA terminator). The dictionary moves to free space DICTIONARY (64 x 2 B +
 NUL halfword) and both consumer literals (0x3806FC, 0x381300) point there.
 The native slot keeps the first 61 entries (builder text writer), so a stale
 reader would still map them to the right atlas cells.
+
+gfx T5 (2026-11-05): the uniform-scale AA atlas compresses beyond the native
+6,161 B slot, so the LZ77 stream moves to proven-empty ATLAS (0xFD3000, after
+the B84 relocation at 0xFD2000) and both loader literals (0x380644, 0x38121C,
+the only references in the original ROM) point there. The native slot at
+0x5B3ECC is retired: it keeps its original bytes and is guarded unchanged.
+
+gfx R3 (2026-11-05): the JP cut-in is upright gothic. Use pinned Hada Sans
+ExtraBold at the R2 face height, retaining the 20 px advance and AA palette.
 """
 from functools import lru_cache
 from hashlib import sha256
 from io import BytesIO
 from pathlib import Path
+import json
 import struct
 import sys
 
@@ -24,8 +34,17 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import aw_fonts  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
-FONT = aw_fonts.OKDANDAN  # AW_FONT_DIR / ~/Library/Fonts (Mac) / ~/aw-fonts (Linux)
-FONT_SHA256 = '3b48adae2f39018dfa8e3d8264363729f024af9c7eb289dcb0479e6d7ea67472'
+CORE_WITNESSES = json.loads((ROOT / 'data/graphic_hangul_shape_witnesses.json').read_text())['cutin_natural_core']
+FONT_SHA256 = aw_fonts.HADASANS_EXTRABOLD_SHA256
+# FixB cut-in frames 24/25/26, OBJ bank 3.  All three captured PRAM states
+# agree; index 8 is the existing light-blue coverage shade between the native
+# blue outline (14) and white face (1).  No palette bytes are changed.
+CUTIN_OBJ3_PALETTE = ((189, 189, 213), (255, 255, 255), (255, 172, 172),
+                      (255, 131, 139), (156, 106, 131), (255, 255, 205),
+                      (255, 255, 106), (156, 180, 123), (213, 213, 255),
+                      (156, 213, 255), (82, 156, 205), (255, 189, 139),
+                      (255, 0, 255), (197, 205, 197), (49, 98, 148),
+                      (0, 41, 0))
 ORIGINAL_SHA256 = 'a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c'
 ROM_SIZE = 0x1000000
 OFFSET, SLOT_SIZE, RAW_SIZE = 0x5B3ECC, 6161, 32768
@@ -43,11 +62,19 @@ NATIVE_LITERAL_GUARDS = (
 # Native consumers, two atlas pointers, palette, neighboring data, name pointers.
 # 0x3806A8/0x381234 digests are the native code with only the two dictionary
 # literals changed to DICTIONARY.
+ATLAS, ATLAS_CAPACITY = 0xFD3000, 0x2000
+ATLAS_POINTERS = (0x380644, 0x38121C)
+# (address, size, native digest, relocated-atlas digest) of the two literal
+# pools holding ATLAS_POINTERS; only those four bytes each differ.
+ATLAS_POINTER_GUARDS = (
+    (0x380564, 0xEC, 'f9fb9090dac028158e96c3c8f1823a8dc2a4344c166e62a69399a17f9108926f',
+     '69890aa4415f4b1c7ce1c209c3ddda967d86593295d6829822e6fccb20f535c2'),
+    (0x38121C, 0xC, 'bd8fb931b0dc3e6d11108bd116853c91f03165bb02b96f89a6a34f5201dc3bfe',
+     '5d65c56b4359e20946ff6491e5b82146724e9d8340ff9e1044f26684ab37cba3'),
+)
 GUARDS = (
-    (0x380564, 0xEC, 'f9fb9090dac028158e96c3c8f1823a8dc2a4344c166e62a69399a17f9108926f'),
     (0x3806A8, 0x58, '4bb218b9236aa9213b3700a451e43c05004098c674db12175a5b328eaa04a27f'),
     (0x38118C, 0x18, '72cfae6085257a5f0ccc21369f5031dfed67ba630eda72be96a3f27e0d67c818'),
-    (0x38121C, 0xC, 'bd8fb931b0dc3e6d11108bd116853c91f03165bb02b96f89a6a34f5201dc3bfe'),
     (0x381234, 0xD0, '54e449ff9c1c660e1f2fd13162c328d37f180c2b8746d3531d727afe52245f98'),
     (0x5B3EBC, 0x10, '4b0c2404daddaba57120378648d3dcaf0e0498579748e2127eb0bfc624914475'),
     (0x5B56DD, 0x20, '2c7c5e1889322476f239cd8607469abe6c2106277a82898bc99583855e8a9dfb'),
@@ -57,12 +84,23 @@ GUARDS = (
 )
 
 
-def _guard_current(rom):
+def _guard_current(rom, relocated=None):
+    """relocated: True/False pins the atlas literals; None accepts either state."""
     if len(rom) != ROM_SIZE:
         raise AssertionError('Part 2 power title requires the complete 16 MiB ROM')
     for address, size, digest in GUARDS:
         if sha256(rom[address:address + size]).hexdigest() != digest:
             raise AssertionError(f'Part 2 power title consumer/pointer/palette/neighbor changed: {address:X}')
+    for address, size, native, moved in ATLAS_POINTER_GUARDS:
+        allowed = {True: (moved,), False: (native,), None: (native, moved)}[relocated]
+        if sha256(rom[address:address + size]).hexdigest() not in allowed:
+            raise AssertionError(f'Part 2 power title consumer/pointer/palette/neighbor changed: {address:X}')
+    if len({_atlas_pointer(rom, a) for a in ATLAS_POINTERS}) != 1:
+        raise AssertionError('Part 2 power title atlas literals disagree')
+
+
+def _atlas_pointer(rom, address):
+    return struct.unpack_from('<I', rom, address)[0] - 0x08000000
 
 
 def source(original):
@@ -77,9 +115,9 @@ def source(original):
 
 
 def _font_bytes():
-    data = FONT.read_bytes()
+    data = Path(aw_fonts.hadasans_extrabold_path()).read_bytes()
     if sha256(data).hexdigest() != FONT_SHA256:
-        raise AssertionError('Part 2 power title OkDanDan font changed')
+        raise AssertionError('Part 2 power title Hada Sans font changed')
     return data
 
 
@@ -175,51 +213,127 @@ def decode_cell(raw, index):
     return pixels
 
 
-# fixB 8_toh (2026-11-04): the per-glyph fit below scales each syllable until it
-# fills 16 px wide OR 24 px high. Narrow horizontal-vowel syllables (토 = 185 x 279
-# source px) hit 24 px first and come out at ~1.5x the font scale of their
-# width-limited neighbours (야/마/다 ~10 px high), so 토 looked enlarged in
-# 「야마토다마시이」. Syllables added by fixB H that are height-limited are instead
-# drawn at the width-fit font scale of REFERENCE_SYLLABLE (다, its neighbour), i.e.
-# the same point size. The approved pre-H cells keep the legacy fit unchanged
-# (pixel identical); among the new syllables only 토 is height-limited.
-H_ADDED_SYLLABLES = frozenset('야마토다시')
-REFERENCE_SYLLABLE = '다'
+# fixB 8_toh (2026-11-04) drew 토 at its neighbour's point size instead of
+# stretching it to 24 px; the other syllables kept a per-glyph 16x24 fit, so 15
+# vertical-vowel syllables (꿈 승 혼 축 골 돌 습 큰 폭 풍 충 분 술 측 흑) were still
+# drawn up to 2.4x larger than wide ones (대 타 ...).
+#
+# gfx R3 (2026-11-05): every syllable shares one Hada Sans horizontal scale
+# referenced to the 18 px width of 다. The proportional binary core is then
+# expanded vertically to the fixed 23 px face height on a common baseline.
+# A user-edited wider syllable is narrowed to the 18 px face. Coverage outside the
+# binary face core is quantized against the live cut-in OBJ bank 3 (JP's own
+# 1 -> 8 -> 10 -> 14 white/light/mid-blue/outline ramp); PRAM is not written.
+# R3 keeps the R2 widths, height and AA ramp with the gothic face.
+FACE_X, FACE_Y, FACE_W, FACE_H = 7, 4, 18, 24
+TARGET_FACE_HEIGHT = 23
+SCALE_REFERENCE = '다'
+# _outline() rasterizes at 384 px from y=0; the pinned Hada Sans has uniform
+# upright Hangul bodies, then each face receives the same 23 px top/baseline.
+AA_RAMP = (14, 10, 8)  # outline -> mid blue -> light blue (face is 1)
 
 
-def _fit_scale(ch):
-    from hangul_pixel_fit import outline_alpha
-    source = outline_alpha(ch)
-    return source, min(16 / source.width, 24 / source.height)
+@lru_cache(maxsize=4096)
+def _outline(ch):
+    """(cropped 384 px Hada Sans coverage, crop top)."""
+    from PIL import Image, ImageDraw, ImageFont
+    font = ImageFont.truetype(aw_fonts.hadasans_extrabold_path(), 384)
+    probe = Image.new('L', (768, 768))
+    ImageDraw.Draw(probe).text((20, 0), ch, font=font, fill=255)
+    box = probe.point(lambda v: 255 if v >= 128 else 0).getbbox()
+    if box is None:
+        raise AssertionError(f'Part 2 power title outline mismatch: {ch}')
+    return probe.crop(box), box[1]
+
+
+def uniform_scale():
+    return FACE_W / _outline(SCALE_REFERENCE)[0].width
+
+
+def _placement(ch):
+    """Return source and fitted face geometry inside the native 32x32 cell."""
+    source, _ = _outline(ch)
+    base = uniform_scale()
+    # Fit width at the original aspect ratio so the existing gap oracle still
+    # checks the unmodified core before the final vertical row expansion.
+    natural_h = max(1, round(source.height * base))
+    while natural_h > 1 and round(source.width * natural_h / source.height) > FACE_W:
+        natural_h -= 1
+    w = max(1, round(source.width * natural_h / source.height))
+    h = TARGET_FACE_HEIGHT
+    x, y = FACE_X + (FACE_W - w) // 2, FACE_Y
+    if not (FACE_X <= x and x + w <= FACE_X + FACE_W and FACE_Y <= y and y + h <= FACE_Y + FACE_H):
+        raise AssertionError(f'Part 2 power title glyph leaves its face box: {ch}')
+    return source, (w, h), (x, y)
+
+
+def _natural_core(ch):
+    """Existing proportional binary face, before a vertical-only enlargement."""
+    from PIL import Image
+    source, _ = _outline(ch)
+    width = _placement(ch)[1][0]
+    height = max(1, round(source.height * width / source.width))
+    return source.resize((width, height), Image.Resampling.LANCZOS).point(
+        lambda v: 255 if v >= 128 else 0)
 
 
 def _fill(ch):
+    """Binary face core in cell coordinates (32x32 L)."""
     from PIL import Image
-    from hangul_pixel_fit import glyph
-    source, scale = _fit_scale(ch)
-    if ch not in H_ADDED_SYLLABLES or 16 / source.width <= 24 / source.height:
-        return glyph(ch, 16, 24)  # uniform scale; unused allocation stays transparent
-    scale = min(scale, _fit_scale(REFERENCE_SYLLABLE)[1])
-    w, h = max(1, round(source.width * scale)), max(1, round(source.height * scale))
-    mask = source.resize((w, h), Image.Resampling.LANCZOS).point(lambda v: 255 if v >= 128 else 0)
-    result = Image.new('L', (16, 24))
-    result.paste(mask, ((16 - w) // 2, (24 - h) // 2))
+    _, size, origin = _placement(ch)
+    mask = _natural_core(ch).resize(size, Image.Resampling.NEAREST)
+    result = Image.new('L', (32, 32))
+    result.paste(mask, origin)
+    return result
+
+
+def _coverage(ch):
+    from PIL import Image
+    source, size, origin = _placement(ch)
+    result = Image.new('L', (32, 32))
+    result.paste(source.resize(size, Image.Resampling.BOX), origin)
     return result
 
 
 def _glyph(ch, font):
-    from PIL import Image, ImageDraw, ImageFilter
-    from hangul_pixel_fit import verify_glyph
-    fill = _fill(ch)
-    if verify_glyph(ch, fill)['failures']:
-        raise AssertionError(f'Part 2 power title gap closed: {ch}')
-    mask = Image.new('L', (32, 32))
-    mask.paste(fill, (8, 4))
+    from PIL import Image, ImageFilter
+    from hangul_pixel_fit import runs
+    from sprite_text_aa import palette_blend_index
+    natural = _natural_core(ch)
+    # Fixed R8 witness is independent of the current resize/threshold path.
+    # A missing or merged stroke changes this digest before vertical scaling.
+    witness = CORE_WITNESSES.get(ch)
+    if witness and sha256(natural.tobytes()).hexdigest() != witness:
+        raise AssertionError(f'Part 2 power title Hada core changed: {ch}')
+    mask = _fill(ch)
+    # Nearest-neighbour row expansion preserves each binary stroke column.
+    # Check the *final* core too, so an altered resize cannot silently close
+    # counters while the original proportional oracle remains green.
+    box = mask.getbbox()
+    final = mask.crop(box)
+    for x in range(natural.width):
+        before = sum(n for n, _, _ in runs([natural.getpixel((x, y)) for y in range(natural.height)]))
+        after = sum(n for n, _, _ in runs([final.getpixel((x, y)) for y in range(final.height)]))
+        if before != after:
+            raise AssertionError(f'Part 2 power title vertical scale closed a gap: {ch} x={x}')
+    soft = _coverage(ch)
     border = mask.filter(ImageFilter.MaxFilter(3))
-    pixels = [[1 if mask.getpixel((x, y)) else 14 if border.getpixel((x, y)) else 0
-               for x in range(32)] for y in range(32)]
+    pixels = []
+    for y in range(32):
+        row = []
+        for x in range(32):
+            if mask.getpixel((x, y)):
+                value = 1
+            elif border.getpixel((x, y)):
+                value = palette_blend_index(14, 1, soft.getpixel((x, y)), AA_RAMP, (CUTIN_OBJ3_PALETTE,))
+            else:
+                value = 0
+            row.append(value)
+        pixels.append(row)
     occupied = [(x, y) for y in range(32) for x in range(32) if pixels[y][x]]
-    if (not occupied or any(not (7 <= x <= 24 and 3 <= y <= 28) for x, y in occupied)
+    # A 1 px outline around the 18 px face spans exactly the native 20 px
+    # advance (x 6..25), as the JP katakana cells do.
+    if (not occupied or any(not (6 <= x <= 25 and 3 <= y <= 28) for x, y in occupied)
             or not any(1 in row for row in pixels)):
         raise AssertionError(f'Part 2 power title glyph exceeds its 20px advance: {ch}')
     return pixels
@@ -234,7 +348,7 @@ def render(original_raw, dictionary, font_bytes=None):
         raise AssertionError('Part 2 power title render dictionary changed scope')
     font_bytes = _font_bytes() if font_bytes is None else font_bytes
     if sha256(font_bytes).hexdigest() != FONT_SHA256:
-        raise AssertionError('Part 2 power title OkDanDan font changed')
+        raise AssertionError('Part 2 power title Hada Sans font changed')
     font = ImageFont.truetype(BytesIO(font_bytes), 120)
     result = bytearray(original_raw)
     for index, ch in enumerate(dictionary):
@@ -257,7 +371,7 @@ def _decode_bounded(payload):
     """Reject out-of-slot reads, malformed lengths and VRAM-unsafe backrefs."""
     from lz77_scan import lz77_decompress
     from export_sprites import lz77_decompress as independent_decode
-    if len(payload) > SLOT_SIZE or len(payload) < 4 or payload[:4] != b'\x10\x00\x80\x00':
+    if len(payload) > ATLAS_CAPACITY or len(payload) < 4 or payload[:4] != b'\x10\x00\x80\x00':
         raise AssertionError('Part 2 power title LZ header/slot changed')
     pos, produced = 4, 0
     try:
@@ -291,9 +405,9 @@ def _decode_bounded(payload):
 def _compress(raw):
     from lz77_compress import lz77_compress_optimal
     packed = lz77_compress_optimal(raw, vram_safe=True)
-    if len(packed) > SLOT_SIZE:
-        raise AssertionError(f'Part 2 power title exceeds original slot: {len(packed)} > {SLOT_SIZE}')
-    payload = packed.ljust(SLOT_SIZE, b'\0')
+    if len(packed) > ATLAS_CAPACITY:
+        raise AssertionError(f'Part 2 power title exceeds relocated atlas: {len(packed)} > {ATLAS_CAPACITY}')
+    payload = packed.ljust(ATLAS_CAPACITY, b'\0')
     decoded, consumed = _decode_bounded(payload)
     if decoded != raw or consumed != len(packed):
         raise AssertionError('Part 2 power title LZ roundtrip failed')
@@ -311,26 +425,58 @@ def _expected(rom, original, display_names, syllable_codes):
     return _payload(raw, dictionary, _font_bytes())
 
 
+def _retired_slot_intact(rom, original):
+    if bytes(rom[OFFSET:OFFSET + SLOT_SIZE]) != bytes(original[OFFSET:OFFSET + SLOT_SIZE]):
+        raise AssertionError('Part 2 power title retired native slot changed')
+
+
 def patch(rom, original, display_names, syllable_codes):
+    """Write the atlas to ATLAS and move both loader literals there.
+
+    Returns the info dict; writes() lists the exact byte extents for the log.
+    """
     expected, consumed = _expected(rom, original, display_names, syllable_codes)
+    native = struct.pack('<I', 0x08000000 + OFFSET)
+    moved = struct.pack('<I', 0x08000000 + ATLAS)
     if bytes(rom[OFFSET:OFFSET + SLOT_SIZE]) != bytes(original[OFFSET:OFFSET + SLOT_SIZE]):
         raise AssertionError('Part 2 power title asset already changed by another writer')
-    rom[OFFSET:OFFSET + SLOT_SIZE] = expected
-    return {'glyphs': len(bind_dictionary(rom, display_names, syllable_codes)), 'names': 36, 'offset': hex(OFFSET),
-            'packed_bytes': consumed, 'slot_bytes': SLOT_SIZE, 'headroom': SLOT_SIZE - consumed,
-            'method': 'dictionary_ordered_lz77_source_only'}
+    if (bytes(original).count(native) != len(ATLAS_POINTERS)
+            or any(bytes(original[a:a + 4]) != native or bytes(rom[a:a + 4]) != native for a in ATLAS_POINTERS)):
+        raise AssertionError('Part 2 power title native atlas literal ownership changed')
+    if (any(original[ATLAS:ATLAS + ATLAS_CAPACITY]) or any(rom[ATLAS:ATLAS + ATLAS_CAPACITY])
+            or moved in original or moved in rom):
+        raise AssertionError('Part 2 power title relocated atlas space occupied or referenced')
+    _guard_current(rom, relocated=False)
+    rom[ATLAS:ATLAS + ATLAS_CAPACITY] = expected
+    for address in ATLAS_POINTERS:
+        rom[address:address + 4] = moved
+    _guard_current(rom, relocated=True)
+    return {'glyphs': len(bind_dictionary(rom, display_names, syllable_codes)), 'names': 36,
+            'offset': hex(ATLAS), 'retired_native_offset': hex(OFFSET), 'pointers': [hex(a) for a in ATLAS_POINTERS],
+            'packed_bytes': consumed, 'slot_bytes': ATLAS_CAPACITY, 'headroom': ATLAS_CAPACITY - consumed,
+            'native_slot_bytes': SLOT_SIZE, 'method': 'dictionary_ordered_lz77_relocated'}
+
+
+def writes(rom):
+    """[(address, bytes, label)] of the relocated atlas and its two literals."""
+    return [(ATLAS, bytes(rom[ATLAS:ATLAS + ATLAS_CAPACITY]), 'part2-power-title-atlas-relocated'),
+            *((a, bytes(rom[a:a + 4]), 'part2-power-title-atlas-literal') for a in ATLAS_POINTERS)]
 
 
 def verify_generated(rom, original, display_names, syllable_codes):
     expected, _ = _expected(rom, original, display_names, syllable_codes)
-    if bytes(rom[OFFSET:OFFSET + SLOT_SIZE]) != expected:
+    _guard_current(rom, relocated=True)
+    _retired_slot_intact(rom, original)
+    if bytes(rom[ATLAS:ATLAS + ATLAS_CAPACITY]) != expected:
         raise AssertionError('Part 2 power title generated asset overwritten before editor')
 
 
 def capture_regions(rom, original, display_names, syllable_codes, *, editor_result):
     """Accept only an exact, explicitly applied editor write for a changed asset."""
     expected, _ = _expected(rom, original, display_names, syllable_codes)
-    payload = bytes(rom[OFFSET:OFFSET + SLOT_SIZE])
+    _guard_current(rom, relocated=True)
+    _retired_slot_intact(rom, original)
+    payload = bytes(rom[ATLAS:ATLAS + ATLAS_CAPACITY])
     _decode_bounded(payload)
     if editor_result.get('skipped', 0):
         raise AssertionError('Part 2 power title editor reported skipped writes')
@@ -340,10 +486,10 @@ def capture_regions(rom, original, display_names, syllable_codes, *, editor_resu
         binding = dictionary_binding(rom, display_names, syllable_codes)
         if editor_result.get('dictionary_bindings', {}).get(ASSET_ID) != binding:
             raise AssertionError('Part 2 power title applied editor dictionary binding is missing or stale')
-        if applied != [(OFFSET, payload)]:
+        if applied != [(ATLAS, payload)]:
             raise AssertionError('Part 2 power title applied editor byte extent differs')
     if payload != expected:
-        accepted = any(sid == ASSET_ID and address == OFFSET and bytes(data) == payload
+        accepted = any(sid == ASSET_ID and address == ATLAS and bytes(data) == payload
                        for sid, address, data in editor_result.get('expected_writes', []))
         if not accepted:
             raise AssertionError('Part 2 power title changed without an explicit applied editor overlay')
@@ -351,13 +497,14 @@ def capture_regions(rom, original, display_names, syllable_codes, *, editor_resu
 
 
 def _snapshot_extents():
-    return {**{a: size for a, size, _ in GUARDS}, OFFSET: SLOT_SIZE,
+    return {**{a: size for a, size, _ in GUARDS}, **{a: size for a, size, _, _ in ATLAS_POINTER_GUARDS},
+            ATLAS: ATLAS_CAPACITY, OFFSET: SLOT_SIZE,
             DICTIONARY: DICTIONARY_SIZE + 2, NAMES_START: NAMES_END - NAMES_START}
 
 
 def verify_regions(rom, regions):
     """Run after all final writers; retain accepted artwork and its bindings."""
-    _guard_current(rom)
+    _guard_current(rom, relocated=True)
     extents = _snapshot_extents()
     if set(regions) != set(extents) or any(len(regions[a]) != size for a, size in extents.items()):
         raise AssertionError('Part 2 power title final snapshot has wrong extents')
@@ -411,7 +558,7 @@ def editor_view(rom, original, display_names, syllable_codes, record=None):
             raise ValueError('기술명 편집본의 타일 크기가 다릅니다. 기존 편집은 보존했습니다.')
         return binding, raw
     expected = _render_cached(source(original), dictionary, _font_bytes())
-    payload = bytes(rom[OFFSET:OFFSET + SLOT_SIZE])
+    payload = bytes(rom[ATLAS:ATLAS + ATLAS_CAPACITY])
     try:
         actual, _ = _decode_bounded(payload)
     except AssertionError as exc:

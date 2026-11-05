@@ -1,4 +1,5 @@
 import unittest
+import hashlib
 
 import part1_rank_card_label as m
 from lz77_scan import lz77_decompress
@@ -44,6 +45,28 @@ class RankCardLabelTests(unittest.TestCase):
         original[m.SOURCE + 300] ^= 1
         with self.assertRaises(AssertionError):
             m.source_guard(original)
+
+    def test_outline_aa_variant_and_switch(self):
+        old = m.sheet(self.original, 'galmuri')
+        new = m.sheet(self.original, 'outline_aa')
+        self.assertNotEqual(old, new)
+        self.assertEqual(hashlib.sha256(new).hexdigest(),
+                         'e51795c4991bfae9d5e9196074fd6b326265187f3313a000731c3ff249951da0')
+        self.assertLessEqual(len(m._stream(new)), m.CAPACITY)
+        self.assertEqual({m._get(new, x, y) for y in range(m.BOX_Y0, m.BOX_Y1)
+                          for x in range(m.BOX_X0, m.BOX_X1)}, {1, 8, 14, 15})
+        for y in range(64):
+            for x in range(64):
+                if not (m.BOX_X0 <= x < m.BOX_X1 and m.BOX_Y0 <= y < m.BOX_Y1):
+                    self.assertEqual(m._get(old, x, y), m._get(new, x, y))
+        prior = m.GRAPHIC_FONT_VARIANT
+        try:
+            m.GRAPHIC_FONT_VARIANT = 'outline_aa'
+            self.assertEqual(m.sheet(self.original), new)
+        finally:
+            m.GRAPHIC_FONT_VARIANT = prior
+        with self.assertRaises(ValueError):
+            m.sheet(self.original, 'unknown')
 
 
 if __name__ == '__main__':

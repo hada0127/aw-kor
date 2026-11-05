@@ -483,7 +483,7 @@ class ScriptSafetyTests(unittest.TestCase):
             self.assertEqual(len(raw), 512)
             self.assertTrue(any(raw))
             indices = set(v for byte in raw for v in (byte & 15, byte >> 4))
-            self.assertTrue(indices <= {0, 5, 6, 10})
+            self.assertTrue(indices <= {0, 5, 6, 7, 8, 9, 10})  # gfx T5: 9/8/7 rim AA
             self.assertIn(5, indices)  # b30 black rim around the Hada Bold face
             for y in range(32):
                 for x in range(24, 32):

@@ -5,6 +5,7 @@ logos go back to the pre-b32 art (f94e690 reverse-applied), including the
 「한글판」 badge and the shared-title TM erase.
 """
 import hashlib
+import json
 import sys
 import unittest
 from pathlib import Path
@@ -20,11 +21,20 @@ LEGACY_TEXT = "게임보이 워즈 어드밴스"
 
 # sha256 of Image.tobytes() for each generated 240x160 index layer.
 LAYER_GOLDENS = {
-    "shared": "6fb82b5b0e0f01dd2de4a17ac9e4f0085c67bfeed21df9085416dfdd6682906b",
-    "select": "2740bcb8feec9f2e36b6a365b06be9d0f5e949049ee7198213c50dbb59af965c",
+    "shared": "aa689821c9d8cda3b00dc09c3d15e953bf03a6372aa7c8ee5cec586a4f4c913b",
+    "select": "242845a62624df9551c3d0410b82076e902f95ddcc4fa0d40cb677606a943c3a",
     "part1": "bbca9ed2b3012e7acc51aeeda0f58d3d308bf4094fc2fddf0e0925ff76fd53d7",
-    "part2": "7d14f9aab71d4ecef633dbaa449190d706633d9240dcb4b00503c11b364bf0c7",
+    "part2": "e1445f5ebd7376af28cc9ec87ee3f2f1fdb4f065dc05ad7ff225dca55d097968",
     "badge": "10677554f954f7283f450df74dedb1ca3b33c9735bc0e608b51c1175b093a121",
+}
+
+# These are the occupied-pixel masks of the restored fixB layers. Edge shades
+# may change, but the lettering, badge and prompt silhouettes must not move.
+OCCUPANCY_GOLDENS = {
+    "shared": "2b5d2d271ff758d941d6a9e7f05466418d50edcde587a95a82ad2015df2768ca",
+    "select": "229abfaa58b1e69d120b6013001eb1f1a1e2db7c30d8d2d3e52d7f3bf11abbeb",
+    "part1": "ee67fdd46bfd28183b0752dcd70e2f26ec56c38c328244d94470af0a3eee9eb2",
+    "part2": "23be974b65037f66569f067905a8032114dcb2a940074d217dc8e15c9a85c5d5",
 }
 
 LAYER_FACTORIES = {
@@ -57,6 +67,37 @@ def sprite_pixel(tile_data, sprites, x, y, tile_subtract=0):
 
 
 class LegacyTitleLogoTests(unittest.TestCase):
+    def test_part1_header_ink_and_protected_english(self):
+        for _, offset, text, size in (title.PART1_MAIN_HEADER_BLOCKS +
+                                      title.PART1_SUBMENU_LOGO_BLOCKS):
+            with self.subTest(offset=hex(offset)):
+                layer = title.make_part1_header_with_footer(offset, text, size)
+                footer_y = title.part1_footer_y(offset)
+                korean = layer.crop((0, 0, 80, footer_y)).getbbox()
+                # gfx T5: Galmuri header family (no edge-to-edge proof for the
+                # 64/16 OBJ pair): ink stays inside the first 64 px cell.
+                self.assertTrue(title.PART1_HEADER_FAMILY_GALMURI)
+                self.assertGreaterEqual(korean[3] - korean[1], 12)
+                self.assertLess(korean[2], 64)
+                native_footer = title.original_part1_footer(offset)
+                self.assertEqual(layer.crop((0, footer_y, 80, 32)).tobytes(),
+                                 native_footer.crop((0, footer_y, 80, 32)).tobytes())
+
+    def test_part1_authoritative_option_overrides_match_generator(self):
+        from export_sprites import tiles_to_indices
+        overrides = json.loads((ROOT / 'data/sprites_overrides.json').read_text())
+        for sid in ('lz77_00C03880', 'lz77_00C03AF0'):
+            with self.subTest(sid=sid):
+                record = overrides[sid]
+                offset = int(sid[5:], 16)
+                _, _, label, size = next(row for row in title.PART1_MODE_OPTION_BLOCKS if row[1] == offset)
+                raw = title.option_layer_to_tiles(title.make_part1_option_block(label, size))
+                grid, width, height = tiles_to_indices(raw, record['width'] // 8)
+                self.assertEqual((width, height), (record['width'], record['height']))
+                self.assertEqual(grid, record['indices'])
+                self.assertLessEqual(len(title.lz77_compress_optimal(raw, vram_safe=True)),
+                                     title.PART1_MODE_OPTION_BLOCK_CAPACITY[offset])
+
     def test_font_is_okdandan(self):
         self.assertEqual(hashlib.sha256(Path(aw_fonts.okdandan_path()).read_bytes()).hexdigest(),
                          aw_fonts.OKDANDAN_SHA256)
@@ -68,6 +109,9 @@ class LegacyTitleLogoTests(unittest.TestCase):
                 self.assertEqual(layer.size, (240, 160))
                 self.assertIsNotNone(layer.getbbox(), name)
                 self.assertEqual(hashlib.sha256(layer.tobytes()).hexdigest(), LAYER_GOLDENS[name])
+                if name in OCCUPANCY_GOLDENS:
+                    occupied = bytes(bool(index) for index in layer.tobytes())
+                    self.assertEqual(hashlib.sha256(occupied).hexdigest(), OCCUPANCY_GOLDENS[name])
 
     def test_logo_text_is_legacy_wording(self):
         self.assertFalse(hasattr(title, "draw_mock_a_logo"))

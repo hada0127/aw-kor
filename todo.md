@@ -1,3 +1,11 @@
+## 2026-11-06 그래픽 한글 재디자인 (후보, 배포 아님)
+
+보고서 [`docs/reports/GRAPHICS_2026-11-06.md`](docs/reports/GRAPHICS_2026-11-06.md). 후보 `output/game_wars_korean_candidate_20261106_gfx.gba` SHA-256 `ec1638fb106b322c04bf2df4b0449f1c26a15e9007226ed9e065744af20df718`.
+
+- [x] 자산별 일본판 스타일 기준 폰트(OK단단/하다 산스), 컷인 ExtraBold, 로고 AA만, 2편 미션 제목·일자·작전성공 AA, 1편 미션 제목 하다 산스(재배치), 모드판 선택 부제 영어 반전, 프롤로그 Black 글자 외곽, 1편 미션 띠 「작전」 투명, 전투 DEF·지도 HUD 손그림 「방」. Astra full→delta 승인, 게이트 46/46.
+- [ ] 2편 작전실패 AA(실팔레트 미확정), 일부 화면 실화면 대조 `(unverified)` — 보고서 6절.
+- [ ] b44 정본 교체·배포는 사용자 결정 후.
+
 ## 2026-11-05 「게임보이 워즈 어드밴스」 표기 복귀 · 11-04 남은 한계 해결 (fixB 후보, 배포 아님)
 
 보고서 [`docs/reports/FIX_2026-11-05.md`](docs/reports/FIX_2026-11-05.md). 후보 `output/game_wars_korean_candidate_20261104_fixB.gba` SHA-256 `0983d1eb93b12f09d5536a26807077f61ed1b8ecca1449e60c0f3cbd9bb9d1a8` CRC32 `ABA0BDD3`. 정본 b44·dist 불변. Astra full C1 → delta C2 → delta C3 APPROVED. 게이트 46/46 exit 0, 단위 테스트 HEAD d8d6a24 대비 새 실패 0(기존 실패 136 은 양쪽 공유).

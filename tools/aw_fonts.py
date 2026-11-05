@@ -1,8 +1,7 @@
-"""Font locations and the shared large-title renderer for ROM graphics.
+"""Pinned font locations and renderers for ROM graphics.
 
-2026-10-08 user font rule (CLAUDE.md): large drawn text (titles, banners,
-headlines, big labels) uses OkDanDan-Bold; small text glyphs use Galmuri
-(reference/fonts). Part 2 large mode plates use Hada Sans Bold (2026-10-13 decision).
+Graphic font choice follows the Japanese lettering of each asset. Dialogue
+glyphs and the default small-line Galmuri policy are separate.
 
 OkDanDan is not redistributable here, so it is resolved from a font directory:
   AW_FONT_DIR (explicit) > ~/Library/Fonts (macOS, unchanged) > ~/aw-fonts (Linux).
@@ -47,6 +46,32 @@ def require_large_line(ink, margin_top=0, margin_bottom=0):
     return height
 
 
+def graphic_outline_font_allowed(ink, margin_top=0, margin_bottom=0):
+    """Graphic text may use an approved outline font at any visible height.
+
+    This is an explicit graphic-only policy. Dialogue glyph generation and
+    require_large_line's existing small-line guard are unchanged. A generator
+    still needs a fitted slot and in-game comparison for small lettering.
+    """
+    return drawn_line_height(ink, margin_top, margin_bottom)
+
+
+SMALL_LABEL_VARIANTS = ('galmuri', 'outline_aa')
+
+
+def graphic_small_label_variant():
+    """Build-wide variant for small (<= 16 px) graphic labels.
+
+    plan_G approval decision 3: Galmuri stays the default; the outline-font AA
+    variant is built only for the comparison sheet via
+    AW_GRAPHIC_SMALL_LABEL_VARIANT=outline_aa. Unknown values fail.
+    """
+    value = os.environ.get('AW_GRAPHIC_SMALL_LABEL_VARIANT', 'galmuri')
+    if value not in SMALL_LABEL_VARIANTS:
+        raise ValueError(f'unknown AW_GRAPHIC_SMALL_LABEL_VARIANT: {value!r}')
+    return value
+
+
 def font_dir():
     env = os.environ.get('AW_FONT_DIR')
     if env:
@@ -75,6 +100,19 @@ def hadasans_path():
 # Only its coverage steers where Bold strokes may grow; jamo/counters stay Bold's.
 HADASANS_BLACK = Path(os.environ.get('AW_HADASANS_BLACK_FONT', str(HADASANS.with_name('HadaSans-Black.otf')))).expanduser()
 HADASANS_BLACK_SHA256 = '6e80fc2410876192323434584523b9d8e3dfba1a79f8a3d42cd7520631f6b048'
+HADASANS_EXTRABOLD = Path(os.environ.get(
+    'AW_HADASANS_EXTRABOLD_FONT',
+    str(HADASANS.with_name('HadaSans-ExtraBold.otf')))).expanduser()
+HADASANS_EXTRABOLD_SHA256 = '4851ecd3ae59dd6691a4eb47973b53ce1331209655ba1ea73da1b0a49e8d0d4b'
+
+
+def hadasans_extrabold_path():
+    if not HADASANS_EXTRABOLD.is_file():
+        raise FileNotFoundError(f'HadaSans-ExtraBold font not found: {HADASANS_EXTRABOLD} (set AW_HADASANS_EXTRABOLD_FONT)')
+    digest = hashlib.sha256(HADASANS_EXTRABOLD.read_bytes()).hexdigest()
+    if digest != HADASANS_EXTRABOLD_SHA256:
+        raise AssertionError(f'unexpected HadaSans-ExtraBold SHA-256 {digest} at {HADASANS_EXTRABOLD}')
+    return str(HADASANS_EXTRABOLD)
 
 
 def hadasans_black_path():
@@ -484,11 +522,26 @@ def screen_contiguity(asset, rom, final=False, fresh=False):
     if final:
         from lz77_scan import lz77_decompress
 
+        import part1_mission_titles as _mt
+        import part1_m19_title as _m19
+        import part1_m20_title as _m20
+        _owned = {block[0] for block in _mt._all_blocks()}
+        _moved = {destination: source for source, (destination, _) in _mt.relocations().items()}
+
         def check_asset(off, decoded_sha, raw_sha, expected_size):
-            decoded = lz77_decompress(rom, off)
+            # gfx T5: a relocated mission-title sheet is read where its own
+            # table slots point (part1_mission_titles guards the retired slot).
+            if off in _owned:
+                at = _mt.stream_address(rom, off)
+            elif off in (_m19.SOURCE, _m20.SOURCE):
+                module = _m19 if off == _m19.SOURCE else _m20
+                at = int.from_bytes(rom[module.POINTER:module.POINTER + 4], 'little') - 0x08000000
+            else:
+                at = off
+            decoded = lz77_decompress(rom, at)
             if (decoded is None or len(decoded[0]) != expected_size or
                     hashlib.sha256(decoded[0]).hexdigest() != decoded_sha or
-                    hashlib.sha256(rom[off:off + decoded[1]]).hexdigest() != raw_sha):
+                    hashlib.sha256(rom[at:at + decoded[1]]).hexdigest() != raw_sha):
                 raise AssertionError(f'screen contiguity proof asset changed for 0x{off:06X}')
 
         if name == key:
@@ -509,9 +562,15 @@ def screen_contiguity(asset, rom, final=False, fresh=False):
         table = entry.get('consumer_table')
         if table:
             import struct
+            for module in (_m19, _m20):
+                address = struct.unpack_from('<I', rom, module.POINTER)[0] - 0x08000000
+                if address not in (module.SOURCE, module.RELOCATION):
+                    raise AssertionError('screen contiguity mission pointer outside allocation')
+                _moved[address] = module.SOURCE
             start, count = table['offset'], table['count']
             ordered = [struct.unpack_from('<I', rom, start + 4 * i)[0] - 0x08000000
                        for i in range(count)]
+            ordered = [_moved.get(pointer, pointer) for pointer in ordered]  # gfx T5
             pointers = set(ordered)
             registered = {int(value, 16) for value in entry['consumer_assets']}
             excluded = {int(value, 16) for value in table['excluded_assets']}

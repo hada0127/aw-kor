@@ -23,7 +23,7 @@ import aw_fonts
 from lz77_compress import lz77_compress, lz77_compress_optimal
 from lz77_scan import lz77_decompress
 from bdf import glyph_grid, load_bdf
-from sprite_text_aa import compose_part1_text
+from sprite_text_aa import blend_index, compose_part1_text, palette_blend_index
 from sprite_relocations import RELOCATIONS, write_relocated_sprite
 
 
@@ -454,6 +454,7 @@ def draw_index_text(
     hi_idx: int,
     aa_idx: int | None = None,
     stroke: int = 1,
+    edge_palette: str | None = None,
 ) -> None:
     from hangul_pixel_fit import line
     # Single body mask: repainting a shifted whole glyph as a highlight closes
@@ -473,6 +474,10 @@ def draw_index_text(
             if body.getpixel((xx, yy)):
                 top_edge = yy == 0 or not body.getpixel((xx, yy - 1))
                 layer.putpixel((xx, yy), hi_idx if top_edge else body_idx)
+    if edge_palette is not None:
+        _soften_logo_body_edge(layer, body, edge_palette, bevel_idx,
+                               (body_idx, 5, 6, 9, 10) if edge_palette == 'common'
+                               else (body_idx, 9, 10, 11, 12))
 
 
 def draw_select_logo_text(
@@ -488,6 +493,7 @@ def draw_select_logo_text(
     inner_aa_idx: int,
     body_stops: tuple[int, ...],
     body_aa_idx: int,
+    edge_palette: str | None = None,
 ) -> None:
     from hangul_pixel_fit import line
     mask, _ = line(text, max_w - 6, max_h - 6, spacing=2)
@@ -503,6 +509,43 @@ def draw_select_logo_text(
             if body.getpixel((px, py)):
                 stop = min(len(body_stops) - 1, (px - x0) * len(body_stops) // mask.width)
                 layer.putpixel((px, py), body_stops[stop])
+    if edge_palette is not None:
+        _soften_logo_body_edge(layer, body, edge_palette, inner_idx,
+                               tuple(dict.fromkeys((*body_stops, body_aa_idx))))
+
+
+# Captured fixB OBJ banks from gfx/palette_profiles.json. The title art keeps
+# its exact occupied pixels; only solid body pixels on its inner contour may
+# use an existing shade. Index 0 remains transparent in every OBJ bank.
+_LOGO_PALETTE_BGR555 = {
+    'common': '3A76 4883 7FBD 6E72 2ABF 227F 32FF 4B7F 5FFF 42BB 223A 556A 72F7 112C 735A 7FFF',
+    'select_top': '3800 7FFF 279F 277F 233F 231F 22FF 1EBF 1E9F 1E7F 1A3F 1A1F 09BA 5F19 35CF 2906',
+    'select_bottom': '3800 4883 7FBD 6E72 2ABF 227F 32FF 4B7F 5FFF 42BB 223A 556A 72F7 112C 735A 7FFF',
+    'part1': '3400 7BDE 237E 235E 1F1E 1EFE 1EDE 1A9E 1A7E 1A5E 161E 15FE 0599 5AF8 31AE 24E5',
+    'part2': '66D6 4462 7B9C 6A51 269E 1E5E 2EDE 475E 5BDE 3E9A 1E19 5149 6ED6 0D0B 6F39 7BDE',
+}
+
+
+@lru_cache(maxsize=5)
+def _logo_palette(name: str):
+    return tuple(bgr555_to_rgb(int(value, 16)) for value in _LOGO_PALETTE_BGR555[name].split())
+
+
+def _soften_logo_body_edge(layer, body, palette_name, under, candidates):
+    """Shade existing inner-edge pixels without changing the restored mask."""
+    palette = _logo_palette(palette_name)
+    original = layer.copy()
+    for y in range(1, layer.height - 1):
+        for x in range(1, layer.width - 1):
+            if not body.getpixel((x, y)) or not body.getpixel((x, y - 1)):
+                continue  # keep the approved top highlight
+            neighbors = sum(bool(body.getpixel((x + dx, y + dy)))
+                            for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)))
+            if neighbors == 4:
+                continue
+            fill = original.getpixel((x, y))
+            shade = palette_blend_index(under, fill, 184, candidates, (palette,))
+            layer.putpixel((x, y), shade)
 
 
 def index_for_alpha(alpha: int, fill_idx: int, edge_idx: int, aa_idx: int) -> int:
@@ -622,7 +665,8 @@ def paint_index_text_crisp(
 
 def make_title_index_layer() -> Image.Image:
     layer = Image.new("L", (240, 160), 0)
-    draw_index_text(layer, "게임보이 워즈 어드밴스", 116, 26, 190, 30, 25, 1, 11, 4, 4, aa_idx=10, stroke=1)
+    draw_index_text(layer, "게임보이 워즈 어드밴스", 116, 26, 190, 30, 25, 1, 11, 4, 4, aa_idx=10, stroke=1,
+                    edge_palette='common')
     draw_part2_start_index(layer, "시작하기!", PART2_STYLE_START_BOX)
     return layer
 
@@ -642,6 +686,7 @@ def make_select_index_layer() -> Image.Image:
         inner_aa_idx=13,
         body_stops=(10, 8, 6, 4, 2),
         body_aa_idx=9,
+        edge_palette='select_top',
     )
     draw_select_logo_text(
         layer,
@@ -656,6 +701,7 @@ def make_select_index_layer() -> Image.Image:
         inner_aa_idx=14,
         body_stops=(5, 4, 6, 7, 8),
         body_aa_idx=9,
+        edge_palette='select_bottom',
     )
     draw_prompt_plain_index(layer, "게임 선택", (20, 144, 144, 160), 6, 1, 10, aa_idx=15)
     return layer
@@ -666,7 +712,8 @@ def make_part1_index_layer() -> Image.Image:
     # Part 1 uses a different OBJ palette from 1+2/Part 2. Stable title-frame
     # sampling shows: dark outline=15, gray shade=14, orange body=8..12,
     # yellow highlight=2..3.
-    draw_index_text(layer, "게임보이 워즈 어드밴스", 116, 24, 200, 34, 27, 15, 14, 8, 2, aa_idx=10, stroke=1)
+    draw_index_text(layer, "게임보이 워즈 어드밴스", 116, 24, 200, 34, 27, 15, 14, 8, 2, aa_idx=10, stroke=1,
+                    edge_palette='part1')
     draw_part1_start_index(layer, "시작하기!", (75, 107, 171, 123))
     return layer
 
@@ -686,6 +733,7 @@ def make_part2_index_layer() -> Image.Image:
         inner_aa_idx=14,
         body_stops=(5, 4, 6, 7, 8),
         body_aa_idx=9,
+        edge_palette='part2',
     )
     draw_part2_start_index(layer, "시작하기!", PART2_STYLE_START_BOX)
     return layer
@@ -1158,8 +1206,12 @@ def draw_centered_title_font_text(
     layer.paste(patch, (x, bbox[1]))
 
 
-# 2026-10-08: some headers only fit at <= 16 px (small text -> Galmuri); a font
-# family must not mix on the same kind of screen element, so all headers follow.
+# gfx T5 (2026-11-05): T2 switched the headers to OkDanDan, but 플레이어 랭크
+# and 케이블 대전 then cross the 64/16 OBJ edge with no native or screen proof
+# that those cells are drawn edge to edge (qa_obj_title_cells), and inside the
+# first cell they drop to 12/14 px. The family must not mix (2026-10-08), and
+# small lines default to Galmuri (plan_G decision 3), so the header family
+# stays Galmuri (fixB geometry) with T2's body-edge AA.
 PART1_HEADER_FAMILY_GALMURI = True
 
 
@@ -1184,13 +1236,9 @@ def draw_part1_clean_menu_label(
             break
     else:
         raise ValueError(f'header text does not fit: {text!r} in {box}')
-    if PART1_HEADER_FAMILY_GALMURI or size <= aw_fonts.GALMURI_MAX_SIZE:
-        # 2026-10-08 decision: a header this small is small text -> Galmuri at its
-        # native 12 px (Bold, else Condensed), same palette composition. The whole
-        # 80x32 header family (main headers + submenu headers, one per screen in
-        # the same top-left slot) follows its smallest members, so it is all
-        # Galmuri. Keep it in the first 64x32 OBJ cell (x < 64) so no glyph
-        # crosses into the 16x32 cell.
+    if PART1_HEADER_FAMILY_GALMURI:
+        # Legacy pixel-font alternative for the later native-screen comparison.
+        # Keep it in the first 64x32 OBJ cell (x < 64).
         cell_box = (box[0], box[1], min(box[2], 62), box[3])
         for path in (BODY_BOLD_FONT_PATH, BODY_FONT_PATH):
             font = ImageFont.truetype(str(path), 12)
@@ -1212,6 +1260,7 @@ def draw_part1_clean_menu_label(
     colors = [10 if y < gradient_start else min(7, y - gradient_start + 1)
               for y in range(layer.height)]
     compose_part1_text(layer, inner, body, colors, compact=True)
+    soften_part1_menu_body(layer, body, colors)
 
 
 def draw_centered_bdf_text(layer: Image.Image, text: str, fill_idx: int, spacing: int = 1) -> None:
@@ -1264,6 +1313,22 @@ def text_mask_layer(
 def part1_menu_text_mask(size, text, font, xy, stroke):
     """Use one typeface; Noto's per-room weight hint does not fit OkDanDan."""
     return text_mask_layer(size, text, font, xy, stroke)
+
+
+def soften_part1_menu_body(layer, body, fills):
+    """Shade only covered edge pixels against the shared OBJ banks."""
+    for y in range(layer.height):
+        fill = fills[y]
+        candidates = tuple(dict.fromkeys((14, fill, *range(1, 9), 10, 11, 12, 13)))
+        for x in range(layer.width):
+            coverage = body.getpixel((x, y))
+            if not coverage or not layer.getpixel((x, y)):
+                continue
+            adjacent = sum(0 <= x + dx < layer.width and 0 <= y + dy < layer.height
+                           and bool(body.getpixel((x + dx, y + dy)))
+                           for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)))
+            if 2 <= adjacent < 4:
+                layer.putpixel((x, y), blend_index(14, fill, min(coverage, 208), candidates))
 
 
 def paste_vertical_text_gradient(
@@ -1697,6 +1762,8 @@ def make_part1_option_block(text: str, max_size: int) -> Image.Image:
     inner = body.filter(ImageFilter.MaxFilter(3))
     compose_part1_text(layer, inner, body,
                       [part1_option_gradient_index(y) for y in range(layer.height)])
+    soften_part1_menu_body(layer, body,
+                           [part1_option_gradient_index(y) for y in range(layer.height)])
     return layer
 
 
@@ -1706,9 +1773,58 @@ def make_part1_catherine_block() -> Image.Image:
     return layer
 
 
+# JP MISSION block (128x32, first 0x800 bytes of the LZ77 stream) is a
+# KNOCKOUT: the band itself is index 1 (drawn orange on screen) and the letter
+# shapes are transparent holes (index 0) showing the map. Around each hole is a
+# 1px light rim (3), with 4 on band pixels touching the letter only diagonally,
+# and a 2px dark inner shadow (2) on the hole's top/left walls (measured on the
+# JP c14 mission-entry frame: 1=(208,117,87) 2=(85,87,76) 3=(208,220,220)
+# 4=(208,179,144)).
+PART1_MISSION_BAND = 1
+PART1_MISSION_SHADOW = 2
+PART1_MISSION_RIM = 3
+PART1_MISSION_RIM_DIAG = 4
+PART1_MISSION_SHADOW_DX = 2
+PART1_MISSION_SHADOW_DY = 2
+# Letter region (inside the rim): same 28px height as MISSION (rows 2..29).
+PART1_MISSION_TEXT_BOX = (8, 2, 94, 28)
+
+
+def part1_mission_letter_mask() -> list[list[bool]]:
+    """Binary 작전 letter area (inside the rim) on the 128x32 band."""
+    x0, y0, width, height = PART1_MISSION_TEXT_BOX
+    hi = Image.new('L', (600, 200), 0)
+    font = ImageFont.truetype(aw_fonts.hadasans_black_path(), 128)
+    draw = ImageDraw.Draw(hi)
+    box = draw.textbbox((0, 0), '작전', font=font)
+    draw.text((20 - box[0], 20 - box[1]), '작전', font=font, fill=255)
+    hi = hi.filter(ImageFilter.MaxFilter(3))
+    hi = hi.crop(hi.getbbox()).resize((width, height), Image.Resampling.BOX)
+    mask = [[False] * 128 for _ in range(32)]
+    for y in range(height):
+        for x in range(width):
+            mask[y0 + y][x0 + x] = hi.getpixel((x, y)) >= 128
+    return mask
+
+
 def make_part1_mission_block() -> Image.Image:
-    layer = Image.new("L", (128, 32), 0)
-    draw_centered_block_text(layer, "작전", (0, 0, 128, 32), 28, 4, 1, 3, large=True)
+    # Keep the JP band and carve 작전 out of it in the JP knockout style.
+    mask = part1_mission_letter_mask()
+
+    def inside(x: int, y: int) -> bool:
+        return 0 <= x < 128 and 0 <= y < 32 and mask[y][x]
+
+    layer = Image.new('L', (128, 32), PART1_MISSION_BAND)
+    dx, dy = PART1_MISSION_SHADOW_DX, PART1_MISSION_SHADOW_DY
+    for y in range(32):
+        for x in range(128):
+            if inside(x, y):
+                lit = all(inside(x - i, y - j) for i in range(dx + 1) for j in range(dy + 1))
+                layer.putpixel((x, y), 0 if lit else PART1_MISSION_SHADOW)
+            elif any(inside(x + a, y + b) for a, b in ((1, 0), (-1, 0), (0, 1), (0, -1))):
+                layer.putpixel((x, y), PART1_MISSION_RIM)
+            elif any(inside(x + a, y + b) for a in (-1, 1) for b in (-1, 1)):
+                layer.putpixel((x, y), PART1_MISSION_RIM_DIAG)
     return layer
 
 
@@ -1743,17 +1859,14 @@ def patch_part1_mission_block(rom: bytearray) -> tuple[int, int]:
     dec = lz77_decompress(rom, PART1_MISSION_LOGO_LZ77_OFF)
     if dec is None:
         raise RuntimeError(f"invalid LZ77 block for {label} at 0x{PART1_MISSION_LOGO_LZ77_OFF:X}")
-    old_data, consumed = dec
-    layer = make_part1_mission_block()
-    new_data = block_to_tiles(layer) + bytes(len(old_data) - layer.width * layer.height // 2)
-    if len(new_data) != len(old_data):
-        raise RuntimeError(f"{label} tile data size mismatch: {len(new_data)} != {len(old_data)}")
-    comp = lz77_compress(new_data, vram_safe=True)
+    native, consumed = dec
+    changed = block_to_tiles(make_part1_mission_block()) + native[0x800:]
+    if len(changed) != len(native):
+        raise RuntimeError('Part 1 mission ribbon tile length changed')
+    comp = lz77_compress_optimal(changed, vram_safe=True)
     if len(comp) > consumed:
-        raise RuntimeError(f"compressed {label} block grew: {len(comp)} > {consumed}")
-    rom[PART1_MISSION_LOGO_LZ77_OFF : PART1_MISSION_LOGO_LZ77_OFF + consumed] = (
-        comp + b"\x00" * (consumed - len(comp))
-    )
+        raise RuntimeError(f'Part 1 mission ribbon LZ77 overflow: {len(comp)} > {consumed}')
+    rom[PART1_MISSION_LOGO_LZ77_OFF:PART1_MISSION_LOGO_LZ77_OFF + consumed] = comp + bytes(consumed - len(comp))
     return len(comp), consumed
 
 

@@ -1,4 +1,7 @@
 import unittest
+import hashlib
+import json
+import struct
 from pathlib import Path
 from unittest.mock import patch
 
@@ -15,10 +18,10 @@ class TitleTests(unittest.TestCase):
     def test_bounded_patch_and_native_tile_geometry(self):
         rom = bytearray(self.original)
         m.patch(rom, self.original)
-        self.assertEqual(rom[:m.SOURCE], self.original[:m.SOURCE])
-        self.assertEqual(rom[m.SOURCE + m.CAPACITY:], self.original[m.SOURCE + m.CAPACITY:])
-        raw, size = lz77_decompress(rom, m.SOURCE)
-        self.assertLessEqual(size, m.CAPACITY)
+        self.assertEqual(rom[m.SOURCE:m.FOLLOWING], self.original[m.SOURCE:m.FOLLOWING])
+        self.assertEqual(struct.unpack_from('<I', rom, m.POINTER)[0], m.RELOCATION + 0x08000000)
+        raw, size = lz77_decompress(rom, m.RELOCATION)
+        self.assertLessEqual(size, m.RELOCATION_LIMIT - m.RELOCATION)
         self.assertEqual(raw, m.render())
         colors, ink = set(), []
         for y in range(32):
@@ -27,11 +30,11 @@ class TitleTests(unittest.TestCase):
                 off = (x // 64) * 1024 + (y // 8) * 256 + ((x % 64) // 8) * 32 + (y % 8) * 4 + (x % 8) // 2
                 color = (raw[off] >> (4 * (x % 2))) & 15
                 colors.add(color)
-                if color == 10:
+                if color in (10, 11):
                     ink.append((x, y))
-        self.assertEqual(colors, {0, 10, 13, 15})
-        # OkDanDan ink box (2026-10-08 font rule; Galmuri7 2x was (24, 101)).
-        self.assertEqual((min(x for x, _ in ink), max(x for x, _ in ink)), (31, 95))
+        self.assertEqual(colors, {0, 10, 11, 13, 15})
+        # R4 Hada Sans ExtraBold is drawn at the native 22-row JP height.
+        self.assertEqual((min(x for x, _ in ink), max(x for x, _ in ink)), (16, 111))
         self.assertTrue(any(x < 64 for x, _ in ink) and any(x >= 64 for x, _ in ink))
 
     def test_source_and_live_pointer_corruption_rejected(self):
@@ -48,16 +51,23 @@ class TitleTests(unittest.TestCase):
 
     def test_overflow_does_not_modify_rom(self):
         rom = bytearray(self.original)
-        with patch.object(m, 'lz77_compress_optimal', return_value=bytes(m.CAPACITY + 1)):
+        with patch.object(m, 'lz77_compress_optimal', return_value=bytes(m.RELOCATION_LIMIT - m.RELOCATION + 1)):
             with self.assertRaises(AssertionError):
                 m.patch(rom, self.original)
         self.assertEqual(rom, self.original)
 
-    def test_forced_capacity_cannot_select_small_okdandan(self):
+    def test_render_keeps_large_hada_geometry(self):
         m.render.cache_clear()
-        with patch.object(m, 'lz77_compress_optimal', return_value=bytes(m.CAPACITY + 1)):
-            with self.assertRaisesRegex(AssertionError, 'overflow'):
-                m.render()
+        witness = json.loads((Path(__file__).resolve().parents[1] /
+                              'data/graphic_hangul_shape_witnesses.json').read_text())[
+                                  'm19_m20'][f'0x{m.SOURCE:06X}']
+        ink = bytes(value for point in sorted(m._ink(m.MAX_SIZE)) for value in point)
+        self.assertEqual(hashlib.sha256(ink).hexdigest(), witness['ink'])
+        raw = m.render()
+        self.assertEqual(hashlib.sha256(raw).hexdigest(), witness['sheet'])
+        damaged = bytearray(raw)
+        damaged[next(i for i, value in enumerate(damaged) if value)] ^= 1
+        self.assertNotEqual(hashlib.sha256(damaged).hexdigest(), witness['sheet'])
         m.render.cache_clear()
 
     def test_final_snapshot_and_padding_guard(self):
@@ -65,7 +75,7 @@ class TitleTests(unittest.TestCase):
         m.patch(rom, self.original)
         regions = m.capture(rom, self.original)
         m.verify(rom, regions)
-        for address in (m.SOURCE + 10, m.SOURCE + m.CAPACITY, m.POINTER):
+        for address in (m.RELOCATION + 10, m.SOURCE + m.CAPACITY, m.POINTER):
             changed = bytearray(rom)
             changed[address] ^= 1
             with self.assertRaises(AssertionError):
@@ -119,9 +129,9 @@ class TitleTests(unittest.TestCase):
         m.patch(rom, self.original)
         self.assertTrue(m.generated_matches(rom))
         unsafe = m.lz77_compress_optimal(m.render(), vram_safe=False)
-        self.assertLessEqual(len(unsafe), m.CAPACITY)
+        self.assertLessEqual(len(unsafe), m.RELOCATION_LIMIT - m.RELOCATION)
         self.assertEqual(lz77_decompress(unsafe, 0)[0], m.render())
-        rom[m.SOURCE:m.SOURCE + m.CAPACITY] = unsafe + bytes(m.CAPACITY - len(unsafe))
+        rom[m.RELOCATION:m.RELOCATION + len(unsafe)] = unsafe
         with self.assertRaisesRegex(AssertionError, 'unsafe VRAM'):
             m.capture(rom, self.original)
 

@@ -77,10 +77,16 @@ def power_title_source(rom, count=45, cell_w=2, cell_h=4):
 
 def check(rom, original):
     import part1_mission_titles as mt
+    import part1_m19_title as m19
+    import part1_m20_title as m20
+    import hangul_pixel_fit as fit
     issues, report = [], []
     at64, at128 = mt._contiguity(bytes(original))
     for label, off, cells, cw, ch, first, edges in TITLES:
-        dec = lz77_decompress(rom, off)
+        live = (struct.unpack_from('<I', rom, m19.POINTER)[0] - 0x08000000 if off == m19.SOURCE
+                else struct.unpack_from('<I', rom, m20.POINTER)[0] - 0x08000000 if off == m20.SOURCE
+                else fit.plate_address(rom, off) if off in fit.PLATE_LOADERS else off)
+        dec = lz77_decompress(rom, live)
         if dec is None:
             issues.append(f'{label}: invalid LZ77 at {off:06X}')
             continue
@@ -107,7 +113,7 @@ def check(rom, original):
     except AssertionError as exc:
         issues.append(str(exc))
     for owner, *_ in mt.TITLES:
-        main = lz77_decompress(rom, owner)[0]
+        main = lz77_decompress(rom, mt.stream_address(rom, owner))[0]  # gfx T5: relocated sheets
         ext = lz77_decompress(rom, mt.EXTENSION[0])[0] if owner == mt.EXTENSION_OWNER else None
         bounds = (64, 128) if ext is not None else (64,)
         try:

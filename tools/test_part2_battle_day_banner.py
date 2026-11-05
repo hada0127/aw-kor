@@ -21,14 +21,24 @@ BLOCKS = {
     0x9D892C: (1024, range(0, 2)),
 }
 CELL_HASHES = {
-    '일': '65cdd213167e210564713b4004263651ea9b837361c443e985d1fd10d6757b8c',
-    '째': 'd208048ec610085e7ac5e84f0ad59f757140cd02e136dda8a7f295ba0103a08a',
-    '작': '0cfa2baaa3f38e9a862aee96415718f5d732d6a4e8ea30064e15b3fdab70c1c7',
-    '전': '675a716eeb8f8ba29e43a28f288f73bf07b78d2461d4756176074cc5d5a5e631',
-    '개': '3d2165d7a85d17c315512a39bb2a693027bce78efe1e83fd2fc6d0b61cf6bb39',
-    '시': '982b7087d1e63f7f836039bab4b43d4cf7ba77a50c07740c29886ca853b877a7',
-    '실': 'cd6f57141133dac98c582b4aaf3a4c71bbe2d8077aaf9dc50e5f8c05b880b6e7',
-    '패': '6e97a2896574d2e672136d24db081001bc423c9c9d9227209c6c018cd0c7d6b1',
+    '일': '94a98d9c0712164cca1a683bae3cf0649a3fc708716857f17fa3d2157002e3d4',
+    '째': '1cca0ce9ea7ef23e693770265a5eabc211e397866556735935c92da850bebf0b',
+    '작': '2749f627da1684849a262b6a7f0deb7e59f1c1dec9b03c1a9c11e2a2a2292634',
+    '전': 'a4ccfe878d1fe54f85b85ac1c59924f5473f488dea916e94c0d9249e206dbec7',
+    '개': '4484d871ddc7b0759fd0ce6c9623af4d9ec2b2e67feae6866f6d242fa369cfa5',
+    '시': 'ff798cff79c35262e72a751f3e18b8d5a64b5dd0d6ecfb8169363ee25601a616',
+    '실': 'a4fc0b6ee6ffe560cf3575706d317f3c524a86ef57e684da4b7b396d00342c54',
+    '패': 'aed324f484dd0715dba934cf411165aff6b62e87f96c3db854d92f29c0982a84',
+}
+FIXB_CORE_SHA = {
+    '일': 'a1e85314b81ec2becc5d137a4f50cc03bc47d1654a87c0f34e93798574749043',
+    '째': '2a939ea15ffab053dd8618ea673211d5eed71c25977263f1865c683fcba460e5',
+    '작': '2a6159f8c101390f2a918316d91019df03646183c0ebe8b748d7df69878db7aa',
+    '전': 'a4e58a0275190f95ed26c622ee98bb2662725425e7dbdb52a401bd951a094708',
+    '개': '140915559c18493244c8bc974989224b42cbf1cab9ebb07680c7bf9b0e333e8e',
+    '시': 'cf668318d429410ade9d8f19093eb5dbdbb91f3ee13c8449a1b07bca9067a005',
+    '실': '050df728cd0dcaaf4316092dcaa8e53c7e5a51c610ae0a197c55f35e80ecd2cb',
+    '패': '7ebd423aee1422a5891a703cfe40514c9e29324ca3785facdd833532570a000c',
 }
 LABELS = {0x45EC74: '일째작전개시실패',
           **{off: '일째개시' for off in (0x92DF84, 0x966C0C, 0x99F4B0, 0x9D7D54)},
@@ -67,6 +77,12 @@ class BattleDayBannerTest(unittest.TestCase):
                 self.assertEqual(after[:10 * 512], before[:10 * 512], hex(off))
             for chunk in chunks:
                 cell = after[chunk * 512:(chunk + 1) * 512]
+                # AA changes edge shades only. The b29r2 white binary core,
+                # which carries the glyph's counter/gaps, equals fixB (0983d1eb)
+                # (core-mask digests taken from that ROM; no output/ dependency).
+                core = bytes((b >> shift) & 15 == 15 for b in cell for shift in (0, 4))
+                self.assertEqual(hashlib.sha256(core).hexdigest(),
+                                 FIXB_CORE_SHA[LABELS[off][chunk - chunks.start]], (hex(off), chunk))
                 self.assertTrue(any(cell), (hex(off), chunk))
                 self.assertNotEqual(cell, before[chunk * 512:(chunk + 1) * 512])
                 validate_cell(cell, LABELS[off][chunk - chunks.start])

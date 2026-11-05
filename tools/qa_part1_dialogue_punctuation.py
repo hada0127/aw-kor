@@ -375,6 +375,10 @@ def main() -> int:
         row_addr = int(entry[0])
         if row_addr in (A3_DECIMAL_NODE, 0x807790) and str(entry[7]).startswith('part2-a3-decimal-'):
             continue
+        # The relocated CO cut-in atlas is LZ77 sprite data recorded in the
+        # integrity map. Its bytes are not Shift-JIS dialogue punctuation.
+        if row_addr == 0xFD3000 and entry[7] == 'part2-power-title-final-editor':
+            continue
         found_decimal = {p for p in decimal_positions(payload, addr) if not prologue_decimal(p)}
         decimal_count = len(found_decimal)
         target = row_addr if row_addr in decimal_targets else None

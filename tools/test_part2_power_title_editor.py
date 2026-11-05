@@ -192,14 +192,14 @@ class PowerTitleEditorTests(unittest.TestCase):
                 self.assertIn('보존', json.loads((directory / 'report.json').read_text())['records'][0]['reason'])
 
     def test_capture_checks_binding_even_when_applied_bytes_equal_automatic_output(self):
-        payload = bytes(self.fixture.patched[titles.OFFSET:titles.OFFSET + titles.SLOT_SIZE])
-        result = {'expected_writes': [(titles.ASSET_ID, titles.OFFSET, payload)]}
+        payload = bytes(self.fixture.patched[titles.ATLAS:titles.ATLAS + titles.ATLAS_CAPACITY])
+        result = {'expected_writes': [(titles.ASSET_ID, titles.ATLAS, payload)]}
         with self.assertRaisesRegex(AssertionError, 'dictionary binding'):
             titles.capture_regions(self.fixture.patched, self.fixture.original, self.fixture.names, self.fixture.codes,
                                    editor_result=result)
         result['dictionary_bindings'] = {titles.ASSET_ID: titles.dictionary_binding(
             self.fixture.patched, self.fixture.names, self.fixture.codes)}
-        result['expected_writes'][0] = (titles.ASSET_ID, titles.OFFSET, payload[:-1] + b'\1')
+        result['expected_writes'][0] = (titles.ASSET_ID, titles.ATLAS, payload[:-1] + b'\1')
         with self.assertRaisesRegex(AssertionError, 'byte extent'):
             titles.capture_regions(self.fixture.patched, self.fixture.original, self.fixture.names, self.fixture.codes,
                                    editor_result=result)

@@ -1,7 +1,7 @@
 """Final-index stroke-gap regression checks for every reworked menu label."""
 import unittest
 from pathlib import Path
-from PIL import Image
+from PIL import Image, ImageFilter
 import hangul_pixel_fit as fit
 import build_title_hangul as title
 from build_korean_full import patch_part2_mode_menu_obj_labels
@@ -26,6 +26,32 @@ def check_large(image, records, inks):
             if fit.dense_syllable(char)]
 
 
+def check_carousel(image, text, size):
+    """Audit the binary face and every indexed AA replacement separately."""
+    body, records = title.part1_option_body(text, size)
+    base = Image.new('L', image.size)
+    fills = [title.part1_option_gradient_index(y) for y in range(image.height)]
+    title.compose_part1_text(base, body.filter(ImageFilter.MaxFilter(3)), body, fills)
+    failures = []
+    for y in range(image.height):
+        fill = fills[y]
+        candidates = tuple(dict.fromkeys((14, fill, *range(1, 9), 10, 11, 12, 13)))
+        for x in range(image.width):
+            coverage = body.getpixel((x, y))
+            expected = base.getpixel((x, y))
+            if coverage and expected:
+                adjacent = sum(0 <= x + dx < image.width and 0 <= y + dy < image.height
+                               and bool(body.getpixel((x + dx, y + dy)))
+                               for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)))
+                if 2 <= adjacent < 4:
+                    expected = title.blend_index(14, fill, min(coverage, 208), candidates)
+            if image.getpixel((x, y)) != expected:
+                failures.append((x, y, expected, image.getpixel((x, y))))
+    results = [fit.verify_glyph(char, body.crop(box)) for char, box in records
+               if fit.dense_syllable(char)]
+    return results, failures
+
+
 class HangulGapTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -36,14 +62,34 @@ class HangulGapTest(unittest.TestCase):
     def test_all_carousel_dense_syllables_in_final_palette(self):
         for _, off, text, size in title.PART1_MODE_OPTION_BLOCKS:
             image = title.make_part1_option_block(text, size)
-            _, records = title.part1_option_body(text, size)
-            for result in check_large(image, records, set(range(1, 7))):
+            results, mapping_failures = check_carousel(image, text, size)
+            self.assertEqual(mapping_failures, [], (hex(off), mapping_failures[:8]))
+            for result in results:
                 self.assertEqual(result['failures'], [], (hex(off), text, result))
                 self.assertGreater(result['gap_columns'], 0, (hex(off), result))
 
+    def test_carousel_oracle_rejects_damaged_face_and_wrong_index(self):
+        _, off, text, size = title.PART1_MODE_OPTION_BLOCKS[1]
+        image = title.make_part1_option_block(text, size)
+        body, records = title.part1_option_body(text, size)
+        char, box = next((char, box) for char, box in records if fit.dense_syllable(char))
+        damaged = body.crop(box).copy()
+        for x in range(damaged.width):
+            gaps = [(a, b) for ink, a, b in fit.runs(
+                    [damaged.getpixel((x, y)) for y in range(damaged.height)]) if not ink]
+            if gaps:
+                a, b = gaps[0]
+                for y in range(a, b): damaged.putpixel((x, y), 255)
+                if fit.verify_glyph(char, damaged)['failures']:
+                    break
+        self.assertTrue(fit.verify_glyph(char, damaged)['failures'])
+        broken = image.copy()
+        broken.putpixel((box[0], box[1]), (image.getpixel((box[0], box[1])) + 1) % 16)
+        self.assertTrue(check_carousel(broken, text, size)[1])
+
     def test_all_large_mode_dense_syllables_in_final_palette(self):
         for off, text in BIG:
-            grid = obj_canvas(lz77_decompress(self.rom, off)[0], 2, 8, 4)
+            grid = obj_canvas(lz77_decompress(self.rom, fit.plate_address(self.rom, off))[0], 2, 8, 4)
             image = Image.new('L', (128, 32)); image.putdata([v for row in grid for v in row])
             _, records = fit.plate_line(text)
             ox, oy = fit.PLATE_ORIGIN
@@ -65,18 +111,20 @@ class HangulGapTest(unittest.TestCase):
             width = sum(w for _, w, _, _, _ in chars) + len(chars) - 1
             height = max(h + yo for _, _, h, _, yo in chars)
             x = 4 + (120 - width) // 2; y = 3 + (9 - height) // 2
+            ink = set()
             for char, (grid, w, h, xo, yo) in zip(text, chars):
                 for row in range(h):
                     for col in range(w):
-                        self.assertEqual(canvas[y + height - h - yo + row][x + col + xo],
-                                         1 if grid[row][col] else 5, (hex(off), char, col, row))
-                self.assertTrue(all(canvas[yy][x + w] == 5 for yy in range(3, 12)))
-                # Sensitive native glyph must actually contain separated bars.
+                        if grid[row][col]:
+                            ink.add((x + col + xo, y + height - h - yo + row))
                 if fit.dense_syllable(char):
                     self.assertTrue(any(sum(v for v, _, _ in fit.runs([row[col] for row in grid])) >= 2
                                         for col in range(w)), (hex(off), char))
                 x += w + 1
-            self.assertTrue(all(canvas[2][x] == canvas[12][x] == 5 for x in range(4, 124)))
+            for yy in range(2, 13):
+                for xx in range(4, 124):
+                    self.assertEqual(canvas[yy][xx], 1 if (xx, yy) in ink else 5,
+                                     (hex(off), text, xx, yy))
 
     def test_oracle_rejects_a_closed_gap(self):
         mask = fit.glyph('틀', 20, 22).copy()

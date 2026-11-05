@@ -35,6 +35,9 @@ TEXT = '랭크'
 BOX, INK = 15, 1
 BOX_X0, BOX_X1, BOX_Y0, BOX_Y1 = 5, 30, 25, 32     # half-open
 SPRITE_W = 64
+# The native screen for this tag is still unverified. Keep the established
+# Galmuri art as the ROM default until both variants are judged at 1x.
+GRAPHIC_FONT_VARIANT = 'galmuri'  # 'galmuri' or 'outline_aa'
 
 
 def _get(data, x, y):
@@ -67,7 +70,46 @@ def source_guard(original):
     return decoded[0]
 
 
-def sheet(original):
+def _outline_aa_tag():
+    from PIL import Image, ImageDraw, ImageFont
+    from aw_fonts import okdandan_path
+    from sprite_text_aa import render_graphic_aa
+
+    size = (BOX_X1 - BOX_X0, BOX_Y1 - BOX_Y0)
+    scale = 8
+    path = okdandan_path()
+    candidates = []
+    for font_size in range(6, 17):
+        font = ImageFont.truetype(path, font_size * scale)
+        bbox = ImageDraw.Draw(Image.new('L', (1, 1))).textbbox((0, 0), TEXT, font=font)
+        w, h = bbox[2] - bbox[0], bbox[3] - bbox[1]
+        if w <= size[0] * scale and h <= size[1] * scale:
+            candidates.append((font_size, font, bbox))
+    if not candidates:
+        raise AssertionError('rank card outline font cannot fit tag')
+    _, font, bbox = candidates[-1]
+    high = Image.new('L', (size[0] * scale, size[1] * scale), 0)
+    left = (high.width - (bbox[2] - bbox[0])) // 2 - bbox[0]
+    top = (high.height - (bbox[3] - bbox[1])) // 2 - bbox[1]
+    ImageDraw.Draw(high).text((left, top), TEXT, font=font, fill=255)
+    image, measurements = render_graphic_aa(
+        {'fill': high}, size, palettes=(PALETTE13,),
+        allowed_indices=(1, 8, 14, 15), fills={'fill': INK},
+        backgrounds={'fill': BOX}, base=Image.new('P', size, BOX), scale=scale)
+    if not measurements['core_box']:
+        raise AssertionError('rank card outline font produced no core')
+    return image
+
+
+def sheet(original, variant=None):
+    if variant is None:
+        # gfx T5: the build-wide comparison switch overrides the module default.
+        import os
+        from aw_fonts import graphic_small_label_variant
+        variant = (graphic_small_label_variant()
+                   if 'AW_GRAPHIC_SMALL_LABEL_VARIANT' in os.environ else GRAPHIC_FONT_VARIANT)
+    if variant not in ('galmuri', 'outline_aa'):
+        raise ValueError(f'unknown rank card font variant: {variant}')
     data = bytearray(source_guard(original))
     edges = [_get(data, x, y) for x in range(BOX_X0, BOX_X1) for y in (BOX_Y0, BOX_Y1 - 1)]
     if edges.count(BOX) < len(edges) - 2 or _get(data, BOX_X0 - 1, BOX_Y0 + 3) == BOX:
@@ -75,6 +117,12 @@ def sheet(original):
     for y in range(BOX_Y0, BOX_Y1):
         for x in range(BOX_X0, BOX_X1):
             _set(data, x, y, BOX)
+    if variant == 'outline_aa':
+        tag = _outline_aa_tag()
+        for y in range(tag.height):
+            for x in range(tag.width):
+                _set(data, BOX_X0 + x, BOX_Y0 + y, tag.getpixel((x, y)))
+        return bytes(data)
     font, glyphs = _font(), []
     for char in TEXT:
         glyphs.append(glyph_grid(font[ord(char)]))

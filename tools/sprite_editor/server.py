@@ -264,10 +264,10 @@ def decode_from_rom(rom, sp):
         grid, w, h = ES.tiles_to_indices(tile_data, cols)
         return grid, w, h, cols
     if typ == "lz77":
-        from sprite_relocations import resolve_sprite_offset
-        off = resolve_sprite_offset(rom, off)
+        from sprite_relocations import resolve_sprite_allocation
+        off, capacity = resolve_sprite_allocation(rom, off, sp.get("comp_size") or 0)
         res = ES.lz77_decompress(rom, off)
-        if not res:
+        if not res or not capacity or res[1] > capacity:
             return None
         tile_data = res[0]
     else:
@@ -527,12 +527,11 @@ def validate_sprite_edit(sp, indices, palette, *, rom_snapshot=None):
         raise ValueError("현재 ROM 타일 크기와 다릅니다: %d×%d 필요" % tuple(decoded[1:3]))
     if sp.get("type") == "lz77":
         from lz77_compress import lz77_compress_optimal
-        from sprite_relocations import RELOCATIONS, resolve_sprite_offset
+        from sprite_relocations import resolve_sprite_allocation
         off = sprite_offset_int(sp)
-        cap = sp.get("comp_size") or 0
-        relocation = RELOCATIONS.get(off)
-        if relocation and resolve_sprite_offset(rom_snapshot if rom_snapshot is not None else patched_bytes() or rom_bytes(), off) == relocation['destination']:
-            cap = relocation['capacity']
+        _, cap = resolve_sprite_allocation(
+            rom_snapshot if rom_snapshot is not None else patched_bytes() or rom_bytes(),
+            off, sp.get("comp_size") or 0)
         compressed = lz77_compress_optimal(enc, vram_safe=True)
         if len(compressed) > cap:
             raise ValueError("재압축 크기 %dB가 ROM 할당 %dB를 초과합니다" % (len(compressed), cap))

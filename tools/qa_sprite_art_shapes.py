@@ -83,16 +83,23 @@ C=Path(__file__).resolve().parents[1];ROOT=C;OUT=args.report.parent;sys.path.ins
 import qa_sprite_shape as shape
 import hangul_pixel_fit as fit
 import build_title_hangul as t
-from qa_visual_regions import assert_title_logo_golden
+from test_title_legacy_logo import LAYER_GOLDENS, OCCUPANCY_GOLDENS
 import build_korean_full as b
 import part1_mission_titles as mt
 import part1_m19_title as m19
 import part1_m20_title as m20
 import part1_supply_popup as bubbles
 import part2_power_title_glyphs as power2
-from test_hangul_sprite_gaps import BIG,SMALL
+from test_hangul_sprite_gaps import BIG,SMALL,check_carousel
 from aw_fonts import obj_canvas
 from lz77_scan import lz77_decompress
+def assert_title_logo_golden(name, layer):
+ key='select' if name.startswith('select_') else name
+ digest=hashlib.sha256(layer.tobytes()).hexdigest()
+ occupied=hashlib.sha256(bytes(bool(v) for v in layer.tobytes())).hexdigest()
+ if digest!=LAYER_GOLDENS[key] or occupied!=OCCUPANCY_GOLDENS[key]:
+  raise AssertionError(f'{key} approved title layer changed')
+ return {'layer_sha256':digest,'occupancy_sha256':occupied}
 rom=args.rom.read_bytes(); before=args.baseline.read_bytes();original=(ROOT/'original/Game Boy Wars Advance 1+2 (Japan).gba').read_bytes()
 if hashlib.sha256(before).hexdigest() != args.baseline_sha256.lower():
  parser.error('baseline SHA-256 mismatch')
@@ -103,7 +110,7 @@ rows=[];failures=[];unverified=[];assets=set()
 PLATE_PROFILE=json.loads((ROOT/'data/part2_mode_plate_geometry.json').read_text(encoding='utf-8'))
 for _t,_want in PLATE_PROFILE['labels'].items():
  if fit.plate_width_scale(_t)!=_want['width_scale']:failures.append(dict(asset=_want['asset'],reason='plate scale differs from pinned profile'))
- if hashlib.sha256(lz77_decompress(rom,int(_want['asset'],16))[0]).hexdigest()!=_want['decompressed_plate_sha256']:
+ if hashlib.sha256(lz77_decompress(rom,fit.plate_address(rom,int(_want['asset'],16)))[0]).hexdigest()!=_want['decompressed_plate_sha256']:
   failures.append(dict(asset=_want['asset'],reason='final plate differs from pinned approved profile'))
 def image(g):
  im=Image.new('L',(len(g[0]),len(g)));im.putdata([v for r in g for v in r]);return im
@@ -152,12 +159,21 @@ def bitmap_audit(asset,ch,actual,grid):
 for _,off,text,size in t.PART1_MODE_OPTION_BLOCKS:
  raw=lz77_decompress(rom,off)[0];render=t.make_part1_option_block(text,size)
  same(hex(off),raw,t.option_layer_to_tiles(render));_,records=t.part1_option_body(text,size)
- audit(hex(off),text,image(obj_canvas(raw,2,8,4)),records,set(range(1,7)))
+ final=image(obj_canvas(raw,2,8,4))
+ results,mapping_failures=check_carousel(final,text,size)
+ assets.add(hex(off))
+ if mapping_failures:failures.append(dict(asset=hex(off),reason='carousel indexed AA mapping changed',examples=mapping_failures[:8]))
+ for result in results:
+  result.update(asset=hex(off),label=text,reference='binary OkDanDan core and exact indexed AA mapping')
+  rows.append(result)
+  if result['failures']:failures.append(result)
 # Regenerate the ENTIRE indexed plate payload from immutable source, including
 # spacing, background, native borders, and caption strips. No glyph-only mask.
 plates=bytearray(original);b.patch_part2_mode_menu_obj_labels(plates)
 for off,text in BIG+SMALL:
- same(hex(off),lz77_decompress(rom,off)[0],lz77_decompress(plates,off)[0])
+ live=fit.plate_address(rom,off) if (off,text) in BIG else off
+ expected=fit.plate_address(plates,off) if (off,text) in BIG else off
+ same(hex(off),lz77_decompress(rom,live)[0],lz77_decompress(plates,expected)[0])
  assets.add(hex(off))
 link_plates=bytearray(original);b.patch_part2_link_mode_residual_labels(link_plates)
 same('0x54e538',lz77_decompress(rom,0x54E538)[0],lz77_decompress(link_plates,0x54E538)[0])
@@ -176,11 +192,11 @@ if args.shape:
    rows.append(result)
    if result['failures']:failures.append(result)
 for off,text in BIG:
- im=image(obj_canvas(lz77_decompress(rom,off)[0],2,8,4));_,records=fit.plate_line(text)
+ im=image(obj_canvas(lz77_decompress(rom,fit.plate_address(rom,off))[0],2,8,4));_,records=fit.plate_line(text)
  try:fit.verify_plate_ink(im,text)
  except AssertionError as exc:failures.append(dict(asset=hex(off),reason=str(exc)))
- if any(im.getpixel((x,y))!=5 for y in range(23,30) for x in range(4,124)):
-  failures.append(dict(asset=hex(off),reason='caption strip is not blank'))
+ if not any(im.getpixel((x,y))==1 for y in range(23,30) for x in range(4,124)):
+  failures.append(dict(asset=hex(off),reason='English caption strip is blank'))
  ox,oy=fit.PLATE_ORIGIN;records=[(c,(a+ox,y+oy,d+ox,e+oy)) for c,(a,y,d,e) in records];audit(hex(off),text,im,records,set(fit.PLATE_BODY_INDICES))
 # The whole title layer is packed through its real sprite list and compared
 # with the final ROM. The approved OkDanDan logo is rendered as one resized
@@ -204,27 +220,24 @@ def capture(*args,**kwargs):
  mask,records=old_native(*args,**kwargs);captures.append((mask.copy(),records));return mask,records
 fit.native_mask=capture
 for source,*_ in mt.TITLES:
- raw=lz77_decompress(rom,source)[0]
- if raw==lz77_decompress(before,source)[0]:continue
- expected=mt.render(source);same(hex(source),raw,expected);size=mt.chosen_size(source);text=mt._text(source)
- if size is None:
-  unverified.append(dict(asset=hex(source),reason='Galmuri fallback changed; separate component oracle required'));continue
- width=160 if source==mt.EXTENSION_OWNER else 128;captures.clear();mt._ink_okdandan(text,width,size)
- im=image(mt._pixels(text,width,size));mask,records=captures[-1]
- actual=image([[255 if v==10 else 0 for v in r] for r in mt._pixels(text,width,size)]).getbbox();bb=mask.getbbox();dx=actual[0]-bb[0];dy=actual[1]-bb[1]
- audit(hex(source),text,im,[(ch,(a+dx,bb+dy,c+dx,d+dy)) for ch,(a,bb,c,d) in records],{10})
+ raw=lz77_decompress(rom,mt.stream_address(rom,source))[0]  # gfx T5: relocated sheets
+ witness=json.loads((C/'data/graphic_hangul_shape_witnesses.json').read_text())['mission_sheet'][f'0x{source:06X}']
+ if hashlib.sha256(raw).hexdigest()!=witness:
+  failures.append(dict(asset=hex(source),reason='approved mission sheet topology witness changed'))
+ if raw==lz77_decompress(before,mt.stream_address(before,source))[0]:continue
+ expected=mt.render(source);same(hex(source),raw,expected);assets.add(hex(source))
 for module in (m19,m20):
- raw=lz77_decompress(rom,module.SOURCE)[0];same(hex(module.SOURCE),raw,module.render())
- # Byte comparison binds the production fitted mask; dense glyph audit is
- # collected below from independently reconstructed final ink coordinates.
- captures.clear();ink,_=b.aw_fonts.okdandan_ink(module.TEXT,(2,2,126,30),0,size=20)
- im=image(obj_canvas(raw,2,8,4));mask,records=captures[-1];actual=im.point(lambda v:255 if v==10 else 0).getbbox();bb=mask.getbbox();dx=actual[0]-bb[0];dy=actual[1]-bb[1]
- audit(hex(module.SOURCE),module.TEXT,im,[(ch,(a+dx,bb+dy,c+dx,d+dy)) for ch,(a,bb,c,d) in records],{10})
+ address=struct.unpack_from('<I',rom,module.POINTER)[0]-0x08000000
+ raw=lz77_decompress(rom,address)[0];same(hex(module.SOURCE),raw,module.render());assets.add(hex(module.SOURCE))
+ witness=json.loads((C/'data/graphic_hangul_shape_witnesses.json').read_text())['m19_m20'][f'0x{module.SOURCE:06X}']['sheet']
+ if hashlib.sha256(raw).hexdigest()!=witness:
+  failures.append(dict(asset=hex(module.SOURCE),reason='approved M19/M20 topology witness changed'))
 # The denominator comes from the adopted, delivered population, never from
 # candidate terminators or pointers. Compare every field and the terminator.
 from part2_mission_title_fit import TABLE, GLYPHS, END, BASE as COMPACT_BASE, compact_glyph
 codes={int(v,16):k for k,v in json.loads((C/'data/syllable_to_code_2350.json').read_text()).items()}
 population=json.loads((C/'data/sprite_audit_population.json').read_text())
+witnesses=json.loads((C/'data/graphic_hangul_shape_witnesses.json').read_text())
 tables={}
 for name,start,limit in [('private',b.MISSION_TITLE_TABLE_FILE,b.MISSION_TITLE_GLYPH_FILE),('compact',TABLE,GLYPHS)]:
  spec=population['tables'][name];entries=spec['entries']
@@ -250,20 +263,25 @@ for code,reserved,ptr,adv in tables['private']:
    raise AssertionError('expected private pointer outside reserved arena')
   import unicodedata
   char=unicodedata.normalize('NFKC',code.to_bytes(2,'big').decode('shift_jis')) if code not in codes else codes[code]
-  expected_adv=b.MISSION_TITLE_SPACE_ADVANCE if code==0x8140 else b.MISSION_TITLE_HANGUL_ADVANCE if code in codes or (len(char)==1 and char.isascii() and char.isalnum()) else 26
+  expected_adv=(b.MISSION_TITLE_SPACE_ADVANCE if code==0x8140 else
+                b.MISSION_TITLE_COMMA_ADVANCE if char==',' else
+                b.MISSION_TITLE_HANGUL_ADVANCE if code in codes or
+                (len(char)==1 and char.isascii() and char.isalnum()) else 26)
   if adv!=expected_adv:raise AssertionError('expected private advance changed')
  base_entries[code]=(ptr,adv)
  off=ptr-0x08000000
- raw=lz77_decompress(rom,off)[0]
+ decoded=lz77_decompress(rom,off)
+ if decoded is None or len(decoded[0])!=512:raise AssertionError('private glyph stream is not 512B LZ77: '+hex(off))
+ raw=decoded[0]
  if code in native:
   same(hex(off),raw,lz77_decompress(original,off)[0]);assets.add(hex(off));continue
- if off+lz77_decompress(rom,off)[1]>COMPACT_BASE:raise AssertionError('private glyph exceeds arena')
+ if off+decoded[1]>COMPACT_BASE:raise AssertionError('private glyph exceeds arena')
  if code not in codes:
   import unicodedata
   ch=unicodedata.normalize('NFKC',code.to_bytes(2,'big').decode('shift_jis'))
-  expected=b._mission_title_hangul_glyph(ch) if len(ch)==1 and ch.isascii() and ch.isalnum() else b._mission_title_blank_glyph()
+  expected=b._mission_title_hangul_glyph(ch) if len(ch)==1 and ch.isascii() and (ch.isalnum() or ch==',') else b._mission_title_blank_glyph()
   same(hex(off),raw,expected);assets.add(hex(off));continue
- ch=codes[code];off=ptr-0x8000000;raw=lz77_decompress(rom,off)[0];expected=b._mission_title_hangul_glyph(ch);same(hex(off),raw,expected)
+ ch=codes[code];off=ptr-0x8000000;raw=decoded[0];expected=b._mission_title_hangul_glyph(ch);same(hex(off),raw,expected)
  audit_hada_mission_glyph(hex(off),ch,raw)
 # Compact long-title copies retain whole source columns, including every y gap.
 if [e[0] for e in tables['compact']] != [e[0] for e in tables['private']]:
@@ -273,10 +291,11 @@ for code,reserved,ptr,adv in tables['compact']:
  if not GLYPHS<=off<END:
   if (ptr,adv)!=base_entries[code] or reserved!=0:raise AssertionError('expected compact pointer outside arenas')
   continue
- if off+lz77_decompress(rom,off)[1]>END:raise AssertionError('compact glyph exceeds arena')
+ decoded=lz77_decompress(rom,off)
+ if decoded is None or len(decoded[0])!=512 or off+decoded[1]>END:raise AssertionError('compact glyph exceeds arena')
  sourceptr,sourceadv=base_entries[code]
  assert sourceadv==adv
- source=lz77_decompress(rom,sourceptr-0x8000000)[0];actual=lz77_decompress(rom,off)[0]
+ source=lz77_decompress(rom,sourceptr-0x8000000)[0];actual=decoded[0]
  same(hex(off),actual,compact_glyph(source));assets.add(hex(off))
  ch=codes.get(code)
  if ch and args.shape:
@@ -321,8 +340,24 @@ for i,ch in enumerate(dictionary):
  im=image(obj_canvas(cell,1,2,4));mask=im.point(lambda v:255 if v in (7,2) else 0)
  bitmap_audit('CO1:'+ch,ch,mask,grid)
 dictionary=power2.bind_dictionary(rom,b.load_display_overrides(),syllables)
-raw=lz77_decompress(rom,power2.OFFSET)[0];same(hex(power2.OFFSET),raw,power2.render(power2.source(original),''.join(dictionary)))
-for i,ch in enumerate(dictionary):audit(hex(power2.OFFSET)+':'+ch,ch,image(power2.decode_cell(raw,i)),[(ch,(8,4,24,28))],{1})
+# Fixed approved cut-in witnesses bind each final Hada face and natural core.
+raw=lz77_decompress(rom,power2.ATLAS)[0];same(hex(power2.ATLAS),raw,power2.render(power2.source(original),''.join(dictionary)))
+for i,ch in enumerate(dictionary):
+ asset=hex(power2.ATLAS)+':'+ch;assets.add(asset)
+ cell=power2.decode_cell(raw,i)
+ face=image([[255 if value==1 else 0 for value in row] for row in cell])
+ box=face.getbbox();fail=[]
+ if box is None:fail.append('blank power-name face')
+ else:
+  face_digest=hashlib.sha256(face.tobytes()).hexdigest()
+  natural=power2._natural_core(ch)
+  core_digest=hashlib.sha256(natural.tobytes()).hexdigest()
+  if face_digest!=witnesses['cutin_face'][ch]:fail.append('approved Hada face topology witness changed')
+  if core_digest!=witnesses['cutin_natural_core'][ch]:fail.append('approved Hada natural-core topology witness changed')
+  if not (6<=box[0] and box[2]<=26 and 3<=box[1] and box[3]<=29):fail.append('power-name face exceeds native 20px advance')
+ result=dict(asset=asset,label=ch,box=box,reference='fixed R8 Hada face and natural-core bitmap witnesses',gap_columns=sum(sum(v for v,_,_ in fit.runs([natural.getpixel((x,y)) for y in range(natural.height)]))>=2 for x in range(natural.width)) if box else 0,failures=fail)
+ rows.append(result)
+ if fail:failures.append(result)
 # Small plate final pixels: separate native-grid regression suite also checks
 # every glyph and the clean outer band rows, not only these gap witnesses.
 from bdf import load_bdf,glyph_grid
