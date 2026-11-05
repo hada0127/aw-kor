@@ -307,7 +307,7 @@ def capture(text: str, lang: str = "ko", canvas: str = "part2_menu",
             return {"png": str(png), "truncated": truncated, "cached": True, **meta}
 
     from qa_visual_regions import MGBADriver  # noqa: E402
-    from editor_storage import atomic_write_bytes, save_json
+    from atomic_data import atomic_write_bytes, save_json
     # Different editor processes may request the same text simultaneously.
     # Each emulator owns its ROM, raw frames and log; publish only complete PNGs.
     run = Path(tempfile.mkdtemp(prefix=f"run_{key}_", dir=CACHE))

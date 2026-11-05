@@ -26,9 +26,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 if __name__ == '__main__':
     # Lock before importing/reading any build input, including module constants.
     import atexit
-    from editor_storage import EDITOR_LOCK
-    EDITOR_LOCK.acquire(timeout=60)
-    atexit.register(EDITOR_LOCK.__exit__)
+    from atomic_data import DATA_LOCK
+    DATA_LOCK.acquire(timeout=60)
+    atexit.register(DATA_LOCK.__exit__)
 from glyph_dictionary_sources import GLYPH_DICTIONARY_TEXT_ADDRS, is_glyph_dictionary_address
 import build_korean_poc as P
 from sprite_relocations import RELOCATIONS, SPRITE_STORAGE_START, resolve_sprite_offset, resolve_sprite_allocation
@@ -15168,7 +15168,7 @@ def verify_sprite_override_final_bytes(rom, result):
         with open(path, encoding='utf-8') as stream:
             report = json.load(stream)
         report.update(ok=False, final_byte_conflicts=failures)
-        from editor_storage import save_json
+        from atomic_data import save_json
         save_json(path, report)
         raise AssertionError('스프라이트 편집이 후속 기록과 충돌합니다: ' +
                              ', '.join(sorted({f['id'] for f in failures})))
@@ -25941,7 +25941,7 @@ def _build(args, publication):
     stable_build_inputs(build_inputs_before, snapshot_inputs())
     if evidence_sha(build_source) != build_source_sha:
         raise AssertionError('Source ROM changed during build; refusing output')
-    from editor_storage import atomic_write_bytes
+    from atomic_data import atomic_write_bytes
     atomic_write_bytes(staged_rom,rom)
     synced_legacy_outputs = []
     default_out = CANONICAL_OUTPUT

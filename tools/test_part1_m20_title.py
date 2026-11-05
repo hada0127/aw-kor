@@ -111,19 +111,8 @@ class TitleTests(unittest.TestCase):
         with self.assertRaises(AssertionError):
             m.source_guard(original)
 
-    def test_editor_geometry_and_unsafe_editor_stream(self):
-        from sprite_editor import server
-        layout = server.part1_tiled_layer_layout({'id': 'lz77_00C15C5C', 'tile_cols': 32}, m.SOURCE)
-        self.assertEqual((layout['w'], layout['h'], layout['obj1d']), (128, 32, 1))
-        self.assertEqual([(c['x'], c['y'], c['tw'], c['th'], c['tile_off']) for c in layout['cells']],
-                         [(0, 0, 8, 4, 0), (64, 0, 8, 4, 32)])
-        self.assertTrue(all(c['bank'] == 6 and c['palbase'] == 256 for c in layout['cells']))
-        with patch.object(server, 'load_layouts', return_value={'layouts': {
-                'lz77_00C15C5C': {'pal_file': 'wrong.pal', 'cells': [
-                    {'tw': 8, 'th': 4, 'bank': 2, 'palbase': 0}]}}}):
-            hinted = server.part1_tiled_layer_layout({'id': 'lz77_00C15C5C'}, m.SOURCE)
-        self.assertTrue(all(c['bank'] == 6 and c['palbase'] == 256 for c in hinted['cells']))
-        self.assertNotEqual(hinted['pal_file'], 'wrong.pal')
+
+    def test_unsafe_vram_stream_is_rejected(self):
         rom = bytearray(self.original)
         m.patch(rom, self.original)
         self.assertTrue(m.generated_matches(rom))
@@ -133,7 +122,6 @@ class TitleTests(unittest.TestCase):
         rom[m.RELOCATION:m.RELOCATION + len(unsafe)] = unsafe
         with self.assertRaisesRegex(AssertionError, 'unsafe VRAM'):
             m.capture(rom, self.original)
-
 
 if __name__ == '__main__':
     unittest.main()

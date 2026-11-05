@@ -93,6 +93,8 @@ python3 temp/apply_check/apply_patch.py "original/Game Boy Wars Advance 1+2 (Jap
 
 ---
 
+웹 대사·스프라이트·통합 편집기는 2026-11-06 사용자 결정으로 제거됐다. 아래 과거 검수 기록은 역사 자료다.
+
 ## 4. 증거 위치
 
 | 무엇 | 어디 |

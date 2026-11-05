@@ -193,30 +193,6 @@ class RemainingControlRepairTests(unittest.TestCase):
                 for raw in list(selected.values())+expected_fixed:
                     self.assertIn(normalize_text_segment(raw,True,msg),live)
 
-    def test_known_command_words_remain_readonly_in_editor(self):
-        spec=importlib.util.spec_from_file_location('remaining_fixed_editor',Path(B.BASE)/'tools/dialogue_editor/server.py')
-        de=importlib.util.module_from_spec(spec);spec.loader.exec_module(de)
-        data=json.loads((Path(B.BASE)/'data/dialogue_map.json').read_text())
-        current={int(row['address'],16):row for row in data['lines']}
-        for a,e,text in FIXED_WORDS:
-            self.assertEqual(current[a]['kind'],'known-story-fragment')
-            self.assertEqual(current[a]['ko'],text)
-            self.assertEqual(de.text_edit_readonly_reason(f'0x{a:08X}'),de.KNOWN_FRAGMENT_READONLY_REASON)
 
-    def test_both_editors_expose_three_bazooka_operands(self):
-        def load(name):
-            spec=importlib.util.spec_from_file_location('remaining_'+name,Path(B.BASE)/'tools'/name/'server.py')
-            module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);return module
-        de,ce=load('dialogue_editor'),load('scene_editor')
-        from build_dialogue_groups import korean_segments
-        members=[dict(address=f'0x{a:08X}',ko=text,ja=self.original[a:e].decode('shift_jis'),slot=e-a,kind='script:operand') for a,e,text in ROWS[3:6]]
-        segments=[dict(kind='frag',address=m['address'])for m in members]
-        self.assertEqual(korean_segments(segments,members),segments)
-        for member,(a,e,text) in zip(members,ROWS[3:6]):
-            self.assertEqual(de.current_ko(member['address'],member=member),text)
-            self.assertEqual(ce.effective_member_ko(member,{}),text)
-            self.assertEqual(de.member_slot(member['address']),e-a)
-            self.assertIsNone(de.text_edit_readonly_reason(member['address']))
-            self.assertEqual(ce.line_budget(member)['slot'],e-a)
 
 if __name__=='__main__':unittest.main()

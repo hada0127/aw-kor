@@ -1,3 +1,5 @@
+> **2026-11-06 사용자 결정:** 외부팀 철수에 따라 웹 대사·스프라이트·통합 편집기 도구를 제거했다. 과거 편집기 검수·TODO 기록은 당시 이력이다. `tools/scene_routes/`는 QA·캡처 재현용으로 유지한다. 스프라이트 override의 ROM 빌드 적용은 유지한다.
+
 ## 2026-11-06 그래픽 한글 재디자인 (후보, 배포 아님)
 
 보고서 [`docs/reports/GRAPHICS_2026-11-06.md`](docs/reports/GRAPHICS_2026-11-06.md). 후보 `output/game_wars_korean_candidate_20261106_gfx.gba` SHA-256 `ec1638fb106b322c04bf2df4b0449f1c26a15e9007226ed9e065744af20df718`.
@@ -304,7 +306,7 @@ RE 사실=`docs/research.md`. 막힘/완료 시 Codex+Claude 엄격 리뷰(`temp
   - [ ] SYOGUN★SELECT / NOW★LOADING / SOUND★ROOM 헤더 화면 미확인
   - [ ] 사운드룸 모드판 실화면 미확인, 2편 룰 아이콘 「에너…」 미확인
   - [ ] 0xA295EC 글리프 사전 충돌(기존: `스트레이트 블래스트` vs display override `직격`) — glyph_dictionary 게이트 exit 1
-  - [ ] `test_editor_safety` 2건(preview_follows_actual_pointer…, preview_partial_rom_write_failure…) HEAD에서도 실패 — `output/game_wars_korean_full.gba` 기준 문제, 원인 정리
+  - [ ] (역사: 2026-11-06 웹 편집기 제거로 대상 테스트 삭제) `test_editor_safety` 2건(preview_follows_actual_pointer…, preview_partial_rom_write_failure…) HEAD에서도 실패 — `output/game_wars_korean_full.gba` 기준 문제, 원인 정리
   - [ ] `part2_native_controls.py`에 누락 제어코드(0x0D, R, P, Q/h, S, c, m) 반영 검토 — 근거 `docs/research.md` 2026-10-13 0x0831424C 표
   - [ ] Ghidra 활용 다음 단계: 단어붙음 잔여 117줄의 0xB8/0xEC 핸들러, compact 렌더러 폭 규칙 디컴파일
 - [ ] **사용자 지시 2026-09-21: 양편 엔딩까지 실제 플레이·발견 결함 수정 반복**. 기록 재생만으로 완료하지 않는다. 일반 입력으로 캠페인을 진행하고 임무/턴/화면 검수·수정 ROM 재검증을 기록한다. 시작 기준 SHA `12f65b06…6dfe3b`; 이전 전 프레임 비교 1편 134320/2편 81446 모두 변경 0으로 종료. 새 진행 `output/qa/part1_2026-09-21/run14_to_ending`, `output/qa/part2_2026-09-21/run07_to_ending`. 엔딩은 양편 모두 미도달.

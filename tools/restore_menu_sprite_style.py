@@ -15,7 +15,7 @@ from PIL import Image
 import build_title_hangul as title
 from export_sprites import tiles_to_indices
 from sprite_text_aa import PART1_STYLE_PALETTES
-from editor_storage import EDITOR_LOCK, atomic_write_text
+from atomic_data import DATA_LOCK, atomic_write_text
 
 ROOT = Path(__file__).resolve().parents[1]
 # Canonical records committed in 6fc6085, generated during the Noto change.
@@ -107,7 +107,7 @@ def main():
     report = audit(args.out)
     if args.migrate_known_overrides:
         path = ROOT / 'data/sprites_overrides.json'
-        with EDITOR_LOCK:
+        with DATA_LOCK:
             before = path.read_bytes()
             records = json.loads(before)
             updated = migrate_records(records)

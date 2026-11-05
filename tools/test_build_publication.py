@@ -7,7 +7,8 @@ import unittest
 from unittest.mock import patch
 
 from build_publication import BuildPublication
-from editor_storage import atomic_write_bytes
+from build_korean_full import verify_sprite_override_final_bytes
+from atomic_data import atomic_write_bytes
 from localization_evidence import write_build_receipt
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -24,6 +25,17 @@ class PublicationTests(unittest.TestCase):
                ('full.gba','final.gba','title.gba','map.json','manifest.json','receipt.json')}
         for path,payload in files.items():path.write_bytes(payload)
         return files
+
+    def test_late_sprite_writer_conflict_publishes_failure_report(self):
+        report = self.root / 'sprite-report.json'
+        report.write_text('{"ok": true}')
+        result = {'report': str(report), 'expected_writes': [('font', 2, b'ab')]}
+        verify_sprite_override_final_bytes(bytearray(b'00ab00'), result)
+        with self.assertRaisesRegex(AssertionError, 'font'):
+            verify_sprite_override_final_bytes(bytearray(b'00ac00'), result)
+        saved = json.loads(report.read_text())
+        self.assertFalse(saved['ok'])
+        self.assertEqual(saved['final_byte_conflicts'][0]['offset'], '0x2')
 
     def test_late_validator_cannot_replace_outputs_or_metadata(self):
         previous=self.accepted()

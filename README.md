@@ -150,7 +150,9 @@ Get-FileHash "Game Boy Wars Advance 1+2 (Korean).gba" -Algorithm SHA256
 
 이 README는 패치를 쓰는 분을 위한 안내입니다. 개발·번역·검수 정보는 따로 있습니다.
 
-- [`docs/DEVELOPER_GUIDE.md`](docs/DEVELOPER_GUIDE.md) — 개발 환경, 편집기, ROM 빌드, 품질 검사 도구, 프로젝트 구조
+- [`docs/DEVELOPER_GUIDE.md`](docs/DEVELOPER_GUIDE.md) — 개발 환경, ROM 빌드, 품질 검사 도구, 프로젝트 구조
 - [`docs/REVIEWER_GUIDE.md`](docs/REVIEWER_GUIDE.md) — 배포본 검증 방법, 배포 게이트, 증거 위치, 미검증 범위
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — 기여 방법
 - [`todo.md`](todo.md) — 현재 진행 상황
+
+웹 대사·스프라이트·통합 편집기는 2026-11-06 사용자 결정으로 제거했습니다. 번역 데이터와 스프라이트 override 빌드 지원은 유지됩니다.

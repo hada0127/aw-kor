@@ -52,7 +52,7 @@ def snapshot_inputs(root=ROOT):
 
 
 def write_json(path, value):
-    from editor_storage import atomic_write_bytes
+    from atomic_data import atomic_write_bytes
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     atomic_write_bytes(path, (json.dumps(value, ensure_ascii=False, indent=2) + '\n').encode())

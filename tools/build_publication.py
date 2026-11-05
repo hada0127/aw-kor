@@ -2,7 +2,7 @@
 from pathlib import Path
 import tempfile
 
-from editor_storage import atomic_write_bytes
+from atomic_data import atomic_write_bytes
 
 
 class BuildPublication:

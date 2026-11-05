@@ -92,7 +92,8 @@ class UnitTypeLabelsTests(unittest.TestCase):
         self.assertEqual(rom, self.original)
         labels._payload.cache_clear()
 
-    def test_real_sprite_editor_overlay_is_preserved_and_late_overwrite_rejected(self):
+
+    def test_saved_override_and_late_overwrite(self):
         from build_korean_full import apply_sprite_overrides
         rom = bytearray(self.original)
         labels.patch(rom, self.original)
@@ -104,7 +105,7 @@ class UnitTypeLabelsTests(unittest.TestCase):
             grid.append([(user_raw[((y // 8) * 4 + x // 8) * 32 + (y % 8) * 4 + (x % 8) // 2]
                           >> (4 * (x % 2))) & 15 for x in range(32)])
         base = Path(__file__).resolve().parents[1]
-        with tempfile.TemporaryDirectory(dir=base / 'temp', prefix='unit_type_editor_') as directory:
+        with tempfile.TemporaryDirectory(dir=base / 'temp', prefix='unit_type_override_') as directory:
             directory = Path(directory)
             override = directory / 'override.json'
             override.write_text(json.dumps({'lz77_00BD1AF0': {'indices': grid}}))
@@ -119,7 +120,6 @@ class UnitTypeLabelsTests(unittest.TestCase):
         rom[labels.OFFSET + 30] ^= 1
         with self.assertRaisesRegex(AssertionError, 'after editor'):
             labels.verify_regions(rom, regions)
-
 
 if __name__ == '__main__':
     unittest.main()

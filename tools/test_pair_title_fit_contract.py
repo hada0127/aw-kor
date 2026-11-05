@@ -14,11 +14,6 @@ import build_korean_full as B
 from part2_mission_title_fit import encode_pair_title, NATIVE_TITLE_SOURCES
 
 
-def load_editor(name):
-    spec = importlib.util.spec_from_file_location(name, ROOT / 'tools' / name / 'server.py')
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
 
 
 class PairTitleFitContractTests(unittest.TestCase):
@@ -100,13 +95,6 @@ class PairTitleFitContractTests(unittest.TestCase):
                 self.assertEqual(B.encode_fit(text, len(exact), self.codes, collections.Counter(), address),
                                  (exact, 0))
 
-    def test_both_editor_budget_helpers_report_title_overflow(self):
-        dialogue = load_editor('dialogue_editor')
-        scene = load_editor('scene_editor')
-        for slot, fits in ((10, False), (14, True)):
-            with self.subTest(slot=slot):
-                self.assertEqual(dialogue.validate_build_fit('해 VS 공!', slot, '0xA2D7D4')['ok'], fits)
-                self.assertEqual(scene.build_fit_budget('해 VS 공!', slot, '0xA2D7D4')['fits'], fits)
 
     def test_title_whitespace_and_punctuation_use_independent_pairs(self):
         address = 0xA2D7D4

@@ -225,62 +225,12 @@ class ModeMenuStyleTest(unittest.TestCase):
 
 
 
-class CampaignHeaderEditorTest(unittest.TestCase):
-    """Sprite editor edits the Korean copy; the JP alphabet is read-only."""
+class CampaignHeaderOverrideTest(unittest.TestCase):
+    """Saved Korean copy overrides cannot change the JP alphabet."""
 
     @classmethod
     def setUpClass(cls):
-        import importlib.util
-        spec = importlib.util.spec_from_file_location('sprite_editor_hdr_test', ROOT / 'tools/sprite_editor/server.py')
-        cls.SE = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(cls.SE)
         cls.original = (ROOT / 'original/Game Boy Wars Advance 1+2 (Japan).gba').read_bytes()
-
-    def test_editor_table_points_at_korean_copy(self):
-        import part2_campaign_header_atlas as hdr
-        self.assertEqual(self.SE.PART2_CAMPAIGN_HEADER_OFFSETS, {hdr.ATLAS_DEST})
-        self.assertEqual(self.SE.PART2_CAMPAIGN_HEADER_COPY_ID, hdr.EDITOR_ID)
-        self.assertIn(hdr.ATLAS, self.SE.PART2_HEADER_ALPHABET_READONLY_OFFSETS)
-        layout = self.SE.build_layout_cells({'offset_int': hdr.ATLAS_DEST, 'type': 'lz77', 'tile_cols': 32})
-        self.assertEqual(layout['fallback'], 'part2_campaign_header_oam')
-        with self.assertRaisesRegex(ValueError, '읽기 전용'):
-            self.SE.validate_sprite_edit({'offset_int': hdr.ATLAS, 'type': 'lz77'}, [[0] * 256] * 40, None)
-
-    def test_editor_rejects_invalid_copy_edits_before_saving(self):
-        import part2_campaign_header_atlas as hdr
-        from build_korean_full import patch_part2_campaign_header_obj
-        from export_sprites import tiles_to_indices
-        rom = bytearray(self.original)
-        patch_part2_campaign_header_obj(rom, self.original)
-        raw = lz77_decompress(rom, hdr.ATLAS_DEST)[0]
-        sprite = {'id': hdr.EDITOR_ID, 'offset_int': hdr.ATLAS_DEST, 'type': 'lz77',
-                  'tile_cols': 32, 'comp_size': hdr.REGION[1] - hdr.ATLAS_DEST}
-
-        def edited(glyph):
-            grid, _, _ = tiles_to_indices(raw, 32)
-            tile = hdr.glyph_index(self.original, glyph) * 8
-            y, x = (tile // 32) * 8 + 3, (tile % 32) * 8 + 3
-            grid[y][x] = (grid[y][x] + 1) % 16
-            return grid
-        for glyph in ('A', 'Y', 'S'):
-            with self.subTest(glyph=glyph):
-                with self.assertRaisesRegex(ValueError, '캠페인 헤더 사본 편집 거부'):
-                    self.SE.validate_sprite_edit(sprite, edited(glyph), None, rom_snapshot=bytes(rom))
-        enc, w, h = self.SE.validate_sprite_edit(sprite, edited('C'), None, rom_snapshot=bytes(rom))
-        self.assertEqual((w, h), (256, 40))
-        # The save endpoint must not persist a rejected edit.
-        import json, tempfile
-        from unittest.mock import patch
-        with tempfile.TemporaryDirectory(dir=ROOT / 'temp', prefix='hdr-save-') as tmp:
-            ov = Path(tmp) / 'ov.json'
-            ov.write_text('{}')
-            with patch.object(self.SE, 'OVERRIDES_PATH', ov), \
-                 patch.object(self.SE, 'sprite_by_id', lambda sid: sprite), \
-                 patch.object(self.SE, 'decode_current_indices', lambda sp: self.SE.decode_from_rom(bytes(rom), sp)):
-                handler = self.SE.Handler.__new__(self.SE.Handler)
-                result = handler._save({'id': hdr.EDITOR_ID, 'indices': edited('A'), 'palette': None})
-            self.assertFalse(result['ok'])
-            self.assertEqual(json.loads(ov.read_text()), {})
 
     def test_one_override_snapshot_feeds_both_passes(self):
         import json, tempfile

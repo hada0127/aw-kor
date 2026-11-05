@@ -85,21 +85,5 @@ class BazookaStyleTests(unittest.TestCase):
             live=bytes(rom[target:target+manifests[0]['new_len']])
             self.assertEqual(live,b'\x32'+payloads[first]+b'\x30'+payloads[second]+self.original[tail_end:tail_end+1]+b'\0')
 
-    def test_both_editors_keep_two_editable_operands_and_group_members(self):
-        def load(name):
-            spec=importlib.util.spec_from_file_location('bazooka_'+name,Path(B.BASE)/'tools'/name/'server.py')
-            module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);return module
-        DE,CE=load('dialogue_editor'),load('scene_editor')
-        from build_dialogue_groups import korean_segments
-        members=[{'address':f'0x{a:08X}','ko':text,'ja':self.original[a:e].decode('shift_jis'),'slot':e-a,'kind':'script:operand'} for a,e,text in ROWS]
-        segments=[{'kind':'frag','address':m['address']} for m in members]
-        self.assertEqual(korean_segments(segments,members),segments)
-        for m,(a,e,text) in zip(members,ROWS):
-            self.assertEqual(DE.current_ko(m['address'],member=m),text)
-            self.assertEqual(CE.effective_member_ko(m,{}),text)
-            self.assertIsNone(DE.text_edit_readonly_reason(m['address']))
-            self.assertEqual(DE.member_slot(m['address']),e-a)
-            budget=CE.line_budget(m)
-            self.assertTrue(budget['editable']);self.assertEqual(budget['slot'],e-a)
 
 if __name__=='__main__':unittest.main()

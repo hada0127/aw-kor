@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""텍스트 바이트 예산 단일 진실원(SSOT) — Python ↔ JS(scene editor) 동형.
+"""텍스트 바이트 예산 도우미 — Python build/QA 공통.
 
 빌드 인코더(build_korean_full.encode_text)의 바이트 길이와 일치한다:
   한글 음절       → 2  (예약 SJIS 2바이트 코드)
@@ -7,9 +7,8 @@
   줄바꿈 '\n'     → 1  (0x0A 제어)
   ASCII 0x20~0x7E → 1
   그 외           → 2  (SJIS 폴백 / ？)
-이 모듈을 build/qa/scene_editor가 공통 사용해 "한글=2 추정" 같은 드리프트를 없앤다.
+이 모듈을 build/qa가 공통 사용해 "한글=2 추정" 같은 드리프트를 없앤다.
 
-JS 미러는 _JS_ENCLEN 문자열로 박제하고, tests에서 node로 실행해 동일성을 강제한다.
 """
 import json
 import os
@@ -127,23 +126,6 @@ def has_unmapped_syllables(text, sylset=None):
 def fits(text, slot_bytes):
     """encoded_len이 슬롯(바이트)에 들어가는가 — 빌드의 1차 하드게이트와 동일 의미."""
     return encoded_len(text) <= slot_bytes
-
-
-# scene editor app.js encLen 정본 미러(파서 동형성 테스트용). app.js를 바꾸면 여기도 함께.
-_JS_ENCLEN = r"""
-function encLen(t) {
-  let n = 0;
-  for (const ch of t) {
-    const c = ch.codePointAt(0);
-    if (c >= 0xAC00 && c <= 0xD7A3) n += 2;        // 완성형 한글
-    else if (ch === "　") n += 2;                   // 전각 공백
-    else if (ch === "\n") n += 1;                   // 줄바꿈 0x0A
-    else if (c >= 0x20 && c <= 0x7E) n += 1;        // ASCII
-    else n += 2;
-  }
-  return n;
-}
-"""
 
 
 if __name__ == '__main__':

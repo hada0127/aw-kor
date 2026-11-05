@@ -25,7 +25,7 @@
 | 텍스트 번역 | ✅ 사실상 완료 — `data/translation_for_import.csv`에 한글 18,262행. QA(lint) error 0. 용어 5종 통일. |
 | 대화 렌더 메커니즘 | ✅ **완전 RE + 인게임 PoC 3건 검증**(FONT_BASE 주입 / 멀티음절 / **예약코드→테이블→한글**). 해당 대화 출력 경로 입증. |
 | 한글 폰트 풀빌드 | ✅ **완료** — `tools/build_korean_full.py`(base=**원본 ROM**, 기본값 `P.ROM`; `output/v56_polished.gba`는 부재/구버전이라 `--base`로만 지정) → `output/game_wars_korean_full.gba`. 음절 글리프 주입 + 한자테이블 확장 + 예약코드 인코딩. **2026-06-16: 폰트 1030→2350자(KS X 1001 완성형) additive 확장** (`data/syllable_to_code_2350.json`/`kor_glyphs_2350.bin`/`syllable_to_glyph_2350.json`, `tools/build_korean2350.py`). 기존 byte-identical 호환. |
-| 한글화 도구체인 (2026-06-16, muramasa-kor 참조) | ✅ **통일사전** `data/proper_nouns.json`(`tools/export/apply_proper_nouns_dict.py`, 카테고리형 정본 — 구 generic `export/apply_proper_nouns.py`는 deprecated→`proper_nouns_inconsistencies.json`). **대사맵** `data/dialogue_map.json`(`tools/build_dialogue_map.py`). **대사 편집기** `tools/dialogue_editor/server.py`(:8780, JA→KO+사전 CRUD+사전검사). **스프라이트 픽셀에디터** `tools/sprite_editor/server.py`(:8781, 4bpp 인덱스+팔레트 페인트). **스프라이트 인덱스** `tools/export_sprites.py`→`data/sprites_index.json`. ✅ PRAM 팔레트 캡처 완료(2026-06-28, 대표 title/select/menu + 전투/CO/유닛 current-state route, `data/sprite_palettes.json` 176 unique/BG92/OBJ84 + route/state/raw dump SHA). ⚠ 잔여: 실화면 시각회귀 QA, LZ77 ROM 역기록, 미번역 1097종 triage. |
+| 한글화 도구체인 (2026-06-16, muramasa-kor 참조) | ✅ 통일사전 `data/proper_nouns.json`, 대사맵 `data/dialogue_map.json`, 스프라이트 인덱스 `data/sprites_index.json` 및 ROM 빌드용 `data/sprites_overrides.json`. 웹 대사·스프라이트·통합 편집기는 사용자 결정으로 **2026-11-06 제거**. 기존 도입·검증 기록은 역사로 보존한다. |
 | 1편 이름 그리드 | ✅ **완료** — 좌 A-Z / 중 a-z(빈칸 없음, 대문자와 매칭) / 우 0-9(기호행 제거). 선택·미리보기 정상. 실배치 ROM 0x08DF8C38 계열 패치. |
 | 2편(Advance 2) 한글 | ✅ **완료** — 타일맵 렌더 3경로(0x313F8C / 0xB11BB0 / 0xA3C7E4) hook으로 한글 렌더. **반각 공백** + **1편과 동일 11×11 galmuri**. 낱한자/감탄사 발견분 정리. |
 | ROM 빌드/부팅 | ✅ 체크섬·삽입 안전, 부팅 OK(흰 화면 해소). |
@@ -188,12 +188,9 @@ python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba   # 부팅/�
 python3 tools/verify_dist_integrity.py   # 배포 manifest↔output↔BPS/IPS 3중 해시 게이트(배포 전 PASS 필수)
 ```
 
-### 편집기 (웹, stdlib http.server, 외부 의존성 0)
-```bash
-python3 tools/dialogue_editor/server.py  # :8780 대사 JA→KO 편집 + 통일사전 CRUD + 사전검사
-python3 tools/sprite_editor/server.py    # :8781 스프라이트 4bpp 픽셀 페인트(팔레트)
-# 데이터 재생성(gitignored): python3 tools/build_dialogue_map.py / tools/export_sprites.py
-```
+### 웹 편집기 제거 (2026-11-06 사용자 결정)
+
+대사·스프라이트·통합 웹 편집기는 제거했다. 번역과 스프라이트 override 데이터는 ROM 빌드 경로에서 계속 읽는다. `tools/scene_routes/`는 QA·캡처 재현 경로이므로 유지한다.
 
 ---
 
@@ -259,7 +256,7 @@ aw-kor/
 
 ### docs/ 주요 문서
 - **진행 기준**: 루트 `todo.md` 하나만 사용한다. 구 `docs/plan.md`와 `.claude/todo.md`는 되살리지 않는다.
-- **개발·검수 안내**: `DEVELOPER_GUIDE.md`(환경·편집기·빌드·QA 도구·구조, 구 루트 README 내용), `REVIEWER_GUIDE.md`(배포본 검증·게이트·증거 위치·미검증 범위)
+- **개발·검수 안내**: `DEVELOPER_GUIDE.md`(환경·빌드·QA 도구·구조, 구 루트 README 내용), `REVIEWER_GUIDE.md`(배포본 검증·게이트·증거 위치·미검증 범위)
 - **Ghidra 디컴파일**: `GHIDRA.md`(설치·사용·한계)
 - **계획/리서치 참고**: `DIALOGUE_KOREAN_IMPLEMENTATION_PLAN.md`(구체 구현 로드맵), `research.md`(대화 렌더 파이프라인 완전 RE — 맨 끝), `muramasa_reference/`(무라마사 QA 도구 이식 출처), `FONT_HACK_RESEARCH_2026_05_21.md`(구 계획), `rom_analysis_guide.md`, `tbl_format_guide.md`, `translation_process.md`
 - **번역 가이드**: `TRANSLATION_GUIDE.md`, `TRANSLATION_TONE_AND_STORY_GUIDE.md`, `AI_TRANSLATION_REFERENCE.md`, `TRANSLATION_REAUDIT_2026_05_18.md`
