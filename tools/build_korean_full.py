@@ -8823,7 +8823,8 @@ def patch_part2_result_summary_obj(rom):
                 px[tx + col, ty + row] = (value >> 4) if col & 1 else (value & 0x0F)
     draw = ImageDraw.Draw(layer)
     draw.fontmode = "1"
-    title_font_path = require_font(OKDANDAN_FONT, 'OkDanDan')
+    from aw_fonts import hadasans_extrabold_path
+    title_font_path = hadasans_extrabold_path()
     label_font_path = require_font(os.path.join(BASE, 'reference/fonts/Galmuri11-Bold.ttf'), 'Galmuri11-Bold')
 
     def fit_font(text, font_path, max_size, box, stroke=0):
@@ -8834,22 +8835,19 @@ def patch_part2_result_summary_obj(rom):
                 return font, bbox
         raise AssertionError(f'Result label does not fit its allocation: {text}')
 
-    def draw_centered(text, box, font_path, max_size, fill=1, stroke_fill=14, shadow=12, stroke=1):
+    def draw_centered(text, box, font_path, max_size, fill=1, stroke_fill=14, shadow=12, stroke=1,
+                      left=None):
         draw.rectangle((box[0], box[1], box[2] - 1, box[3] - 1), fill=0)
         font, bbox = fit_font(text, font_path, max_size, box, stroke=stroke)
         if font_path == label_font_path and font.size != 11:
             raise AssertionError(f'Result label must use native 11px font: {text}')
         tw = bbox[2] - bbox[0]
         th = bbox[3] - bbox[1]
-        x = box[0] + ((box[2] - box[0]) - tw) // 2 - bbox[0]
+        x = (box[0] + ((box[2] - box[0]) - tw) // 2 if left is None else left) - bbox[0]
         y = box[1] + ((box[3] - box[1]) - th) // 2 - bbox[1]
-        if font_path == title_font_path:
-            from hangul_pixel_fit import paint_native
-            paint_native(layer, text, font, (x, y), fill, outline=stroke_fill, shadow=shadow)
-        else:
-            from hangul_pixel_fit import paint_bitmap
-            paint_bitmap(layer, text, font, (x, y), fill,
-                         outline=stroke_fill if stroke else None, shadow=shadow)
+        from hangul_pixel_fit import paint_bitmap
+        paint_bitmap(layer, text, font, (x, y), fill,
+                     outline=stroke_fill if stroke else None, shadow=shadow)
 
     # The title is split into four tile groups by the original renderer. Keep
     # all other tiles in the 1024-tile sheet intact so the score digits and rank
@@ -8860,13 +8858,28 @@ def patch_part2_result_summary_obj(rom):
         ('성', (128, 0, 192, 64)),
         ('공', (192, 0, 256, 64)),
     ]:
-        draw_centered(text, box, title_font_path, 44, fill=1, stroke_fill=14, shadow=None, stroke=1)
+        # The JP cell's live ink box is x=11..49, y=12..51.  Keep that
+        # 39x40 footprint and its thick dark red rim in OBJ bank 4.
+        font = ImageFont.truetype(title_font_path, 384)
+        probe = Image.new('L', (768, 768), 0)
+        ImageDraw.Draw(probe).text((40, 0), text, font=font, fill=255)
+        source = probe.crop(probe.point(lambda v: 255 if v >= 128 else 0).getbbox())
+        face = Image.new('L', (64, 64), 0)
+        face.paste(source.resize((33, 34), Image.Resampling.LANCZOS), (14, 15))
+        from PIL import ImageFilter
+        rim = face.point(lambda v: 255 if v >= 110 else 0).filter(ImageFilter.MaxFilter(7))
+        for yy in range(64):
+            for xx in range(64):
+                alpha = face.getpixel((xx, yy))
+                value = (14 if alpha >= 190 else 13 if alpha >= 130 else
+                         12 if alpha >= 75 else 11 if alpha >= 30 else
+                         1 if rim.getpixel((xx, yy)) else 0)
+                layer.putpixel((box[0] + xx, yy), value)
 
     # These are tile-aligned allocations in the original 32-column atlas.
     # Rows 8/9 are digits; rows 10/11 also contain digits/Pt and NEXT.
     # Runtime OAM/VRAM matching establishes each strided source rectangle.
     label_boxes = [
-        ('축하!', (80, 80, 224, 96)),
         ('속도', (0, 96, 48, 112)),
         ('화력', (64, 96, 104, 112)),
         ('기술', (128, 96, 192, 112)),
@@ -8875,9 +8888,47 @@ def patch_part2_result_summary_obj(rom):
     ]
     # The tail English label strip is preserved until its runtime consumers
     # are verified; the old whole-row blanking must not return.
+    # The four JP score labels all begin at screen x=10. Their separate OBJ
+    # cells have different origins, so the atlas starts below account for OAM.
+    score_starts = {'속도': 0, '화력': 64, '기술': 128, '합계': 0}
     for text, box in label_boxes:
         draw_centered(text, box, label_font_path, 11, fill=6,
-                      stroke_fill=14 if text == '축하!' else 15, shadow=None, stroke=1)
+                      stroke_fill=15, shadow=None, stroke=1,
+                      left=score_starts.get(text))
+
+    # Same 144x16 allocation as JP CONGRATULATIONS!, with the full Korean
+    # wording.  OBJ bank 5 has yellow 6/5 and blue 14/10/9 for edge AA.
+    congrat_box = (80, 80, 224, 96)
+    from aw_fonts import hadasans_extrabold_path
+    font = ImageFont.truetype(hadasans_extrabold_path(), 384)
+    face = Image.new('L', (144, 16), 0)
+    widths = (19, 19, 19, 19, 19)
+    cursor = 2
+    for ch, width in zip('축하합니다', widths):
+        probe = Image.new('L', (768, 768), 0)
+        ImageDraw.Draw(probe).text((40, 0), ch, font=font, fill=255)
+        source = probe.crop(probe.point(lambda v: 255 if v >= 128 else 0).getbbox())
+        face.paste(source.resize((width, 12), Image.Resampling.LANCZOS), (cursor, 2))
+        cursor += width + 3
+    from PIL import ImageFilter
+    core = face.point(lambda v: 255 if v >= 145 else 0)
+    rim = core.filter(ImageFilter.MaxFilter(3))
+    for yy in range(16):
+        for xx in range(144):
+            alpha = face.getpixel((xx, yy))
+            value = 6 if core.getpixel((xx, yy)) else 5 if alpha >= 70 else 14 if rim.getpixel((xx, yy)) else 0
+            layer.putpixel((80 + xx, 80 + yy), value)
+    # The JP title uses a narrow vertical stroke and a separate dot. Keep the
+    # mark in its original 19px allocation, with the same bank-5 inks as R12.
+    exclamation = (
+        '.EEE.', 'E565E', 'E666E', 'E666E', 'E666E', 'E666E', 'E666E',
+        'E565E', '.EEE.', '.....', '.EEE.', 'E565E', 'E666E', '.EEE.',
+    )
+    for yy, row in enumerate(exclamation, 81):
+        for xx, ink in enumerate(row, 193):
+            if ink != '.':
+                layer.putpixel((xx, yy), int(ink, 16))
+    label_boxes.insert(0, ('축하합니다!', congrat_box))
 
     out = bytearray(len(data))
     src = layer.load()
@@ -8904,7 +8955,7 @@ def patch_part2_result_summary_obj(rom):
                 raise AssertionError(f'Part 2 result non-label tile changed: {tile}')
     rec_label_layout(off, 32, [
         {'text': '작/전/성/공', 'tile_ids': sorted(title_tiles)},
-        {'text': '축하!/속도/화력/기술/합계/누계', 'tile_ids': sorted(label_tiles)},
+        {'text': '축하합니다!/속도/화력/기술/합계/누계', 'tile_ids': sorted(label_tiles)},
     ])
 
     comp = lz77_compress(bytes(out), vram_safe=True)
@@ -9172,45 +9223,59 @@ def patch_part2_result_congratulations_obj(rom):
     if len(data) != 96 * 32:
         raise AssertionError(f'unexpected Part 2 result title size at 0x{off:X}: {len(data)}')
 
-    font_path = require_font(OKDANDAN_FONT, 'OkDanDan')
-
-    def draw_centered(img, text, max_size, fill, stroke_fill, shadow=None, stroke=1, path=None):
-        draw = ImageDraw.Draw(img)
-        box = (0, 0, img.width, img.height)
-        for size in range(max_size, 7, -1):
-            font = ImageFont.truetype(path or font_path, size)
-            bbox = draw.textbbox((0, 0), text, font=font, stroke_width=stroke)
-            if bbox[2] - bbox[0] <= img.width - 4 and bbox[3] - bbox[1] <= img.height - 2:
-                break
-        tw = bbox[2] - bbox[0]
-        th = bbox[3] - bbox[1]
-        x = box[0] + ((box[2] - box[0]) - tw) // 2 - bbox[0]
-        y = box[1] + ((box[3] - box[1]) - th) // 2 - bbox[1]
-        if path is None:
-            from hangul_pixel_fit import paint_native
-            # Reserve the extra integer advance before centering the line.
-            x -= (len(text) - 1) // 2
-            paint_native(img, text, font, (x, y), fill, outline=stroke_fill,
-                         shadow=shadow, shadow_offset=(2, 2))
-        else:
-            if shadow is not None:
-                draw.text((x + 1, y + 1), text, font=font, fill=shadow, stroke_width=stroke, stroke_fill=stroke_fill)
-            draw.text((x, y), text, font=font, fill=fill, stroke_width=stroke, stroke_fill=stroke_fill)
-
     # Runtime uses 1D OBJ mapping:
     # tiles 0..63: four 32x32 sprites for the large title at y=22
     # tiles 64..95: four 32x16 sprites for the small top title at y=3
     big = Image.new('P', (128, 32), 0)
     small = Image.new('P', (128, 16), 0)
-    draw_centered(big, '작전 성공', 23, fill=1, stroke_fill=15, shadow=11, stroke=1)
+    from aw_fonts import okdandan_path
+    from PIL import ImageFilter
+    font = ImageFont.truetype(okdandan_path(), 384)
+    face = Image.new('L', (128, 32), 0)
+    # The JP headline fills the four native cells with small gaps between its
+    # four characters.  Keep the Korean word break, but avoid a full font-space
+    # which would shrink all four syllables inside this 128px allocation.
+    for word, left in (('작전', 3), ('성공', 66)):
+        probe = Image.new('L', (2048, 768), 0)
+        ImageDraw.Draw(probe).text((40, 0), word, font=font, fill=255)
+        source = probe.crop(probe.point(lambda v: 255 if v >= 128 else 0).getbbox())
+        face.paste(source.resize((59, 26), Image.Resampling.LANCZOS), (left, 2))
+    core = face.point(lambda v: 255 if v >= 145 else 0)
+    rim = core.filter(ImageFilter.MaxFilter(3))
+    shadow = Image.new('L', (128, 32), 0)
+    shadow.paste(rim.crop((0, 0, 127, 30)), (1, 2))
+    for yy in range(32):
+        # Live bank 3: blue 9..6, white 5, yellow 4..1, brown rim 14.
+        gradient = (8 if yy < 7 else 7 if yy < 11 else
+                    6 if yy < 14 else 5 if yy < 18 else
+                    4 if yy < 21 else 3 if yy < 24 else
+                    2 if yy < 27 else 1)
+        for xx in range(128):
+            alpha = face.getpixel((xx, yy))
+            value = (gradient if core.getpixel((xx, yy)) else
+                     9 if alpha >= 50 and yy < 16 else
+                     10 if alpha >= 50 else
+                     14 if rim.getpixel((xx, yy)) else
+                     11 if shadow.getpixel((xx, yy)) else 0)
+            big.putpixel((xx, yy), value)
     # The native 作戦成功 never crosses a 32x32 cell, so contiguity comes from a
     # screen proof (data/obj_cell_contiguity.json, tools/qa_screen_obj_contiguity.py).
     aw_fonts.check_cells([[big.getpixel((x, y)) for x in range(128)] for y in range(32)], (32, 64, 96),
                          'Part 1 result 작전 성공', native=aw_fonts.screen_contiguity(off, rom))
-    # Small top line: Galmuri (2026-10-08 font rule; was OkDanDan). The large
-    # 작전 성공 title above stays OkDanDan.
-    draw_centered(small, '축하합니다!', 12, fill=1, stroke_fill=9, shadow=11, stroke=1,
-                  path=str(aw_fonts.GALMURI11_BOLD))
+    # Small top line: approved Galmuri exception; the large title stays OkDanDan.
+    small_text = '축하합니다!'
+    small_draw = ImageDraw.Draw(small)
+    for size in range(12, 7, -1):
+        small_font = ImageFont.truetype(str(aw_fonts.GALMURI11_BOLD), size)
+        small_bbox = small_draw.textbbox((0, 0), small_text, font=small_font, stroke_width=1)
+        if small_bbox[2] - small_bbox[0] <= small.width - 4 and small_bbox[3] - small_bbox[1] <= small.height - 2:
+            break
+    small_x = (small.width - (small_bbox[2] - small_bbox[0])) // 2 - small_bbox[0]
+    small_y = (small.height - (small_bbox[3] - small_bbox[1])) // 2 - small_bbox[1]
+    small_draw.text((small_x + 1, small_y + 1), small_text, font=small_font,
+                    fill=11, stroke_width=1, stroke_fill=9)
+    small_draw.text((small_x, small_y), small_text, font=small_font,
+                    fill=1, stroke_width=1, stroke_fill=9)
 
     out = bytearray(len(data))
 
@@ -14766,35 +14831,49 @@ def _grid_to_tiles(grid):
     return encode_indices(grid, len(grid[0]), len(grid))
 
 
-@lru_cache(maxsize=1)
-def _b84_power_title_font():
-    from bdf import load_bdf
-    return load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri11.bdf'))[0]
-
-
 def _b84_power_title_glyph_block(ch):
     """Render one 16x32 4bpp glyph for the AW1 CO-power title cut-in."""
-    from PIL import Image, ImageFilter
-    from hangul_pixel_fit import glyph, verify_glyph
+    from PIL import Image, ImageDraw, ImageFilter, ImageFont
+    from aw_fonts import hadasans_extrabold_path
     width, height = 16, 32
     body = Image.new('L', (width, height))
-    # The 16px-wide consumer cannot hold natural large OkDanDan lettering.
-    # Use native Galmuri11 for this <=16px line, with the same palette split.
-    from bdf import glyph_grid
-    grid, w, h, xo, yo = glyph_grid(_b84_power_title_font()[ord(ch)])
-    mask = Image.new('L', (w,h))
-    mask.putdata([255 if v else 0 for row in grid for v in row])
-    body.paste(mask, ((width-w)//2, 10))
-    stroke = body.filter(ImageFilter.MaxFilter(3))
-    shadow = Image.new('L', (width, height)); shadow.paste(stroke, (1, 1))
+    # JP uses a tall gradient gothic face.  The 16x32 source cell is the actual
+    # consumer limit; draw all 44 dictionary glyphs at one 26px ink height.
+    font = ImageFont.truetype(hadasans_extrabold_path(), 384)
+    probe = Image.new('L', (768, 768), 0)
+    ImageDraw.Draw(probe).text((40, 0), ch, font=font, fill=255)
+    source = probe.crop(probe.point(lambda v: 255 if v >= 128 else 0).getbbox())
+    body.paste(source.resize((10, 26), Image.Resampling.LANCZOS), (3, 3))
+    core = body.point(lambda v: 255 if v >= 160 else 0)
+    stroke = core.filter(ImageFilter.MaxFilter(3))
+    halo = core.filter(ImageFilter.MaxFilter(5))
     grid = [[0] * width for _ in range(height)]
     for y in range(height):
+        # Original B84 source and live OBJ bank 3: cyan at the top, white
+        # transition, then yellow at the foot. Index 15 is the dark contour
+        # and 7 the one-pixel light outside edge.
+        gradient = (13 if y < 6 else 12 if y < 8 else
+                    11 if y < 10 else 10 if y < 12 else
+                    9 if y < 14 else 8 if y < 16 else
+                    7 if y == 16 else 6 if y < 19 else
+                    5 if y < 21 else 4 if y < 23 else
+                    3 if y < 25 else 2)
         for x in range(width):
-            if shadow.getpixel((x, y)): grid[y][x] = 15
-            if stroke.getpixel((x, y)): grid[y][x] = 14
-            if body.getpixel((x, y)): grid[y][x] = 7 if y < 14 else 2
+            if 0 < x < 15 and 0 < y < 31 and halo.getpixel((x, y)):
+                grid[y][x] = 7
+            if stroke.getpixel((x, y)): grid[y][x] = 15
+            alpha = body.getpixel((x, y))
+            if alpha >= 160: grid[y][x] = gradient
     aw_fonts.check_cells(grid, (), f'Part 1 power title glyph {ch}')
     return _grid_to_tiles(grid)
+
+
+def b84_glyph_stream_capacity(used):
+    """Enforce the reserved 0xFD2000..0xFD3000 B84 stream allocation."""
+    capacity = 0x1000
+    if used > capacity:
+        raise AssertionError(f'B84 power title glyph LZ77 overflow: {used} > {capacity}')
+    return capacity
 
 
 def patch_b84_power_title_lz77_source(rom, orig, dictionary, syl_to_code):
@@ -14836,6 +14915,7 @@ def patch_b84_power_title_lz77_source(rom, orig, dictionary, syl_to_code):
         buf[idx * 0x100:(idx + 1) * 0x100] = _b84_power_title_glyph_block(ch)
     buf[len(dictionary) * 0x100:required] = bytes(0x100)
     comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
+    b84_glyph_stream_capacity(len(comp))
     lz_end = B84_POWER_GLYPH_LZ77_RELOCATED + len(comp)
     if (lz_end > len(rom)
             or any(orig[B84_POWER_GLYPH_LZ77_RELOCATED:lz_end])
@@ -14858,7 +14938,8 @@ def patch_b84_power_title_lz77_source(rom, orig, dictionary, syl_to_code):
         'glyphs': len(dictionary),
         'raw_bytes': len(raw),
         'compressed': len(comp),
-        'slot': len(comp),
+        'slot': 0x1000,
+        'capacity': 0x1000,
         'lz77_off': '0x%X' % B84_POWER_GLYPH_LZ77_RELOCATED,
     }
 
@@ -15494,13 +15575,17 @@ def _build(args, publication):
             os.path.join(BASE, 'data', 'dialogue_overrides.json')).items()
     }
     _b84_dictionary = b84_full_power_dictionary(_b84_full_names)
-    st['b84_power_title_lz77_glyphs'] = patch_b84_power_title_lz77_source(
-        rom, orig, _b84_dictionary, syl_to_code)['glyphs']
+    _b84_report = patch_b84_power_title_lz77_source(
+        rom, orig, _b84_dictionary, syl_to_code)
+    st['b84_power_title_lz77_glyphs'] = _b84_report['glyphs']
     # The 0x08B3C184 copy path is a shared compact renderer.  The LZ77 source
     # replacement above is sufficient for the AW1 power-title glyph sheet; a
     # copy-site hook here also intercepts unrelated compact menu strings.
     st['b84_power_title_glyphs'] = {
         'glyphs': st['b84_power_title_lz77_glyphs'],
+        'packed_bytes': _b84_report['compressed'],
+        'slot_bytes': _b84_report['capacity'],
+        'headroom': _b84_report['capacity'] - _b84_report['compressed'],
         'method': 'lz77_source_only',
         'copy_site_hook': 'disabled_shared_renderer',
     }

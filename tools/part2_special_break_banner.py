@@ -14,14 +14,12 @@ Static RE (original ROM, 2026-10-06 fixH):
   with 4/3 anti-aliasing, on the white plate 6.
 
 The Korean term is 스페셜 브레이크 (translation_for_import 0x00A2DEB2 「스페셜
-브레이크」, 0x00A2E619).  Each line is redrawn in the native hollow style:
-OkDanDan-Bold, largest size whose line fits 24 rows (2026-10-08 font rule; was
-Galmuri11-Bold 12 px scaled 2x),
-body = index 0,
-2 px outline 5 + one 4-neighbour AA ring 4, centred in its line rectangle.
+브레이크」, 0x00A2E619).  The current generator uses Hada Sans Black glyphs
+within the native 32-row line rectangles: body index 0, two outline rings 5,
+and an outer four-neighbour AA ring 4.
 Only tiles referenced exclusively by the line cells are rewritten; the shared
-fill tiles 0x16/0x36/0x8E and the tilemap stay untouched.  On-screen result is
-unverified (no savestate of the banner).
+fill tiles 0x16/0x36/0x8E and the tilemap stay untouched.  The SPECIAL BREAK
+consumer was observed on screen in R9–R13 (2026-11-06).
 """
 import hashlib
 import struct
@@ -90,27 +88,52 @@ def line_cells(entries, row0, col0, col1):
 
 
 LINE_CHARS = '스페셜브레이크'
-BODY_ROWS = 24   # the native 24 px line (old Galmuri 12px x 2 body)
+BODY_ROWS = 26   # 32px cell leaves three pixels for the native outline/AA
 
 
 @lru_cache(maxsize=None)
 def glyph_mask(char):
-    """OkDanDan-Bold glyph on the common line (2026-10-08 font rule; was
-    Galmuri11-Bold 12px scaled 2x). Returns (set, width, line height)."""
-    return aw_fonts.okdandan_glyph(char, aw_fonts.okdandan_fit_line(BODY_ROWS, LINE_CHARS),
-                                   chars=LINE_CHARS)
+    """Hada Sans Black matches the JP block lettering at its full line height."""
+    from PIL import Image, ImageDraw, ImageFont
+    path = aw_fonts.hadasans_black_path()
+    for size in range(40, 5, -1):
+        font = ImageFont.truetype(path, size)
+        boxes = [font.getbbox(c) for c in LINE_CHARS]
+        line_top = min(box[1] for box in boxes)
+        line_bottom = max(box[3] for box in boxes)
+        if line_bottom - line_top <= BODY_ROWS:
+            break
+    image = Image.new('L', (3 * size, line_bottom - line_top), 0)
+    ImageDraw.Draw(image).text((size, -line_top), char, font=font, fill=255)
+    ink = [(x, y) for y in range(image.height) for x in range(image.width)
+           if image.getpixel((x, y)) >= 128]
+    if not ink:
+        raise AssertionError(f'special break glyph missing: {char}')
+    left, right = min(x for x, _ in ink), max(x for x, _ in ink) + 1
+    return frozenset((x - left, y) for x, y in ink), right - left, image.height
 
 
 def render_line(text, width, allowed):
     """width x 32 pixel rows (None = keep native) for one hollow-letter line."""
+    from PIL import Image
     glyphs = [glyph_mask(c) for c in text]
-    total = sum(w for _, w, _ in glyphs) + GAP * (len(glyphs) - 1)
+    # JP occupies almost the entire 23-tile line.  Widen the Korean blocks
+    # within that same line rectangle; preserve the native row/column offset.
+    target = width - (24 if len(glyphs) == 3 else 12)
+    gap = 12 if len(glyphs) == 3 else 8
+    ink_width = (target - gap * (len(glyphs) - 1)) // len(glyphs)
+    total = ink_width * len(glyphs) + gap * (len(glyphs) - 1)
     height = max(h for _, _, h in glyphs)
     left, top = (width - total) // 2, (32 - height) // 2
     body = set()
     for mask, w, h in glyphs:
-        body |= {(x + left, y + top + (height - h)) for x, y in mask}
-        left += w + GAP
+        source = Image.new('1', (w, h))
+        for x, y in mask:
+            source.putpixel((x, y), 1)
+        wide = source.resize((ink_width, h), Image.Resampling.NEAREST)
+        body |= {(x + left, y + top + (height - h))
+                 for y in range(h) for x in range(ink_width) if wide.getpixel((x, y))}
+        left += ink_width + gap
     near8 = lambda p: [(p[0] + dx, p[1] + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1) if dx or dy]
     near4 = lambda p: [(p[0] + dx, p[1] + dy) for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))]
     ring1 = {q for p in body for q in near8(p)} - body

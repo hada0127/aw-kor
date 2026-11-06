@@ -109,6 +109,21 @@ def text_mask(text, sx, sy):
     return pixels, cursor
 
 
+@lru_cache(maxsize=None)
+def glyph_coverage(char, sy):
+    """The same OkDanDan raster as glyph_mask, before its 128 cutoff."""
+    from PIL import Image, ImageDraw, ImageFont
+    size = glyph_size(sy)
+    font = ImageFont.truetype(aw_fonts.okdandan_path(), size)
+    top, bottom = aw_fonts.okdandan_line(size, LINE_CHARS)
+    image = Image.new('L', (3 * size, bottom - top), 0)
+    ImageDraw.Draw(image).text((size // 2, -top), char, font=font, fill=255)
+    ink = [(x, y) for y in range(image.height) for x in range(image.width)
+           if image.getpixel((x, y)) >= 128]
+    left, right = min(x for x, _ in ink), max(x for x, _ in ink) + 1
+    return image.crop((left, 0, right, image.height))
+
+
 def render(native, banner):
     name, _, _, _, _, _, text, band, owned, band_top, top, (sx, sy), ring = banner
     px = _decode(native)
@@ -126,6 +141,23 @@ def render(native, banner):
         if not (x0 + 1 <= x < x1 - 1 and y0 + 1 <= y < y1 - 1):
             raise AssertionError(f'{name} banner glyph clipped')
         px[y][x] = INK
+    if name == 'WIN':
+        # R9 live result step_052: BG bank 4, red 13 -> 12/11/10 -> white 15.
+        # Retain every solid face and ring pixel; soften only partial face
+        # coverage that currently falls on the red band/ring.
+        from sprite_text_aa import palette_blend_index
+        cursor = 0
+        for i, char in enumerate(text):
+            coverage = glyph_coverage(char, sy)
+            _, advance, _ = glyph_mask(char, sx, sy)
+            for gy in range(coverage.height):
+                for gx in range(coverage.width):
+                    x, y = left + cursor + gx, top + gy
+                    alpha = coverage.getpixel((gx, gy))
+                    if 0 < alpha < 128 and x0 <= x < x1 and y0 <= y < y1 and px[y][x] == band:
+                        px[y][x] = palette_blend_index(
+                            band, INK, alpha, (band, 12, 11, 10, INK), (PALETTE4,))
+            cursor += advance + (sx if i + 1 < len(text) else 0)
     return _encode(px)
 
 

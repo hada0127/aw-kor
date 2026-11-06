@@ -166,6 +166,10 @@ def load_active(code2syl, rom_path=None, map_path=None, manifest_path=None):
         if kind in RETIRED_TAGS:
             stats["retired_rows"] += 1
             continue
+        # The B84 relocated LZ77 glyph atlas is an integrity-map byte write,
+        # not a text payload. Its compressed bytes can decode as fake controls.
+        if kind == "b84-power-glyph-lz77-relocated":
+            continue
         if not enc_hex or "pointer" in str(kind) or str(kind).startswith("repoint:"):
             continue
         enc_end = addr + len(bytes.fromhex(enc_hex))

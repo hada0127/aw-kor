@@ -39,7 +39,8 @@ class MapResultBannerTests(unittest.TestCase):
                         self.assertEqual(px_new[y][x], px_old[y][x], (banner[0], x, y))
             ink = sum(row.count(m.INK) for row in px_new)
             self.assertGreater(ink, 150, banner[0])
-            self.assertTrue({v for row in px_new for v in row[x0:x1]} <= {0, banner[7], m.INK} | (
+            aa = {10, 11, 12} if banner[0] == 'WIN' else set()
+            self.assertTrue({v for row in px_new for v in row[x0:x1]} <= {0, banner[7], m.INK} | aa | (
                 {v for row in px_old for v in row[x1:]} if x1 < 128 else set()))
         # LOSE: shared fill tiles 141/142/143 (sheet tiles 45..47) untouched.
         lose = lz77_decompress(rom, 0xBFCF48)[0]

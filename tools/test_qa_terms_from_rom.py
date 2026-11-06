@@ -67,6 +67,8 @@ class ActiveOwnershipTests(unittest.TestCase):
         rom[self.SCRIPT_ROW:self.SCRIPT_ROW + len(inline)] = inline
         ui = ko('모프')
         rom[0x380:0x380 + len(ui)] = ui
+        compressed_glyphs = b'i \x10\xff'
+        rom[0x500:0x500 + len(compressed_glyphs)] = compressed_glyphs
         writes = [
             [0x100, len(old), len(old), old.hex(), None, '몹님', 0, 'import-csv'],
             [0x300, len(retired), len(retired), retired.hex(), None, '몹 사령관', 0, 'dialogue-spacing-final'],
@@ -76,6 +78,8 @@ class ActiveOwnershipTests(unittest.TestCase):
             [0x10, 4, 4, rom[0x10:0x14].hex(), None, None, None, 'dialogue-rewrite-pointer'],
             [self.SCRIPT_ROW, len(inline), len(inline), inline.hex(), None, '캣님 좋아', 0, 'import-csv'],
             [0x380, len(ui), len(ui), ui.hex(), None, '모프', 0, 'import-csv'],
+            [0x500, len(compressed_glyphs), len(compressed_glyphs),
+             compressed_glyphs.hex(), None, None, None, 'b84-power-glyph-lz77-relocated'],
         ]
         manifest = [{'msg': '0x000100', 'status': 'relocated', 'old_len': len(old) + 1,
                      'new_addr': '0x000200', 'new_len': len(new), 'ptr_off': '0x000010',
