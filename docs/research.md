@@ -3838,6 +3838,7 @@ A:START, or WIN!/LOSE art. Their exact original-screen status remains
   raw OBJ tiles `0xBE9A5C`/`0xBE989C`. The former Korean 7-row glyphs began
   in row 1, while the native letters occupy rows 2–6. The replacement uses
   rows 2–6; see `temp/claude_2026-10-07/fix3/tabs_asset_before_after.png`.
+  R18 (2026-11-09): `COST` is now white six-row text in rows 1..6 with a 1px black outline ring.
 - The Part 1 terrain popup port title is the `0A 09 港 0A 00 00 00`
   record at `0xD85AF4`. Its two spare bytes permit `0A 09 항구 0A 00`
   without moving the next record. The non-income fallback is the four-byte

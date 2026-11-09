@@ -3,7 +3,9 @@
 The same bank's SPEC / INFO / COST / COMMENT labels are already Korean
 (build_korean_full.patch_part2_info_screen_obj_labels: 정보 / 정보 / 비용 /
 설명, render_32x8_obj_label style: black box index 5 in rows 1..7, white
-index 1 Galmuri7 text).  Project policy (docs/success.md 2026-06-07: SPEC ->
+index 1 Galmuri7 text).  R18 (2026-11-09): COST (비용) instead uses white
+six-row Galmuri text in rows 1..6 with a 1px black outline ring, following
+the JP COST composition.  Project policy (docs/success.md 2026-06-07: SPEC ->
 정보, WEAPON -> 무기) translates these standalone English labels; only the
 English subtitles under Korean menu titles are kept on purpose
 (docs/reports/SPRITE_STYLE_REVISION_2026-09-07.md).  So the remaining
@@ -30,6 +32,7 @@ from functools import lru_cache
 from pathlib import Path
 
 from bdf import load_bdf, glyph_grid
+import galmuri6
 
 ROOT = Path(__file__).resolve().parent.parent
 BOX, INK = 5, 1
@@ -47,6 +50,12 @@ LABELS = (
     (0xBE9ADC, 8, '플레이어 랭크', 'left', 'PLAYER RANK'),
 )
 SPACE = 3
+# R18 (2026-11-09): on screen these headers sit over the window top border,
+# and seven-row text filling box rows 1..7 looked clipped at the top.  The
+# Japanese labels keep one black row above and below the text, so these use
+# six-row Galmuri cuts in rows 1..6 inside a box over all eight rows.
+# BATTLE INFO and PRODUCTION INFO share the INFO piece, so both change.
+SIX_ROW = {0xBE965C, 0xBE973C, 0xBE979C, 0xBE991C}
 
 
 @lru_cache(maxsize=1)
@@ -71,9 +80,13 @@ def _ink(text):
     return ink, cursor - 1
 
 
-def render(tiles, text, align):
+def render(tiles, text, align, six_row=False):
     width = tiles * 8
-    ink, text_width = _ink(text)
+    if six_row:
+        points, text_width = galmuri6.ink(text, space=SPACE)
+        ink, box_top, last_row = [(x, y + 1) for x, y in points], 0, 6
+    else:
+        (ink, text_width), box_top, last_row = _ink(text), 1, 7
     if align == 'right':
         x0 = width - 2 - text_width
         box0, box1 = x0 - 2, width
@@ -86,11 +99,11 @@ def render(tiles, text, align):
     if box0 < 0 or box1 > width:
         raise AssertionError(f'header label too wide: {text}')
     pixels = [[0] * width for _ in range(8)]
-    for y in range(1, 8):
+    for y in range(box_top, 8):
         for x in range(box0, box1):
             pixels[y][x] = BOX
     for x, y in ink:
-        if not (0 <= x0 + x < width and 1 <= y <= 7):
+        if not (0 <= x0 + x < width and 1 <= y <= last_row):
             raise AssertionError(f'header glyph clipped: {text}')
         pixels[y][x0 + x] = INK
     raw = bytearray(tiles * 32)
@@ -123,7 +136,7 @@ def _source(original, address, tiles):
 
 
 def expected_regions(original):
-    return tuple((address, render(tiles, text, align))
+    return tuple((address, render(tiles, text, align, address in SIX_ROW))
                  for address, tiles, text, align, _ in LABELS
                  if _source(original, address, tiles) is not None)
 

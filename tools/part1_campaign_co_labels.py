@@ -3,6 +3,7 @@ import hashlib
 import struct
 from pathlib import Path
 from bdf import load_bdf, glyph_grid
+import galmuri6
 
 ROOT = Path(__file__).resolve().parent.parent
 BANK = 0xBF2BCC
@@ -104,6 +105,30 @@ def render_label(text=TEXT, white=1, shadow=3, outline=5):
     return bytes(raw)
 
 
+# Japanese campaign labels keep column 0/31 clear and ink inside 2..29, with a
+# 1px outline row above and below; under the TEAM SETTING portrait the frame
+# line also covers row 7 (R18 capture).  So text gets six rows and 28 columns.
+CAMPAIGN_INK = (2, 30)
+
+
+def render_campaign_label(text, white=1, outline=5):
+    """Six-row Galmuri cut, white ink in rows 1..6, black 8-way outline."""
+    left, right = CAMPAIGN_INK
+    points, width = galmuri6.ink(text)
+    if width > right - left:
+        points, width = galmuri6.ink(text, narrow=True)
+    if width > right - left:
+        raise AssertionError(f'campaign CO name too wide: {text}')
+    x0 = left + (right - left - width) // 2
+    return galmuri6.tiles_4bpp(galmuri6.outlined(32, [(x + x0, y) for x, y in points], white, outline))
+
+
+def render(label_id, text, white, shadow, outline):
+    if label_id.startswith('campaign_'):
+        return render_campaign_label(text, white, outline)
+    return render_label(text, white, shadow, outline)
+
+
 def patch_campaign_name(rom, original):
     validate_source(original)
     for pointer in POINTERS:
@@ -111,8 +136,8 @@ def patch_campaign_name(rom, original):
             raise AssertionError('campaign CO live bank pointer changed')
     if bytes(rom[ACCESSOR[0]:ACCESSOR[0] + len(ACCESSOR[1])]) != ACCESSOR[1]:
         raise AssertionError('campaign CO live accessor changed')
-    for _, address, _, text, white, shadow, outline in LABELS:
-        rom[address:address + 128] = render_label(text, white, shadow, outline)
+    for label_id, address, _, text, white, shadow, outline in LABELS:
+        rom[address:address + 128] = render(label_id, text, white, shadow, outline)
     return len(LABELS)
 
 

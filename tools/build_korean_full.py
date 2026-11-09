@@ -6677,7 +6677,13 @@ def patch_part2_info_screen_obj_labels(rom):
     encode_32x8_label(0xBE945C, '정보')
     # Terrain information page labels ("INFO", "COST").
     rom[0xBE9A5C:0xBE9ADC] = render_32x8_obj_label(font, '정보', compact=True)
-    rom[0xBE989C:0xBE991C] = render_32x8_obj_label(font, '비용', compact=True)
+    # COST: Japanese white text with a 1px black ring in an 8px cell.  Seven-row
+    # text in a box looked clipped at the top (R18), so six-row Galmuri cuts
+    # sit in rows 1..6 with the ring around them, starting at column 0 as in JP.
+    import galmuri6
+    cost_ink, _ = galmuri6.ink('비용')
+    rom[0xBE989C:0xBE991C] = galmuri6.tiles_4bpp(
+        galmuri6.outlined(32, [(x + 1, y) for x, y in cost_ink]))
     # Terrain comment popup label ("COMMENT"), split as 32x8 + 16x8 OBJ.
     encode_32x8_label(0xBE9BDC, '설명')
     rom[0xBE9C5C:0xBE9C5C + 64] = bytes(64)

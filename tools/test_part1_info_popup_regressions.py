@@ -56,7 +56,7 @@ class Part1InfoPopupRegressions(unittest.TestCase):
 
     def test_tab_ink_stays_below_screen_edge(self):
         spec = pixels(lz77_decompress(self.rom, 0xBC7C00)[0][:128], 32)
-        for address in (0xBE9A5C, 0xBE989C):
+        for address in (0xBE9A5C,):
             tab = pixels(self.rom[address:address + 128], 32)
             self.assertIn(1, tab[1])
             self.assertIn(1, tab[7])
