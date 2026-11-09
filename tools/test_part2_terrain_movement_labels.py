@@ -13,10 +13,10 @@ class TerrainMovementTests(unittest.TestCase):
   cls.regions=p.capture_regions(cls.rom,cls.original)
  def test_reviewed_code_and_atlas_golden_and_source_literal_chain(self):
   self.assertEqual(hashlib.sha256(p.CODE).hexdigest(),'49b4df10e3f43a1d7f6dd8b608b65408585961a009d558e8dd569373827270b3')
-  self.assertEqual(hashlib.sha256(p.render(self.original)).hexdigest(),'f4c2969cc30d9b68168556c5ddbc05ba2872226d14702fa4e7f89a94d0c92fb5')
+  self.assertEqual(hashlib.sha256(p.render(self.original)).hexdigest(),'b96e38d5fc155a5a95f6f1781e4e1b22cddf528573c0800019d7451dbdb3aef8')
   self.assertEqual(struct.unpack_from('<I',self.original,0x31970c)[0],0x08814fc0)
   self.assertEqual(struct.unpack_from('<I',self.original,0x814fc0)[0],0x0201db40)
-  self.assertEqual(len(self.writes),8);self.assertEqual(self.stats['additional_oam'],0)
+  self.assertEqual(len(self.writes),6);self.assertEqual(self.stats['additional_oam'],0)
  def test_tracked_asm_assembles_to_reviewed_embedded_bytes(self):
   if not shutil.which('clang'):self.skipTest('clang unavailable; embedded byte and ASM SHA guards still run')
   with tempfile.TemporaryDirectory(dir=p.ROOT/'temp',prefix='terrain_asm_')as directory:
@@ -27,7 +27,7 @@ class TerrainMovementTests(unittest.TestCase):
    names_header=headers[names_index];names=raw[names_header[4]:names_header[4]+names_header[5]]
    sections={names[h[0]:].split(b'\0',1)[0]:raw[h[4]:h[4]+h[5]]for h in headers}
    self.assertEqual(sections[b'.text'],p.CODE);self.assertNotIn(b'.rel.text',sections);self.assertNotIn(b'.rela.text',sections)
- def test_only_eight_owned_regions_change_and_native_exit_is_untouched(self):
+ def test_only_six_owned_regions_change_and_native_exit_is_untouched(self):
   restored=bytearray(self.rom)
   for a,data in self.writes:restored[a:a+len(data)]=self.original[a:a+len(data)]
   self.assertEqual(restored,self.original)
@@ -43,20 +43,70 @@ class TerrainMovementTests(unittest.TestCase):
  def test_native_destinations_and_draw_clear_geometry(self):
   self.assertEqual(struct.unpack_from('<7I',p.CODE,p.SYMBOLS['obj_destinations']),p.obj_destinations(self.original))
   offsets=struct.unpack_from('<28H',p.CODE,p.SYMBOLS['cell_offsets']);self.assertEqual(offsets,p.CELL_OFFSETS)
-  coords=dict(self.writes)[0x83e081];costs=dict(self.writes)[0x83e06c]
-  for side in(0,128):
-   for subset in range(128):
-    for index in range(subset.bit_count()):
-     x=side+coords[index*2]+2;y=coords[index*2+1];off=(x+32)//8*2+y//8*64
-     self.assertIn(off,offsets[::2]);self.assertIn(off+64,offsets);self.assertEqual(x+40,side+costs[index*2]*8)
+  # JP layout: icon x and number cell are native; the label ends inside the
+  # 32px body right before the number, and every BG tail tile is blank.
+  self.assertNotIn(0x83e081,dict(self.writes));self.assertNotIn(0x83e06c,dict(self.writes))
+  coords=self.rom[0x83e081:0x83e08f];costs=self.rom[0x83e06c:0x83e07a]
+  self.assertEqual(coords,self.original[0x83e081:0x83e08f]);self.assertEqual(costs,self.original[0x83e06c:0x83e07a])
+  for index in range(7):
+   x=coords[index*2]+2;self.assertLessEqual(x+p.LABEL_RIGHT+1,costs[index*2]*8)
+  self.assertFalse(any(p.render(self.original)[1792:]))
  def test_generated_visible_icon_pixels_preserved(self):
   from part2_purchase_labels import pixels
+  from bdf import load_bdf
   atlas=p.render(self.original)
+  font=load_bdf(str(p.FONT))[0]
   for index in range(7):
    a=0x454494+index*256;old=pixels(self.original[a:a+256],16);new=pixels(atlas[index*256:(index+1)*256],16);mask=p.caption_mask(28+index)
+   reconstruction=p.icon_reconstruction(index)
+   _,edge=p.caption_pixels(font,p.LABELS[index])
    for y in range(16):
     for x in range(32):
-     if (x,y)not in mask and old[y][x]:self.assertEqual(new[y][x],old[y][x],(index,x,y))
+     if (x,y)not in mask and(x,y)not in edge:self.assertEqual(new[y][x],old[y][x],(index,x,y,'icon pixel outside the JP plate changed'))
+     elif (x,y)in mask and(x,y)not in edge:
+      # Inside the JP kana plate only the Korean label or the drawn icon art may remain.
+      self.assertEqual(new[y][x],reconstruction.get((x,y),0),(index,x,y,'Japanese caption pixel remained'))
+ def test_no_japanese_kana_ink_survives(self):
+  from part2_purchase_labels import pixels
+  from bdf import load_bdf
+  atlas=p.render(self.original);font=load_bdf(str(p.FONT))[0]
+  # Kana strokes are palette 1 inside the plate. Outside the Hangul footprint,
+  # only these drawn icon interiors (tyre hub, plane fuselage/wing) may be 1.
+  allowed={(1,14,9),(6,14,8),(6,14,9),(6,14,10),(6,15,9),(6,16,7),(6,17,7)}
+  kept=set()
+  for index in range(7):
+   a=0x454494+index*256;old=pixels(self.original[a:a+256],16);new=pixels(atlas[index*256:(index+1)*256],16)
+   _,edge=p.caption_pixels(font,p.LABELS[index]);mask=p.caption_mask(28+index)
+   # The plate mask spans every kana column: nothing right of x24 below row 6 survives unmasked.
+   self.assertFalse([(x,y)for y in range(7,16)for x in range(24,32)if (x,y)not in mask],index)
+   for x,y in mask-edge:
+    if old[y][x]==1 and new[y][x]==1:kept.add((index,x,y))
+   if index in(4,5,6):
+    # Ship/plane art never uses the plate's palette 4: any 4 left is kana.
+    self.assertFalse([(x,y)for y in range(16)for x in range(32)if new[y][x]==4 and(x,y)not in edge],index)
+  self.assertLessEqual(kept,allowed)
+  # The fragments reported beside the Hangul in earlier rounds are gone (or now under it).
+  for index,x,y in ((0,8,7),(0,7,8),(1,15,13),(1,13,10),(2,14,9),(2,12,9),(3,7,10),(3,7,13),(3,10,7),(6,14,11),(6,15,13)):
+   old=pixels(self.original[0x454494+index*256:0x454494+(index+1)*256],16);new=pixels(atlas[index*256:(index+1)*256],16)
+   self.assertIn((x,y),p.caption_mask(28+index))
+   if (x,y)not in p.caption_pixels(font,p.LABELS[index])[1]:self.assertNotEqual(new[y][x],old[y][x],(index,x,y))
+ def test_icon_art_reconstructs_hidden_icon_parts(self):
+  from part2_purchase_labels import pixels
+  atlas=p.render(self.original)
+  # The second tyre is the first one shifted by 10px (rows 7-12, x11-19).
+  from bdf import load_bdf
+  new=pixels(atlas[256:512],16);_,edge=p.caption_pixels(load_bdf(str(p.FONT))[0],p.LABELS[1])
+  for y in range(7,13):
+   for x in range(11,20):
+    if (x,y)not in edge:self.assertEqual(new[y][x],new[y][x-10],(x,y))
+  # The tank's top-run stripes continue through the former kana stroke.
+  tank=pixels(atlas[0:256],16);self.assertEqual(tank[6][1:19],[1,2,2]*6)
+  # The bazooka tube interior row and bottom outline are continuous.
+  baz=pixels(atlas[768:1024],16);self.assertEqual(baz[6][5:22],[2]*17);self.assertEqual(baz[7][5:15],[4]*10)
+  for index in range(7):
+   with self.subTest(index=index):
+    with patch.object(p,'ICON_ART',tuple({**art,0:((31,'1'),)}if i==index else art for i,art in enumerate(p.ICON_ART))):
+     with self.assertRaisesRegex(ValueError,'outside the caption plate'):p.render(self.original)
  def test_atomic_source_cave_and_native_mutation_rejection(self):
   for a in(0x454494,0x45eb74,0x3474f6,0x83e0b4,0x31970c,0x38b434,0x31bc38,0x83e0e8,p.CAVE,p.ATLAS,p.CAVE+p.CAPACITY-1):
    rom=bytearray(self.original);rom[a]^=1;before=bytes(rom)

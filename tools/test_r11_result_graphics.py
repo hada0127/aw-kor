@@ -80,8 +80,9 @@ class R11ApprovedArt(unittest.TestCase):
                 (0x5B00D8, 'af50323856b92610fda3a49bd846ca0c2da2dad6bb54e5aab9d8d78a6348e2e7')):
             self.assertEqual(hashlib.sha256(lz77_decompress(rom, off)[0]).hexdigest(), expected)
         for off, expected in (
-                (0xBFCBD8, 'e96d31c9bc6fad033e1d83bf089bee72f6a954b93c984fb49f3f0fcc1eb05c96'),
-                (0xBFCF48, 'ed1674c922aea727cac470b4a3d69ee886b1044d8924cae859318090e8199186')):
+                # R15a band AA + R17 Hada Sans DRAW/LOSE (see test_r15a_part1_result_graphics).
+                (0xBFCBD8, '1cf0c35722a73adff3d481173b7355806fc6df18abca32236e4a6ee29748e437'),
+                (0xBFCF48, 'ecf41073d7a36775b728d5608412bf4b81900fefe37c8ead96b8e403c65a8747')):
             self.assertEqual(hashlib.sha256(lz77_decompress(rom, off)[0]).hexdigest(), expected)
 
 

@@ -26,9 +26,12 @@ class CampaignClearBannerTests(unittest.TestCase):
 
     def test_patch_reads_korean_and_keeps_counts_and_delays(self):
         rom = bytearray(self.original)
-        self.assertEqual(m.patch(rom, self.original), 3)
-        sheet, used = lz77_decompress(rom, m.SOURCE)
-        self.assertLessEqual(used, m.CAPACITY)
+        self.assertEqual(m.patch(rom, self.original), 5)   # R17: relocated sheet + 2 pointers
+        for pointer in m.SOURCE_POINTERS:
+            self.assertEqual(struct.unpack_from('<I', rom, pointer)[0], m.RELOCATION + 0x08000000)
+        self.assertEqual(rom[m.SOURCE:m.FOLLOWING], self.original[m.SOURCE:m.FOLLOWING])   # retired
+        sheet, used = lz77_decompress(rom, m.RELOCATION)
+        self.assertLessEqual(used, m.RELOCATION_END - m.RELOCATION)
         native = lz77_decompress(self.original, m.SOURCE)[0]
         self.assertNotEqual(sheet[:m.CELL_BASE_TILE * 32], native[:m.CELL_BASE_TILE * 32])
         import part1_obj_header_labels as headers
@@ -65,7 +68,8 @@ class CampaignClearBannerTests(unittest.TestCase):
     def test_glyph_cells_use_native_palette_roles(self):
         for char in m.GLYPHS:
             values = {v for row in m.render_cell(char) for v in row}
-            self.assertTrue(values <= {0, 1, 2, 3, 4, 5, 6, 7, 8, 13, 14}, char)
+            # R15a: + 11, the JP B edge AA of the green rows.
+            self.assertTrue(values <= {0, 1, 2, 3, 4, 5, 6, 7, 8, 11, 13, 14}, char)
             self.assertIn(14, values)
 
     def test_conflicts_rejected(self):

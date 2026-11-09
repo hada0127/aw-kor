@@ -85,7 +85,9 @@ def check(rom, original):
     for label, off, cells, cw, ch, first, edges in TITLES:
         live = (struct.unpack_from('<I', rom, m19.POINTER)[0] - 0x08000000 if off == m19.SOURCE
                 else struct.unpack_from('<I', rom, m20.POINTER)[0] - 0x08000000 if off == m20.SOURCE
-                else fit.plate_address(rom, off) if off in fit.PLATE_LOADERS else off)
+                else fit.plate_address(rom, off) if off in fit.PLATE_LOADERS
+                else mt.stream_address(rom, off) if off in {b[0] for b in mt._all_blocks()}
+                else off)   # R17: relocated 작전룸 titles are read where the consumer reads
         dec = lz77_decompress(rom, live)
         if dec is None:
             issues.append(f'{label}: invalid LZ77 at {off:06X}')
@@ -135,6 +137,9 @@ def check(rom, original):
                 issues.append(str(exc))
                 continue
         else:
+            if off == 0xC43400:   # R17: campaign clear sheet relocated; follow its loader pointer
+                import part1_campaign_clear_banner as clear
+                off = struct.unpack_from('<I', rom, clear.SOURCE_POINTERS[0])[0] - 0x08000000
             data = lz77_decompress(rom, off)[0]
         for i in range(count):
             grid = aw_fonts.obj_canvas(data, 1, cw, ch, first + i * cw * ch)

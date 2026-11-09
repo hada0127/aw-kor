@@ -46,23 +46,56 @@ def _row_index(y):
     return value
 
 
+# Live OBJ bank 3 of the 決着 OBJs (R15a CHEAT settle capture, JP and
+# candidate frame 26160, OAM 32/33 palette 3): 1..4 orange -> 5 white ->
+# 6..9 lilac fill, 10..13 the JP edge AA steps, 14 brown outline.
+LIVE_BANK3 = ((230, 115, 82), (255, 131, 41), (255, 164, 98), (255, 197, 148), (255, 222, 205),
+              (255, 255, 255), (222, 230, 255), (189, 189, 255), (164, 164, 255), (139, 148, 255),
+              (230, 98, 8), (148, 16, 0), (106, 106, 172), (65, 65, 131), (90, 65, 41), (49, 32, 16))
+GLYPH_BOX = 28     # JP 決/着 ink fills the cell; ours keeps the outline off the border
+                   # (qa_obj_title_cells: per-glyph cells must not touch the cell edge)
+AA_MIN = 48        # partial coverage that becomes an AA edge pixel
+
+
+@lru_cache(maxsize=1)
+def _coverages():
+    """R15a: Hada Sans Black (JP 決着 is the same heavy squared gothic as 戰績,
+    2026-11-05 rule), largest size whose common 결판 line and widths fit
+    GLYPH_BOX.  Was OkDanDan through the campaign-clear glyph helper."""
+    from part1_record_screen import _hada_title_coverage
+    for size in range(48, 8, -1):
+        images = _hada_title_coverage(TEXT, size)
+        if all(im.width <= GLYPH_BOX and im.height <= GLYPH_BOX for im in images.values()):
+            return size, images
+    raise AssertionError('settle banner glyphs cannot fit')
+
+
 @lru_cache(maxsize=None)
 def render_cell(char):
-    from part1_campaign_clear_banner import glyph_mask
-    # OkDanDan-Bold glyph (2026-10-08 font rule). The 1px stroke thickening the
-    # thin Galmuri 2x glyph needed is dropped: OkDanDan is already bold.
-    mask, width, height = glyph_mask(char, TEXT)
-    left, top = (32 - width) // 2, (32 - height) // 2
-    body = {(x + left, y + top) for x, y in mask}
-    ring = {(x + dx, y + dy) for x, y in body for dx in (-1, 0, 1) for dy in (-1, 0, 1)} - body
+    """Gradient body (native row profile), palette-index AA on partially
+    covered edge pixels (nearest of fill/10..13/14 in the live bank) and the
+    1px outline 14 around both."""
+    from sprite_text_aa import palette_blend_index
+    image = _coverages()[1][char]
+    left, top = (32 - image.width) // 2, (32 - image.height) // 2
+    cov = {(x + left, y + top): image.getpixel((x, y))
+           for y in range(image.height) for x in range(image.width)}
+    body = {p for p, v in cov.items() if v >= 128}
+    near4 = lambda p: ((p[0] + 1, p[1]), (p[0] - 1, p[1]), (p[0], p[1] + 1), (p[0], p[1] - 1))
+    edge = {p for p, v in cov.items() if AA_MIN <= v < 128 and any(q in body for q in near4(p))}
+    ring = {(x + dx, y + dy) for x, y in body | edge for dx in (-1, 0, 1) for dy in (-1, 0, 1)} - body - edge
     pixels = [[0] * 32 for _ in range(32)]
-    for x, y in body | ring:
+    for x, y in body | edge | ring:
         if not (0 <= x < 32 and 0 <= y < 32):
             raise AssertionError(f'settle banner glyph clipped: {char}')
     for x, y in ring:
         pixels[y][x] = OUTLINE
     for x, y in body:
         pixels[y][x] = _row_index(y)
+    for x, y in edge:
+        fill = _row_index(y)
+        pixels[y][x] = palette_blend_index(OUTLINE, fill, cov[(x, y)], (fill, 10, 11, 12, 13, OUTLINE),
+                                           (LIVE_BANK3,))
     return tuple(tuple(row) for row in pixels)
 
 

@@ -14,9 +14,10 @@ split across the right edge of 0xC1100C and the left edge of 0xC12E40 tiles
 temp/claude_2026-10-06/fixA/work/c1100c_ext.png).  Extension tiles 16..31 are
 blank in the original and stay blank.
 
-Skipped (owned by other writers): 0xC10B34 / 0xC11D9C / 0xC1205C
-(build_korean_full.py), 0xC15A68 (part1_m19_title), 0xC15C5C
-(part1_m20_title) and the shared blank filler 0xC12F58.
+Skipped (owned by other writers): 0xC15A68 (part1_m19_title), 0xC15C5C
+(part1_m20_title) and the shared blank filler 0xC12F58.  Entries 0/7/8
+(0xC10B34 / 0xC11D9C / 0xC1205C, the 작전룸 training titles) moved here from
+build_korean_full.py in R15a (2026-11-09).
 
 Korean text = B-team mission names (data/bteam_baseline.json, 0xB81D80..0xB82018)
 verbatim when available; see TITLES for per-entry source notes.
@@ -47,7 +48,7 @@ RELOCATION_START, RELOCATION_END = 0xFD5000, 0xFD9000
 ROM_BASE = 0x08000000
 INK, SHADOW, OUTLINE = 10, 13, 15
 # Owned by other writers or shared filler; never touched by this module.
-SKIP = frozenset((0xC10B34, 0xC11D9C, 0xC1205C, 0xC15A68, 0xC15C5C, 0xC12F58))
+SKIP = frozenset((0xC15A68, 0xC15C5C, 0xC12F58))
 
 # Extension cell of mission 2 (table index 16): source, following, capacity, size, sha.
 EXTENSION = (0xC12E40, 0xC12F58, 279, 1024,
@@ -124,6 +125,18 @@ TITLES = (
      (34,), '호이프 해군 터보!', 'bteam 0x00B81EB8'),
     (0xC1689C, 0xC16B38, 668, '7b3b708efe4f3567a6b82bc2fc6ae1d2d47ea62cdc7d5a018cc2b3b68485d6b4',
      (61,), '최강의 라이벌!', 'bteam 0x00B81D80'),
+    # R15a (2026-11-09): the 작전룸 (training) titles 0/7/8.  Runtime proof: the
+    # loader 0x08B52CFE..0x08B52D20 reads TABLE[u16 0x02000028] when byte
+    # 0x030040D1 == 0 (작전룸); BP 0x08B52D06 gave r0 = 0 / 7 / 8 on the JP and
+    # candidate ROMs (temp/fix_20261104/gfx/R15a/titles).  Same OBJ bank 6 and
+    # renderer as every other entry, so the R4 Hada Sans style applies (these
+    # were OkDanDan sheets written by build_korean_full.patch_part2_*).
+    (0xC10B34, 0xC10DC0, 651, '5ea67092b7abbd77c786c0a562c95f3e50bad118e0914ed37efab6298020a594',
+     (0,), '전투 개시!', 'existing graphic text (0x00B82018 戦闘開始！)'),
+    (0xC11D9C, 0xC1205C, 701, 'e5cfac80eb4108ef0cb63711716f1cab5a0082255907445bd261b20f44262b90',
+     (7,), '하늘에서 오는 건…', 'R17: 작전룸 list text 0x00B81F80 (・・・ shown as one 「…」 cell)'),
+    (0xC1205C, 0xC122DC, 637, '2e52c0738bedd822e7b413c3d1075d2fdbff5d234a8672ccdbd5a491038a3b1b',
+     (8,), '하늘을 제압하라!', 'R17: 작전룸 list text 0x00B81F70 (dialogue_rewrites)'),
 )
 SPACES = (' ', '　')
 

@@ -11,7 +11,8 @@ from test_r11_result_graphics import pixels
 ROOT = Path(__file__).resolve().parents[1]
 ORIGINAL = ROOT / 'original/Game Boy Wars Advance 1+2 (Japan).gba'
 R13_GOLDEN = '6082c9ef07cde601435e958a71537542adb5db721de8c3581c078ee9bd9752ce'
-ROM_GOLDEN = '7e0bca529afd6e4ab2bab970906be689edfd88f9e40c360d5dec4cb14ed14c1d'
+# R17: the whole-ROM SHA pin (7e0bca52…, the R13 candidate) was removed; any later
+# candidate changes other assets.  The checks below bind only what R13 owns.
 HEAD_DAY_STREAM_GOLDEN = '11ff06daf01ebe607c6ef95d4a6addf5aa1696a5326447abe90b17b1d8758237'
 HEAD_DAY_SLOT_GOLDEN = '6f75ecaf3a4060675138cc3bc323724cccc6568af615d8bf884287d88ade9b9a'
 MARK = (
@@ -40,7 +41,6 @@ class R13ResultExclamation(unittest.TestCase):
             self.skipTest('AW_TEST_ROM required for fresh candidate checks')
         original = ORIGINAL.read_bytes()
         rom = Path(candidate).read_bytes()
-        self.assertEqual(hashlib.sha256(rom).hexdigest(), ROM_GOLDEN)
         self.assertEqual(rom[0x34A3D0:0x34A3D4], original[0x34A3D0:0x34A3D4])
         self.assertEqual(rom[0x34A3D0:0x34A3D4], bytes.fromhex('74ec4508'))
         self.assertEqual(rom[0xFDA000:0xFDB000], original[0xFDA000:0xFDB000])

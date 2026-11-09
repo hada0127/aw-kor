@@ -1,5 +1,10 @@
 """Part 1 map-result BG banners WIN! / DRAW / LOSE.. -> 승리! / 무승부 / 패배..
 
+R17 (2026-11-09): 무승부 / 패배.. are Hada Sans Black (largest size whose
+common line fits the 11*sy body and whose text fits the owned width); 승리!
+keeps the approved OkDanDan art.  The notes below describe the original
+OkDanDan design.
+
 Static RE (original ROM, 2026-10-06 fixH):
 - Loader 0x08B4C6xx..0x08B4C7E4 (BL 0x08B0FFE4 = LZ77 to VRAM):
     LOSE..  LZ77 0xBFCF48 (literal 0xB4C7C0) -> 0x06000D80 (BG char tile 108)
@@ -80,38 +85,90 @@ def _encode(px):
 
 
 LINE_CHARS = '승리!무승부패배..'   # every character the three banners draw
+# Palette-index AA ramps (band -> light band shades -> white ink) per banner.
+# R17: with the Hada Sans LOSE glyphs the full 9/8/7 ramp fits the native
+# 365-byte LZ77 slot (338 bytes; the R15a OkDanDan art needed 376 and kept 8 only).
+BAND_AA = {'WIN': (13, 12, 11, 10, INK), 'DRAW': (4, 3, 2, 1, INK), 'LOSE': (14, 9, 8, 7, INK)}
+
+
+# R17 (2026-11-09, user: 「무승부,패배도 하다산스로」): DRAW/LOSE use Hada Sans
+# Black, matching the heavy block strokes of the JP DRAW / LOSE.. letters; WIN
+# keeps its approved OkDanDan art byte for byte.
+FACES = {'WIN': 'okdandan', 'DRAW': 'hada', 'LOSE': 'hada'}
+HADA_CHARS = '무승부패배..'
 
 
 @lru_cache(maxsize=None)
-def glyph_size(sy):
-    """Largest OkDanDan size whose common line fits the old 11*sy-row body."""
-    return aw_fonts.okdandan_fit_line(11 * sy, LINE_CHARS)
+def _hada_line(size):
+    from PIL import Image, ImageDraw, ImageFont
+    font = ImageFont.truetype(aw_fonts.hadasans_black_path(), size)
+    draw = ImageDraw.Draw(Image.new('L', (1, 1)))
+    boxes = [draw.textbbox((0, 0), ch, font=font) for ch in HADA_CHARS]
+    return min(b[1] for b in boxes), max(b[3] for b in boxes)
 
 
 @lru_cache(maxsize=None)
-def glyph_mask(char, sx, sy):
-    """OkDanDan-Bold glyph for the old 11*sy-row body (2026-10-08 font rule; was
-    Galmuri11-Bold 12px scaled pixel-crisp by (sx, sy)). Natural aspect, largest
-    size whose common line fits, so '.' and short syllables keep one baseline.
+def glyph_size(sy, face='okdandan', fit=None):
+    """Largest size whose common line fits the old 11*sy-row body (OkDanDan,
+    unchanged), or for Hada Sans also the owned width `fit` = (text, sx, width)."""
+    if face == 'okdandan':
+        return aw_fonts.okdandan_fit_line(11 * sy, LINE_CHARS)
+    text, sx, width = fit
+    for size in range(64, 8, -1):
+        top, bottom = _hada_line(size)
+        if bottom - top > 11 * sy:
+            continue
+        total = sum(_hada_raster(ch, size).width for ch in text) + sx * (len(text) - 1)
+        if total <= width:
+            return size
+    raise AssertionError(f'result banner text cannot fit: {text}')
+
+
+@lru_cache(maxsize=None)
+def _hada_raster(char, size):
+    from PIL import Image, ImageDraw, ImageFont
+    font = ImageFont.truetype(aw_fonts.hadasans_black_path(), size)
+    top, bottom = _hada_line(size)
+    image = Image.new('L', (3 * size, bottom - top), 0)
+    ImageDraw.Draw(image).text((size // 2, -top), char, font=font, fill=255)
+    ink = [(x, y) for y in range(image.height) for x in range(image.width)
+           if image.getpixel((x, y)) >= 128]
+    left, right = min(x for x, _ in ink), max(x for x, _ in ink) + 1
+    return image.crop((left, 0, right, image.height))
+
+
+@lru_cache(maxsize=None)
+def glyph_mask(char, sx, sy, face='okdandan', size=None):
+    """Glyph for the old 11*sy-row body: OkDanDan-Bold (WIN, 2026-10-08 font
+    rule) or Hada Sans Black at `size` (DRAW/LOSE, R17). Natural aspect on one
+    common line, so '.' and short syllables keep one baseline.
     Returns (set, w, h)."""
-    mask, width, height = aw_fonts.okdandan_glyph(char, glyph_size(sy), chars=LINE_CHARS)
+    if face == 'okdandan':
+        mask, width, height = aw_fonts.okdandan_glyph(char, glyph_size(sy), chars=LINE_CHARS)
+    else:
+        image = _hada_raster(char, size)
+        mask = frozenset((x, y) for y in range(image.height) for x in range(image.width)
+                         if image.getpixel((x, y)) >= 128)
+        width, height = image.width, image.height
     if height > 11 * sy:
         raise AssertionError(f'banner glyph outside {11 * sy}px body: {char}')
     return mask, width, 11 * sy
 
 
-def text_mask(text, sx, sy):
+def text_mask(text, sx, sy, face='okdandan', size=None):
     pixels, cursor = set(), 0
     for i, char in enumerate(text):
-        mask, width, _ = glyph_mask(char, sx, sy)
+        mask, width, _ = glyph_mask(char, sx, sy, face, size)
         pixels |= {(x + cursor, y) for x, y in mask}
         cursor += width + (sx if i + 1 < len(text) else 0)
     return pixels, cursor
 
 
 @lru_cache(maxsize=None)
-def glyph_coverage(char, sy):
-    """The same OkDanDan raster as glyph_mask, before its 128 cutoff."""
+def glyph_coverage(char, sy, face='okdandan', size=None):
+    """The same raster as glyph_mask, before its 128 cutoff."""
+    if face != 'okdandan':
+        return _hada_raster(char, size)
     from PIL import Image, ImageDraw, ImageFont
     size = glyph_size(sy)
     font = ImageFont.truetype(aw_fonts.okdandan_path(), size)
@@ -124,11 +181,22 @@ def glyph_coverage(char, sy):
     return image.crop((left, 0, right, image.height))
 
 
+def banner_face(banner):
+    """(face, size) used to draw one banner."""
+    name, text, owned, (sx, sy), ring = banner[0], banner[6], banner[8], banner[11], banner[12]
+    face = FACES[name]
+    if face == 'okdandan':
+        return face, None
+    width = owned[2] - owned[0] - 2 - 2 * ring
+    return face, glyph_size(sy, face, (text, sx, width))
+
+
 def render(native, banner):
     name, _, _, _, _, _, text, band, owned, band_top, top, (sx, sy), ring = banner
     px = _decode(native)
     x0, y0, x1, y1 = owned
-    mask, width = text_mask(text, sx, sy)
+    face, fsize = banner_face(banner)
+    mask, width = text_mask(text, sx, sy, face, fsize)
     left = x0 + (x1 - x0 - width) // 2
     letters = {(x + left, y + top) for x, y in mask}
     near = set(letters)
@@ -141,22 +209,24 @@ def render(native, banner):
         if not (x0 + 1 <= x < x1 - 1 and y0 + 1 <= y < y1 - 1):
             raise AssertionError(f'{name} banner glyph clipped')
         px[y][x] = INK
-    if name == 'WIN':
+    if name in BAND_AA:
         # R9 live result step_052: BG bank 4, red 13 -> 12/11/10 -> white 15.
-        # Retain every solid face and ring pixel; soften only partial face
-        # coverage that currently falls on the red band/ring.
+        # R15a live DRAW/LOSE (CHEAT draw list, N1 route frame 26800/26700):
+        # same BG bank 4, green 4 -> 3/2/1 and blue 14 -> 9/8/7, the light band
+        # shades the JP letters use as AA.  Retain every solid face and ring
+        # pixel; soften only partial face coverage that falls on the band/ring.
         from sprite_text_aa import palette_blend_index
         cursor = 0
         for i, char in enumerate(text):
-            coverage = glyph_coverage(char, sy)
-            _, advance, _ = glyph_mask(char, sx, sy)
+            coverage = glyph_coverage(char, sy, face, fsize)
+            _, advance, _ = glyph_mask(char, sx, sy, face, fsize)
             for gy in range(coverage.height):
                 for gx in range(coverage.width):
                     x, y = left + cursor + gx, top + gy
                     alpha = coverage.getpixel((gx, gy))
                     if 0 < alpha < 128 and x0 <= x < x1 and y0 <= y < y1 and px[y][x] == band:
                         px[y][x] = palette_blend_index(
-                            band, INK, alpha, (band, 12, 11, 10, INK), (PALETTE4,))
+                            band, INK, alpha, BAND_AA[name], (PALETTE4,))
             cursor += advance + (sx if i + 1 < len(text) else 0)
     return _encode(px)
 

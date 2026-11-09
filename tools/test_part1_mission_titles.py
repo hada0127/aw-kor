@@ -22,7 +22,7 @@ class MissionTitleTests(unittest.TestCase):
     def test_table_coverage_and_skip_set(self):
         owned = {row[0] for row in m.TITLES} | {m.EXTENSION[0]}
         self.assertEqual(self.count, len(owned))
-        self.assertEqual(len(owned), 35)
+        self.assertEqual(len(owned), 38)   # R15a: + 작전룸 titles 0/7/8
         table = {struct.unpack_from('<I', self.original, m.TABLE + 4 * i)[0] - 0x08000000
                  for i in range(m.TABLE_ENTRIES)}
         # Every unique sheet in the 63-entry table is either owned here or skipped.
@@ -49,7 +49,7 @@ class MissionTitleTests(unittest.TestCase):
         outside = bytearray(self.rom)
         moved = m.relocations()
         # R4 Hada Sans sheets that exceed a native LZ77 slot are repointed.
-        self.assertEqual(len(moved), 22)
+        self.assertEqual(len(moved), 24)   # R17: + 작전룸 titles 7/8 (list wording)
         for source, following, capacity, size, _, indices in m._all_blocks():
             address = m.stream_address(self.rom, source)
             raw, used = lz77_decompress(self.rom, address)

@@ -12,7 +12,7 @@ class CaptureWordTests(unittest.TestCase):
         rom = bytearray(original)
         result = word.patch(rom, original)
         word.verify(rom, original)
-        self.assertEqual(result['font'], 'OkDanDan-Bold')
+        self.assertEqual(result['font'], 'HadaSans-ExtraBold')   # R15a
         self.assertEqual(rom[word.OFFSET - 1], before[0])
         self.assertEqual(rom[word.OFFSET + word.SIZE], before[-1])
         self.assertNotEqual(rom[word.OFFSET:word.OFFSET + word.SIZE],

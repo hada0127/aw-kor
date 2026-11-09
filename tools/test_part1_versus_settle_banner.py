@@ -17,7 +17,8 @@ class VersusSettleBannerTests(unittest.TestCase):
         self.assertEqual(len(data), m.SIZE)
         for cell in range(2):
             values = {(data[cell * 512 + i] >> s) & 15 for i in range(512) for s in (0, 4)}
-            self.assertTrue(values <= {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, m.OUTLINE})
+            # R15a: + 10..13, the JP edge AA indices of the live OBJ bank 3.
+            self.assertTrue(values <= {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, m.OUTLINE})
             self.assertIn(m.OUTLINE, values)
         outside = bytearray(rom)
         for address, raw in m.expected_regions(self.original):

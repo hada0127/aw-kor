@@ -57,7 +57,8 @@ def _pixels(raw, tiles):
 
 
 def _sheet(rom):
-    data = lz77_decompress(rom, banner.SOURCE)
+    # R17: the patched sheet lives where the loader pointer 0xB6D61C points.
+    data = lz77_decompress(rom, _u32(rom, banner.SOURCE_POINTERS[0]) - 0x08000000)
     return data[0] if isinstance(data, tuple) else data
 
 

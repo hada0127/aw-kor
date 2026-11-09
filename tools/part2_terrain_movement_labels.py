@@ -21,7 +21,7 @@ NATIVE_SPANS=((0x346D48,0x347710),(0x317E38,0x317E68),(0x318A5C,0x318A78),(0x31F
 CODE=bytes.fromhex('f0b5104b00f0e0f80f4c14a507262000296840220d4b00f0d7f88020400024180435013ef3d1200009497022074b00f0cbf8f0bc08bc9e46064908680278064b1847000009f7310800c8ff0835b43808006800067c72480801753408e03e0106e03f0106e0400106e0410106e0430106e0420106e0440106f0b581b004000d001600069f009700231a4fbc4600f09df81c3c062c25d8072029003143014220d12035ed086d00f608b601ad1938a00e210288954203d004300139f9d111e00e482d182888290040310988084309d164000a4824182c80013440352c80084b00f073f801b0f0bc08bc9e4603980130054b1847000021f8310840bb010240a30000013b3108c1723408f0b504000d0000f023f820002900044b00f056f8f0bc08bc9e4601bc00470000c1703408f0b50648064980229200064b00f046f8054b00f043f8f0bc08bc184740db0102006800067d1c3108f5763408f0b50da41c25094e094f208880190188c91b0d2901d8002101800234013df4d1044b00f025f8f0bc08bc184740bb010240a30000013b3108ca020a03d60216034a038a0356039603ca030a04d60316044a048a04ea022a03f60236036a03aa037603b603ea032a04f60336046a04aa0418476047')
 ASM_SHA='9eb4606dedfe97da62d187d4e292c4200bea85059c8f2494098a03361d2f03a1'
 SYMBOLS={'init_bridge': 0, 'draw_bridge': 120, 'frame_bridge': 264, 'late_exit_bridge': 300, 'clear_cells': 344, 'cell_offsets': 400, 'obj_destinations': 92}
-ATLAS_SHA='f4c2969cc30d9b68168556c5ddbc05ba2872226d14702fa4e7f89a94d0c92fb5'
+ATLAS_SHA='b96e38d5fc155a5a95f6f1781e4e1b22cddf528573c0800019d7451dbdb3aef8'
 
 _XREF_SITES=((0x3474f6,10),(0x3472b8,8),(0x34769a,10),(0x347700,8))
 SPANS=_XREF_SITES+((0x3470c0,2),(0x83e06c,14),(0x83e081,14),
@@ -166,12 +166,64 @@ def validate(o,c):
  _verify_xrefs(o,c)
 
 
-LEFTS=((7,6,7,7,7,7,7,8,9),(13,13,12,11,12,13,14,14,15),(12,11,11,11,11,11,10,11,12),(6,7,7,6,6,6,6,6,7),(12,12,12,12,14,11,11,11,12),(17,17,17,19,21,18,18,18,19),(13,13,13,13,13,13,14,14,15))
-EXTRA_TOP={31:20,32:25,33:24,34:25}
+# The Japanese caption is baked into each native 32x16 icon as a dark plate
+# (outline 4, kana ink 1, shading 3) overlapping the icon's lower right.
+# PLATE is that whole footprint, per row as half-open x spans, including kana
+# strokes that rise above the plate. Every PLATE pixel is discarded.
+def _spans(lefts,extra=()):
+ spans={y:((x,32),)for y,x in lefts.items()}
+ for y,a,b in extra:spans[y]=spans.get(y,())+((a,b),)
+ return spans
+PLATE=(_spans({7:6,8:6,9:6,10:7,11:7,12:7,13:7,14:8,15:9},((6,7,10),)),
+       _spans({7:13,8:13,9:12,10:12,11:12,12:13,13:14,14:14,15:15}),
+       _spans({7:12,8:12,9:12,10:12,11:12,12:12,13:11,14:11,15:12}),
+       _spans({7:5,8:7,9:7,10:6,11:6,12:6,13:6,14:6,15:7},((6,9,14),(6,17,22),(6,25,28))),
+       _spans({7:12,8:12,9:12,10:12,11:14,12:11,13:11,14:11,15:12},((6,26,29),)),
+       _spans({7:17,8:17,9:17,10:18,11:18,12:18,13:18,14:18,15:19},((6,25,28),)),
+       _spans({7:13,8:13,9:13,10:13,11:13,12:13,13:13,14:14,15:15},((6,26,29),)))
+# Hand-drawn icon art for the area the plate hid: (x,'hex') runs per row, '.'
+# is transparent. Runs may start left of the plate only where they repeat the
+# original pixels exactly (checked in render). Only each icon's own palette
+# indices are used: tread band below the tank top, the second tyre (= first
+# tyre shifted +10px), the boot heel shadow, the bazooka tube bottom/shadow,
+# both ship hull sterns, and the plane's rear fuselage and lower wing.
+ICON_ART=(
+ {6:((0,'412212212212212212243'),),7:((0,'413333'),(6,'4'*15),(21,'3')),
+  8:((0,'4233224'),(7,'2232232232232'),(20,'43')),9:((1,'4232244'),(8,'232232232232'),(20,'43')),
+  10:((2,'423334'),(8,'232232232232'),(20,'43')),11:((3,'42224'),(8,'232232232232'),(20,'43')),
+  12:((4,'4'*17),(21,'3')),13:((7,'3'*15),)},
+ {7:((11,'122222212'),(20,'43')),8:((11,'222222112'),(20,'43')),9:((11,'322111123'),(20,'43')),
+  10:((11,'432222234'),(20,'3')),11:((12,'4444444'),(19,'33')),12:((13,'3333333'),)},
+ {7:((12,'43'),),8:((12,'3'),),9:((12,'3'),),10:((12,'3'),),11:((12,'3'),),12:((12,'3'),),13:((11,'33'),)},
+ {6:((9,'22222'),(17,'22222')),7:((5,'4'*19),(24,'3')),8:((7,'3'*18),)},
+ {7:((12,'11111'),(17,'93')),8:((12,'8888'),(16,'93')),9:((12,'888'),(15,'93')),10:((12,'999'),(15,'3')),
+  11:((14,'33'),)},
+ {7:((17,'111'),(20,'93')),8:((17,'88'),(19,'93')),9:((17,'8'),(18,'93')),10:((18,'3'),),11:((18,'3'),)},
+ {7:((13,'11111DC3'),),8:((13,'1111DC3'),),9:((13,'111CC3'),),10:((13,'11C3'),),11:((13,'1C3'),),
+  12:((13,'C3'),),13:((13,'C3'),),14:((14,'3'),)})
 def caption_mask(native):
- mask={(x,y)for y,left in enumerate(LEFTS[native-28],7)for x in range(left,32)}
- if native in EXTRA_TOP:mask|={(x,6)for x in range(EXTRA_TOP[native],32)}
- return mask
+ return {(x,y)for y,spans in PLATE[native-28].items()for a,b in spans for x in range(a,b)}
+
+def icon_reconstruction(index):
+ result={}
+ for y,runs in ICON_ART[index].items():
+  for x0,run in runs:
+   for k,c in enumerate(run):
+    if c!='.':result[x0+k,y]=int(c,16)
+ return result
+
+# Like the JP caption plate, the Hangul (with its outline) ends at the icon
+# body's right edge x31 and overlaps the icon; the native 32px icon x and the
+# number position stay JP. The 8px BG tail tiles therefore remain blank.
+LABEL_RIGHT=31
+def caption_pixels(font,label):
+ glyphs=[glyph_grid(font[ord(c)])for c in label];width=sum(g[1]for g in glyphs)+len(glyphs)-1;cursor=LABEL_RIGHT-1-width;ink=set()
+ for bitmap,w,h,xoff,yoff in glyphs:
+  if xoff!=0:raise ValueError('reviewed Galmuri7 bearing changed')
+  ink|={(cursor+x,8+y+7-h-yoff)for y in range(h)for x in range(w)if bitmap[y][x]};cursor+=w+1
+ edge={(x+dx,y+dy)for x,y in ink for dx in(-1,0,1)for dy in(-1,0,1)}
+ if not ink or any(not(0<=x<40 and 0<=y<16)for x,y in edge):raise ValueError('movement caption clipped')
+ return ink,edge
 
 def render(original):
  if len(original)!=0x1000000 or hashlib.sha256(original).hexdigest()!=ORIGINAL_SHA:raise ValueError('wrong immutable original')
@@ -182,16 +234,16 @@ def render(original):
   old=[[original[a+((y//8)*4+x//8)*32+(y%8)*4+(x%8)//2]>>(4*(x%2))&15 for x in range(32)]for y in range(16)]
   new=[row+[0]*8 for row in old];mask=caption_mask(28+i)
   for x,y in mask:new[y][x]=0
-  glyphs=[glyph_grid(font[ord(c)])for c in label];width=sum(g[1]for g in glyphs)+len(glyphs)-1;cursor=39-width;ink=set()
-  for bitmap,w,h,xoff,yoff in glyphs:
-   if xoff!=0:raise ValueError('reviewed Galmuri7 bearing changed')
-   ink|={(cursor+x,8+y+7-h-yoff)for y in range(h)for x in range(w)if bitmap[y][x]};cursor+=w+1
-  edge={(x+dx,y+dy)for x,y in ink for dx in(-1,0,1)for dy in(-1,0,1)}
-  if not ink or any(not(0<=x<40 and 0<=y<16)for x,y in edge):raise ValueError('movement caption clipped')
-  if any(x<32 and(x,y)not in mask and old[y][x]for x,y in edge):raise ValueError('movement caption overlaps protected icon')
+  reconstruction=icon_reconstruction(i)
+  palette={old[y][x]for y in range(16)for x in range(32)if(x,y)not in mask}
+  if any((x,y)not in mask and old[y][x]!=v for (x,y),v in reconstruction.items()):raise ValueError('icon art changes pixels outside the caption plate')
+  if not set(reconstruction.values())<=palette-{0}:raise ValueError('icon art uses a palette index the icon does not')
+  for (x,y),value in reconstruction.items():new[y][x]=value
+  ink,edge=caption_pixels(font,label)
   for x,y in edge:new[y][x]=4
   for x,y in ink:new[y][x]=1
-  if any(new[y][x]!=old[y][x]for y in range(16)for x in range(32)if(x,y)not in mask and old[y][x]):raise ValueError('protected icon changed')
+  if any(new[y][x]!=old[y][x]for y in range(16)for x in range(32)if(x,y)not in mask and(x,y)not in edge):raise ValueError('protected icon changed')
+  if any(new[y][x]for x,y in mask if (x,y)not in reconstruction and (x,y)not in edge):raise ValueError('Japanese caption pixels survived')
   def pack(x0,width):
    return bytes(new[ty*8+y][x0+tx*8+x]|new[ty*8+y][x0+tx*8+x+1]<<4 for ty in range(2)for tx in range(width//8)for y in range(8)for x in range(0,8,2))
   blobs.append((pack(0,32),pack(32,8)))
@@ -207,11 +259,8 @@ def expected_writes(original):
   payload=(b'\xc0\x46'if a%4 else b'')+b'\x00\x4b\x18\x47'+struct.pack('<I',0x08000000+CAVE+SYMBOLS[name]+1)
   if len(payload)!=n:raise ValueError('invalid trampoline extent')
   writes.append((a,payload))
- coords=bytearray(original[0x83e081:0x83e08f]);costs=bytearray(original[0x83e06c:0x83e07a])
- if coords!=bytes([6,88,62,88,6,104,62,104,6,120,62,120,6,136]) or costs!=bytes([5,11,12,11,5,13,12,13,5,15,12,15,5,17]):raise ValueError('terrain coordinate table changed')
- for i in(2,6,10):coords[i]=54
- for i in(0,4,8,12):costs[i]=6
- writes.extend(((0x83e081,bytes(coords)),(0x83e06c,bytes(costs))))
+ # Icon/number coordinates stay native (JP layout); NATIVE_SPANS guards them.
+ if original[0x83e081:0x83e08f]!=bytes([6,88,62,88,6,104,62,104,6,120,62,120,6,136]) or original[0x83e06c:0x83e07a]!=bytes([5,11,12,11,5,13,12,13,5,15,12,15,5,17]):raise ValueError('terrain coordinate table changed')
  writes.sort()
  if len(CODE)>ATLAS-CAVE or ATLAS+2240>CAVE+CAPACITY:raise ValueError('private cave capacity exceeded')
  if any(a+len(x)>z for (a,x),(z,y)in zip(writes,writes[1:])):raise ValueError('movement writes overlap')

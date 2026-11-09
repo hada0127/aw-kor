@@ -43,7 +43,8 @@ class RecordScreenTests(unittest.TestCase):
         sheet = rom[record.SHEET:record.SHEET + record.TILES * 32]
         values = collections.Counter(record._get(sheet, t, x, y) for t in range(64, 96)
                                      for y in range(8) for x in range(8))
-        self.assertTrue(set(values) <= {0, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9})
+        # R15a: + 10..13, the JP edge AA indices of the live BG bank 7.
+        self.assertTrue(set(values) <= {0, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13})
         self.assertGreater(values[14], 100)
 
     def test_small_glyphs_come_from_the_syllable_blob(self):

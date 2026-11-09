@@ -48,6 +48,9 @@ SOURCE = 0xC43400
 SOURCE_POINTERS = (0xB6D61C, 0xB75EF4)
 CAPACITY = 1761                  # original consumed; 0xC43AE1..0xC43AE3 padding kept
 FOLLOWING = 0xC43AE4
+# Proven empty (0 in the original and in the R15a candidate, unreferenced),
+# after the M19/M20 relocation limit 0xFDB800 (no ROM word points into it).
+RELOCATION, RELOCATION_END = 0xFDD000, 0xFDD800
 SIZE = 6656
 SOURCE_SHA256 = '6df0a58aace11cc9dfbc731568fc5eac20548ccfea740086e9682a72c79ac92e'
 CELL_BASE_TILE = 32              # first 32x32 cell inside the sheet
@@ -79,25 +82,93 @@ def _row_index(y):
     return min(8, 2 + (y - GRADIENT_START) // 2)
 
 
-BODY_ROWS = 24    # the old 12px x 2 Galmuri body box
+# JP キ/ク body rows are 4..28 inside the 1px outline; ours start at the same row 4.
+# R17 (user: 「캠페인 클리어는 사이즈만 조금만 더 크게」): 26 px Hada Sans Black
+# (25-row line = the JP body rows, 24 px widest), was 24 px / 23 rows in R15a.
+# That sheet no longer fits the native 1761-byte slot, so it is relocated to
+# RELOCATION (both loader pointers repointed, old slot retired unchanged).
+BODY_ROWS = 25
+MAX_WIDTH = 26
+AA_GREEN_ONLY = True
+
+
+def _font_path():
+    """R15a (2026-11-09): the JP キャンペーンクリア! cells are blocky squared
+    gothic (4px stems, clipped 1px corners), so per the 2026-11-05 rule the
+    Korean cells use Hada Sans Black at the JP cell size (was OkDanDan 22px,
+    whose thin strokes the 1px outline filled in on the live screen)."""
+    return aw_fonts.hadasans_black_path()
+
+
+@lru_cache(maxsize=None)
+def _line(size, chars=GLYPHS):
+    from PIL import Image, ImageDraw, ImageFont
+    font = ImageFont.truetype(_font_path(), size)
+    draw = ImageDraw.Draw(Image.new('L', (1, 1)))
+    boxes = [draw.textbbox((0, 0), ch, font=font) for ch in chars]
+    return min(b[1] for b in boxes), max(b[3] for b in boxes), max(b[2] - b[0] for b in boxes)
+
+
+@lru_cache(maxsize=None)
+def glyph_size(chars=GLYPHS):
+    """Largest Hada Sans Black size whose common line fits BODY_ROWS and whose
+    widest glyph fits MAX_WIDTH."""
+    for size in range(40, 8, -1):
+        top, bottom, width = _line(size, chars)
+        if bottom - top <= BODY_ROWS and width <= MAX_WIDTH:
+            return size
+    raise AssertionError('campaign clear glyphs cannot fit the native cell')
+
+
+@lru_cache(maxsize=None)
+def glyph_coverage(char, chars=GLYPHS):
+    """8-bit coverage rows of one glyph on the common line, x-cropped to ink."""
+    from PIL import Image, ImageDraw, ImageFont
+    size = glyph_size(chars)
+    top, bottom, _ = _line(size, chars)
+    font = ImageFont.truetype(_font_path(), size)
+    image = Image.new('L', (3 * size, bottom - top), 0)
+    ImageDraw.Draw(image).text((size // 2, -top), char, font=font, fill=255)
+    box = image.point(lambda v: 255 if v >= 128 else 0).getbbox()
+    if box is None:
+        raise AssertionError(f'campaign clear glyph missing: {char}')
+    image = image.crop((box[0], 0, box[2], image.height))
+    return tuple(tuple(image.getpixel((x, y)) for x in range(image.width)) for y in range(image.height))
 
 
 @lru_cache(maxsize=None)
 def glyph_mask(char, chars=GLYPHS):
-    """OkDanDan-Bold glyph on the common line of `chars` (2026-10-08 font rule;
-    was Galmuri11-Bold 12px scaled 2x): the largest size whose line over the
-    drawn characters fits BODY_ROWS. Returns (ink set, width, line height)."""
-    size = aw_fonts.okdandan_fit_line(BODY_ROWS, chars)
-    return aw_fonts.okdandan_glyph(char, size, chars=chars)
+    """(ink set, width, line height) of the >=128 coverage core."""
+    cov = glyph_coverage(char, chars)
+    ink = frozenset((x, y) for y, row in enumerate(cov) for x, v in enumerate(row) if v >= 128)
+    return ink, len(cov[0]), len(cov)
+
+
+LIVE_PALETTE_ADDRESS = 0xBFC250   # OBJ bank 0 of the clear screen (R15a PRAM match)
+
+
+@lru_cache(maxsize=1)
+def _palettes():
+    """Live OBJ bank 0 of the normal clear screen: the R15a N1 capture PRAM
+    (JP and candidate, frame 40600) equals ROM 0xBFC252.. (index 0 differs).
+    The hard-clear bank was not captured; it uses the same index roles."""
+    rom = (ROOT / 'original/Game Boy Wars Advance 1+2 (Japan).gba').read_bytes()
+    return (tuple(rom_palette(rom, LIVE_PALETTE_ADDRESS)),)
 
 
 @lru_cache(maxsize=None)
 def render_cell(char):
-    """32x32 cell pixels (row-major list of lists) in the native banner style."""
+    """32x32 cell pixels (row-major list of lists) in the native banner style:
+    interior 1 above row 15, gradient 2..8 below, 1px outline 14 (13 at
+    diagonal-only corners), outer ring 1.  Palette-index AA like the JP B/D
+    pixels: partially covered body edge pixels take the nearest existing index
+    between the fill and the outline (11 in the green rows, 13 in the white)."""
+    from sprite_text_aa import palette_blend_index
+    cov = glyph_coverage(char)
     mask, width, height = glyph_mask(char)
-    if width > 28 or height > 26:
+    if width > 28 or height > BODY_ROWS:
         raise AssertionError(f'campaign clear glyph too large: {char}')
-    left, top = (32 - width) // 2, 4 + (24 - height) // 2
+    left, top = (32 - width) // 2, 4 + (BODY_ROWS - height) // 2
     body = {(x + left, y + top) for x, y in mask}
     near4 = lambda p: [(p[0] + dx, p[1] + dy) for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))]
     near8 = lambda p: [(p[0] + dx, p[1] + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1) if dx or dy]
@@ -112,7 +183,14 @@ def render_cell(char):
     for x, y in ring:
         pixels[y][x] = OUTLINE if any(q in body for q in near4((x, y))) else OUTLINE_AA
     for x, y in body:
-        pixels[y][x] = _row_index(y)
+        fill = _row_index(y)
+        alpha = cov[y - top][x - left]
+        if AA_GREEN_ONLY and fill == INTERIOR:
+            pass
+        elif alpha < 192 and any(q in ring for q in near4((x, y))):
+            aa = (fill, 11) if fill != INTERIOR else (fill, OUTLINE_AA)
+            fill = palette_blend_index(OUTLINE, fill, alpha, aa, _palettes())
+        pixels[y][x] = fill
     return tuple(tuple(row) for row in pixels)
 
 
@@ -190,18 +268,35 @@ def _stream(sheet_bytes):
     return lz77_compress_optimal(sheet_bytes, vram_safe=True)
 
 
-def expected_regions(original):
+def _padded_stream(original):
     stream = _stream(sheet(original))
-    if len(stream) > CAPACITY:
-        raise AssertionError(f'campaign clear sheet overflow: {len(stream)} > {CAPACITY}')
-    return ((SOURCE, stream + bytes(CAPACITY - len(stream))),
+    if len(stream) > RELOCATION_END - RELOCATION:
+        raise AssertionError(f'campaign clear sheet overflow: {len(stream)} > {RELOCATION_END - RELOCATION}')
+    return stream + bytes(-len(stream) % 4)
+
+
+def expected_regions(original):
+    pointer = struct.pack('<I', RELOCATION + ROM_BASE)
+    return ((RELOCATION, _padded_stream(original)),
             (NORMAL_TABLE, table(original, NORMAL_TABLE, NORMAL_ENTRIES, NORMAL_LAYOUT)),
-            (HARD_TABLE, table(original, HARD_TABLE, HARD_ENTRIES, HARD_LAYOUT)))
+            (HARD_TABLE, table(original, HARD_TABLE, HARD_ENTRIES, HARD_LAYOUT))) + tuple(
+        (p, pointer) for p in SOURCE_POINTERS)
 
 
 def _fixed(original):
-    return tuple((p, bytes(original[p:p + 4])) for p in SOURCE_POINTERS + (NORMAL_POOL, HARD_POOL)) + (
-        (SOURCE + CAPACITY, bytes(original[SOURCE + CAPACITY:FOLLOWING])),)
+    return tuple((p, bytes(original[p:p + 4])) for p in (NORMAL_POOL, HARD_POOL)) + (
+        (SOURCE, bytes(original[SOURCE:FOLLOWING])),)   # retired native slot
+
+
+def _relocation_space_free(rom, original):
+    span = slice(RELOCATION, RELOCATION_END)
+    stream = _padded_stream(original)
+    done = bytes(rom[span]) == stream + bytes(RELOCATION_END - RELOCATION - len(stream))
+    if any(original[span]) or (any(rom[span]) and not done):
+        raise AssertionError('campaign clear relocation area occupied')
+    low, high = RELOCATION + ROM_BASE, RELOCATION_END + ROM_BASE
+    if any(low <= word < high for word in memoryview(bytes(original)).cast('I')):
+        raise AssertionError('campaign clear relocation area referenced')
 
 
 def patch(rom, original):
@@ -213,9 +308,10 @@ def patch(rom, original):
         current = bytes(rom[address:address + len(new)])
         if current not in (bytes(original[address:address + len(new)]), new):
             raise AssertionError(f'campaign clear {address:06X} already modified by another writer')
+    _relocation_space_free(rom, original)
     for address, new in regions:
         rom[address:address + len(new)] = new
-    decoded = lz77_decompress(rom, SOURCE)
+    decoded = lz77_decompress(rom, RELOCATION)
     if decoded is None or decoded[0] != sheet(original):
         raise AssertionError('campaign clear sheet round trip failed')
     return len(regions)
@@ -227,16 +323,20 @@ def capture(rom, original):
     for address, raw in _fixed(original):
         if bytes(rom[address:address + len(raw)]) != raw:
             raise AssertionError(f'campaign clear final pointer/padding changed {address:06X}')
-    decoded = lz77_decompress(rom, SOURCE)
-    if decoded is None or len(decoded[0]) != SIZE or decoded[1] > CAPACITY:
+    for pointer in SOURCE_POINTERS:
+        if struct.unpack_from('<I', rom, pointer)[0] != RELOCATION + ROM_BASE:
+            raise AssertionError(f'campaign clear final pointer changed {pointer:06X}')
+    decoded = lz77_decompress(rom, RELOCATION)
+    if decoded is None or len(decoded[0]) != SIZE or decoded[1] > RELOCATION_END - RELOCATION:
         raise AssertionError('campaign clear final sheet invalid')
-    verify_vram_stream(bytes(rom[SOURCE:SOURCE + CAPACITY]), SIZE, 'campaign clear sheet')
+    verify_vram_stream(bytes(rom[RELOCATION:RELOCATION + decoded[1]]), SIZE, 'campaign clear sheet')
     return tuple((address, bytes(rom[address:address + len(new)]))
                  for address, new in expected_regions(original)) + _fixed(original)
 
 
 def expected_region_addresses():
-    return (SOURCE, NORMAL_TABLE, HARD_TABLE) + SOURCE_POINTERS + (NORMAL_POOL, HARD_POOL, SOURCE + CAPACITY)
+    return ((RELOCATION, NORMAL_TABLE, HARD_TABLE) + SOURCE_POINTERS
+            + (NORMAL_POOL, HARD_POOL, SOURCE))
 
 
 def verify(rom, regions):
@@ -248,7 +348,7 @@ def verify(rom, regions):
 
 
 def generated_matches(rom, original):
-    decoded = lz77_decompress(rom, SOURCE)
+    decoded = lz77_decompress(rom, RELOCATION)
     return (decoded is not None and decoded[0] == sheet(original)
             and all(bytes(rom[a:a + len(n)]) == n for a, n in expected_regions(original)[1:]))
 

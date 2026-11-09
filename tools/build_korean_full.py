@@ -8364,53 +8364,15 @@ def patch_part2_action_menu_icon_labels(rom):
 
 
 def patch_part2_mission_start_obj(rom):
-    """Replace the Part 2 battle-start OBJ label sheet with Korean text."""
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from lz77_compress import lz77_compress_optimal
-    from lz77_scan import lz77_decompress
+    """R15a (2026-11-09): retired writer, kept as a no-op for the stats key.
 
-    off = 0xC10B34
-    dec = lz77_decompress(rom, off)
-    if dec is None:
-        raise AssertionError(f'invalid mission-start LZ77 block at 0x{off:X}')
-    tile_data, consumed = dec
-    width, height = 128, 32
-    pixels = [[0] * width for _ in range(height)]
-
-    # The original block packs several Japanese labels. On the battle-start
-    # screen the unused labels can bleed in around the main banner, so clear the
-    # sheet and redraw only the active battle-start text.
-    banner_text = '전투 개시!'
-    # Large banner: OkDanDan (2026-10-08 font rule; was Galmuri11-Condensed x2).
-    # Same ink 10 + drop shadow 14 as the Galmuri version, 1px shadow at +1,+1.
-    aw_fonts.draw_okdandan(pixels, banner_text, (2, 3, 126, 29), 26, ink=10, shadow=14)
-    # gfx T5: same OBJ6 body-corner AA (index 11) as the mission titles.
-    from part1_m19_title import soften_mission_body
-    soften_mission_body(pixels)
-    # Native 戦闘開始 art crosses x=64 (19 rows): cells drawn edge to edge.
-    aw_fonts.check_cells(pixels, (64,), 'Part 2 battle start banner',
-                         native=aw_fonts.obj_canvas(tile_data, 2, 8, 4))
-
-    out = bytearray(len(tile_data))
-    # The banner is displayed as two 64x32 OBJs: tile 0x00 for the left half
-    # and tile 0x20 for the right half. Pack the 128x32 canvas into that layout.
-    for ty in range(4):
-        for tx in range(16):
-            tile_idx = ty * 8 + tx if tx < 8 else 0x20 + ty * 8 + (tx - 8)
-            for row in range(8):
-                for col in range(8):
-                    value = pixels[ty * 8 + row][tx * 8 + col] & 0x0F
-                    bi = tile_idx * 32 + row * 4 + col // 2
-                    if col & 1:
-                        out[bi] |= value << 4
-                    else:
-                        out[bi] |= value
-
-    comp = lz77_compress_optimal(bytes(out), vram_safe=True)
-    if len(comp) > consumed:
-        raise AssertionError(f'mission-start LZ77 overflow: {len(comp)} > {consumed}')
-    rom[off:off + consumed] = comp + bytes(consumed - len(comp))
-    return 1
+    0xC10B34 (전투 개시!) is entry 0 of the Part 1 mission-title table 0xE12BF4,
+    read by the 작전룸 (training) branch of the loader 0x08B52CFE (runtime BP
+    0x08B52D06 r0 = 0 on the JP and candidate ROMs).  It is not a Part 2
+    asset; part1_mission_titles.py now owns and redraws it in the shared R4
+    mission-title style.
+    """
+    return 0
 
 
 def patch_part2_operation_prompt_labels(rom):
@@ -9309,170 +9271,27 @@ def patch_part2_result_congratulations_obj(rom):
 
 
 def patch_part2_air_mission_title_obj(rom):
-    """Redraw the Part 2 "Sky" tutorial mission title OBJ sheet in Korean."""
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from PIL import Image, ImageDraw, ImageFont
-    from lz77_compress import lz77_compress_optimal
-    from lz77_scan import lz77_decompress
+    """R15a (2026-11-09): retired writer, kept as a no-op for the stats key.
 
-    off = 0xC11D9C
-    dec = lz77_decompress(bytes(rom), off)
-    if dec is None:
-        raise AssertionError(f'invalid Part 2 air mission title LZ77 block at 0x{off:X}')
-    data, consumed = dec
-    if len(data) != 64 * 32:
-        raise AssertionError(f'unexpected Part 2 air mission title size at 0x{off:X}: {len(data)}')
-
-    font_path = require_font(OKDANDAN_FONT, 'OkDanDan')
-
-    canvas = Image.new('P', (128, 32), 0)
-    text = '하늘의 적'
-    # Sized like the other mission-start titles of this consumer (native ink is
-    # ~21 rows); the old 18 px cap left it at the 16 px small-text line.
-    for size in range(22, 8, -1):
-        font = ImageFont.truetype(font_path, size)
-        probe = ImageDraw.Draw(Image.new('L', (1, 1), 0))
-        bbox = probe.textbbox((0, 0), text, font=font, stroke_width=1)
-        if bbox[2] - bbox[0] <= 124 and bbox[3] - bbox[1] <= 28:
-            break
-    if size <= aw_fonts.GALMURI_MAX_SIZE:
-        raise AssertionError('Part 2 air mission title fell to small-text size')
-    tw = bbox[2] - bbox[0]
-    th = bbox[3] - bbox[1]
-    x = (128 - tw) // 2 - bbox[0]
-    y = (32 - th) // 2 - bbox[1]
-
-    stroke_mask = Image.new('L', (128, 32), 0)
-    fill_mask = Image.new('L', (128, 32), 0)
-    ImageDraw.Draw(stroke_mask).text((x, y), text, font=font, fill=255, stroke_width=1, stroke_fill=255)
-    ImageDraw.Draw(fill_mask).text((x, y), text, font=font, fill=255)
-    dst = canvas.load()
-    stroke_px = stroke_mask.load()
-    fill_px = fill_mask.load()
-    from part1_m19_title import MISSION_OBJ6_RGB
-    from sprite_text_aa import palette_blend_index
-    for yy in range(32):
-        for xx in range(128):
-            if stroke_px[xx, yy]:
-                dst[xx, yy] = 15
-            if fill_px[xx, yy] >= 128:
-                dst[xx, yy] = 10
-            elif fill_px[xx, yy]:
-                # gfx T5: partial face coverage over the 15 outline takes the
-                # mission-start OBJ6 grey steps 13/12/11 (same occupied mask).
-                dst[xx, yy] = palette_blend_index(15, 10, fill_px[xx, yy], (15, 13, 12, 11),
-                                                  (MISSION_OBJ6_RGB,))
-
-    grid = [[canvas.getpixel((xx, yy)) for xx in range(128)] for yy in range(32)]
-    aw_fonts.check_cells(grid, (64,), 'Part 2 air mission title', native=aw_fonts.obj_canvas(data, 2, 8, 4))
-    out = bytearray(len(data))
-    px = canvas.load()
-    for sprite in range(2):
-        for ty in range(4):
-            for tx in range(8):
-                tile_idx = sprite * 32 + ty * 8 + tx
-                sx = sprite * 64 + tx * 8
-                sy = ty * 8
-                base = tile_idx * 32
-                for row in range(8):
-                    for col in range(8):
-                        value = px[sx + col, sy + row] & 0x0F
-                        bi = base + row * 4 + col // 2
-                        if col & 1:
-                            out[bi] |= value << 4
-                        else:
-                            out[bi] |= value
-
-    comp = lz77_compress_optimal(bytes(out), vram_safe=True)
-    if len(comp) > consumed:
-        raise AssertionError(f'Part 2 air mission title LZ77 overflow: {len(comp)} > {consumed}')
-    rom[off:off + consumed] = comp + bytes(consumed - len(comp))
-    return 1
+    0xC11D9C (하늘의 적) is entry 7 of the Part 1 mission-title table 0xE12BF4,
+    read by the 작전룸 (training) branch of the loader 0x08B52CFE (runtime BP
+    0x08B52D06 r0 = 7 on the JP and candidate ROMs).  It is not a Part 2
+    asset; part1_mission_titles.py now owns and redraws it in the shared R4
+    mission-title style.
+    """
+    return 0
 
 
 def patch_part2_air_supremacy_title_obj(rom):
-    """Redraw the Part 2 "Rule the sky" tutorial mission title OBJ sheet."""
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from PIL import Image, ImageDraw, ImageFont
-    from lz77_compress import lz77_compress_optimal
-    from lz77_scan import lz77_decompress
+    """R15a (2026-11-09): retired writer, kept as a no-op for the stats key.
 
-    off = 0xC1205C
-    dec = lz77_decompress(bytes(rom), off)
-    if dec is None:
-        raise AssertionError(f'invalid Part 2 air supremacy title LZ77 block at 0x{off:X}')
-    data, consumed = dec
-    if len(data) != 64 * 32:
-        raise AssertionError(f'unexpected Part 2 air supremacy title size at 0x{off:X}: {len(data)}')
-
-    text = '하늘 제패!'
-    # 2026-10-08 font rule: large title -> OkDanDan (was AppleSDGothicNeo index 6).
-    font_path = aw_fonts.okdandan_path()
-
-    def load_title_font(size):
-        return ImageFont.truetype(font_path, size)
-
-    probe = ImageDraw.Draw(Image.new('L', (1, 1), 0))
-    for size in range(24, 11, -1):
-        font = load_title_font(size)
-        bbox = probe.textbbox((0, 0), text, font=font, stroke_width=1)
-        if bbox[2] - bbox[0] <= 124 and bbox[3] - bbox[1] <= 26:
-            break
-
-    tw = bbox[2] - bbox[0]
-    th = bbox[3] - bbox[1]
-    x = (128 - tw) // 2 - bbox[0]
-    y = (32 - th) // 2 - bbox[1] + 1
-
-    stroke_mask = Image.new('L', (128, 32), 0)
-    fill_mask = Image.new('L', (128, 32), 0)
-    ImageDraw.Draw(stroke_mask).text((x, y), text, font=font, fill=255, stroke_width=1, stroke_fill=255)
-    ImageDraw.Draw(fill_mask).text((x, y), text, font=font, fill=255)
-
-    canvas = Image.new('P', (128, 32), 0)
-    dst = canvas.load()
-    stroke_px = stroke_mask.load()
-    fill_px = fill_mask.load()
-    for yy in range(32):
-        for xx in range(128):
-            if stroke_px[xx, yy] >= 70:
-                dst[xx, yy] = 14
-            if fill_px[xx, yy] >= 190:
-                dst[xx, yy] = 10
-            elif fill_px[xx, yy] >= 40 and stroke_px[xx, yy] >= 70:
-                # gfx T5: partial face coverage over the 14 outline takes the
-                # mission-start OBJ6 grey steps (binary 10 face unchanged).
-                from part1_m19_title import MISSION_OBJ6_RGB
-                from sprite_text_aa import palette_blend_index
-                dst[xx, yy] = palette_blend_index(14, 10, fill_px[xx, yy], (14, 13, 12, 11),
-                                                  (MISSION_OBJ6_RGB,))
-
-    grid = [[canvas.getpixel((xx, yy)) for xx in range(128)] for yy in range(32)]
-    # Native 空制 art crosses x=64 (14 rows): this consumer draws the cells edge to edge.
-    aw_fonts.check_cells(grid, (64,), 'Part 2 air supremacy title', native=aw_fonts.obj_canvas(data, 2, 8, 4))
-    out = bytearray(len(data))
-    px = canvas.load()
-    for sprite in range(2):
-        for ty in range(4):
-            for tx in range(8):
-                tile_idx = sprite * 32 + ty * 8 + tx
-                sx = sprite * 64 + tx * 8
-                sy = ty * 8
-                base = tile_idx * 32
-                for row in range(8):
-                    for col in range(8):
-                        value = px[sx + col, sy + row] & 0x0F
-                        bi = base + row * 4 + col // 2
-                        if col & 1:
-                            out[bi] |= value << 4
-                        else:
-                            out[bi] |= value
-
-    comp = lz77_compress_optimal(bytes(out), vram_safe=True)
-    if len(comp) > consumed:
-        raise AssertionError(f'Part 2 air supremacy title LZ77 overflow: {len(comp)} > {consumed}')
-    rom[off:off + consumed] = comp + bytes(consumed - len(comp))
-    return 1
+    0xC1205C (하늘 제패!) is entry 8 of the Part 1 mission-title table 0xE12BF4,
+    read by the 작전룸 (training) branch of the loader 0x08B52CFE (runtime BP
+    0x08B52D06 r0 = 8 on the JP and candidate ROMs).  It is not a Part 2
+    asset; part1_mission_titles.py now owns and redraws it in the shared R4
+    mission-title style.
+    """
+    return 0
 
 
 # These are keys for the campaign header's ASCII OBJ glyph lookup, not text
