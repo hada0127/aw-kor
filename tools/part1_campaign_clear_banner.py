@@ -229,13 +229,21 @@ RANK_STRIPS = ((0, '캠페인 랭크', 'CAMPAIGN RANK'), (16, '하드 캠페인 
 STRIP_TILES = 16
 
 
+def rank_strip(text):
+    """R20: JP strip composition -- white letters with a black 8-way outline
+    from column 0 (JP: outline rows 0/6, text 1..5); six-row Galmuri cut in
+    rows 1..6, outline rows 0..7."""
+    import galmuri6
+    points, _ = galmuri6.ink(text)
+    return galmuri6.tiles_4bpp(galmuri6.outlined(STRIP_TILES * 8, [(x + 1, y) for x, y in points]))
+
+
 def sheet(original):
-    from part1_obj_header_labels import render as render_header
     native = source_guard(original)
     out = bytearray(native)
     for first_tile, text, _ in RANK_STRIPS:
         start = first_tile * 32
-        out[start:start + STRIP_TILES * 32] = render_header(STRIP_TILES, text, 'left')
+        out[start:start + STRIP_TILES * 32] = rank_strip(text)
     for cell in range(CELLS):
         start = (CELL_BASE_TILE + cell * 16) * 32
         if cell < len(GLYPHS):

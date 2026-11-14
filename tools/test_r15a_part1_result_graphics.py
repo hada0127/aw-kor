@@ -26,7 +26,7 @@ GOLDEN = {
     'title_0xC10B34': 'a082ff295a6845adf009526494a9eff6e89b114a40e90b8e6cd8a5d0db2b9cec',
     'title_0xC11D9C': '7cf549694e9d94e848fa9d4f632becc98e8096bbfeab6e3dfd6fe18f4c49ae1b',
     'title_0xC1205C': '2a2f7bb127e65d513f0ec7b8ab08f2e17bc7e3487495a03f53ca8b2446a52651',
-    'clear_sheet': 'd75b11632a564b2e234e5bc8a6a0d39d3a6e658d0299ab481e493e96f50e85c3',
+    'clear_sheet': '6d795a2374ebc5c754778a9316e6781c4cc0f37deababff4da86db4be89d6f9b',  # R20 rank strips
     'result_WIN': 'efe4f952d9114d6213eb2e8af67aeba675c39454b77f9a9a8ceddf51b41887c7',
     'result_DRAW': '1cf0c35722a73adff3d481173b7355806fc6df18abca32236e4a6ee29748e437',
     'result_LOSE': 'ecf41073d7a36775b728d5608412bf4b81900fefe37c8ead96b8e403c65a8747',

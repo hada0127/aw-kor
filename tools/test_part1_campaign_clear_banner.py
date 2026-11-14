@@ -1,8 +1,12 @@
+import hashlib
 import struct
 import unittest
 
 import part1_campaign_clear_banner as m
 from lz77_scan import lz77_decompress
+
+# Current-generator golden of both rank strips (R20, 2026-11-09).
+RANK_STRIPS_SHA256 = '356284697cb14558bf06640ddba43db84ee7d90dff97f11abc55f4b529538d3b'
 
 
 class CampaignClearBannerTests(unittest.TestCase):
@@ -34,9 +38,17 @@ class CampaignClearBannerTests(unittest.TestCase):
         self.assertLessEqual(used, m.RELOCATION_END - m.RELOCATION)
         native = lz77_decompress(self.original, m.SOURCE)[0]
         self.assertNotEqual(sheet[:m.CELL_BASE_TILE * 32], native[:m.CELL_BASE_TILE * 32])
-        import part1_obj_header_labels as headers
-        self.assertEqual(sheet[:16 * 32], headers.render(16, '캠페인 랭크', 'left'))
-        self.assertEqual(sheet[16 * 32:32 * 32], headers.render(16, '하드 캠페인 랭크', 'left'))
+        # R20: JP strip composition (white six-row letters, black outline, no box).
+        self.assertEqual(sheet[:16 * 32], m.rank_strip('캠페인 랭크'))
+        self.assertEqual(sheet[16 * 32:32 * 32], m.rank_strip('하드 캠페인 랭크'))
+        for first in (0, 16):
+            strip = sheet[first * 32:(first + 16) * 32]
+            px = [[(strip[x // 8 * 32 + y * 4 + x % 8 // 2] >> (4 * (x % 2))) & 15 for x in range(128)]
+                  for y in range(8)]
+            self.assertEqual({v for row in px for v in row}, {0, 1, 5})
+            self.assertNotIn(1, px[0] + px[7])
+            self.assertEqual(px[3][0], 5)   # outline from column 0 like the JP strip
+        self.assertEqual(hashlib.sha256(sheet[:32 * 32]).hexdigest(), RANK_STRIPS_SHA256)
         glyph = lambda t: (m.GLYPHS + '__')[(t - m.OBJ_TILE0) // 16]
         for table, entries, text in ((m.NORMAL_TABLE, m.NORMAL_ENTRIES, '캠페인클리어!'),
                                      (m.HARD_TABLE, m.HARD_ENTRIES, '하드캠페인클리어!')):

@@ -1,5 +1,14 @@
 > **2026-11-06 사용자 결정:** 외부팀 철수에 따라 웹 대사·스프라이트·통합 편집기 도구를 제거했다. 과거 편집기 검수·TODO 기록은 당시 이력이다. `tools/scene_routes/`는 QA·캡처 재현용으로 유지한다. 스프라이트 override의 ROM 빌드 적용은 유지한다.
 
+## 2026-11-14 첫 공개 릴리스 (R19–R21 포함)
+
+- [x] R19 미도달 화면 검증, R20 사용자 지적 수정(6줄 이름 손그림·하드 캠페인 머리말·랭크 띠·조우!/보급!·오프닝 전략 지도·In/G 칩·날짜/포인트 칩·2편 남은 1명/R:정보·사령관 이름), R21 2편 사령관 이름 하다 산스 ExtraBold. 후보 gfx6 SHA-256 `49e42333052937e78962e181dd99ae44bdd177d7efa02595e298ec6248ba46af`. 보고 `temp/fix_20261104/gfx/R19_common.md`·`R20_common.md`·`R21/`.
+- [x] R21 빌더 패치(`temp/fix_20261104/gfx/R21/builder.patch`)를 소스에 반영, 오버레이 없이 재빌드 SHA 일치. Astra full(NOT APPROVED: 빌더 미반영·「가자!」) → delta. 리뷰 원문 `temp/release_20261114/`.
+- [x] GitHub Release `v2026-11-14` xdelta 공개, README 사용자용 개편, 블로그 소개글 요청(blog 세션).
+- [ ] (사용자 결정 대기) 2편 「가자!」 로고도 하다 산스로 바꿀지 — R20 때 질문했고 R21은 사령관 이름만 지시. 이번 릴리스는 OK단단 유지.
+- [ ] 1편 작전룸 목록 「하늘에서 오는 건··」 말줄임 점 2개(제목 화면은 「…」), 2편 「레드스타 진군 !」 간격 — 일본판 대조 필요. 증거 `temp/release_20261114/blog_shots/captions.md`.
+- [ ] (Optional) `part2_select_obj_captions.py` 폭 계산 1px 짧음, `part1_campaign_clear_banner.py` 머리 설명 갱신.
+
 ## 2026-11-06 그래픽 한글 재디자인 (후보, 배포 아님)
 
 보고서 [`docs/reports/GRAPHICS_2026-11-06.md`](docs/reports/GRAPHICS_2026-11-06.md). 후보 `output/game_wars_korean_candidate_20261106_gfx.gba` SHA-256 `ec1638fb106b322c04bf2df4b0449f1c26a15e9007226ed9e065744af20df718`.

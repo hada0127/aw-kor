@@ -55,9 +55,10 @@ class SpriteStyleTest(unittest.TestCase):
             packed = lz77_compress_optimal(title.part1_logo_layer_to_tiles(image), vram_safe=True)
             self.assertLessEqual(len(packed), title.lz77_decompress(source, offset)[1], hex(offset))
 
-    def test_duplicate_label_requires_source_offset(self):
+    def test_unknown_label_requires_source_offset(self):
+        # R20: 0xC1A2BC is 하드 캠페인, so 캠페인 is no longer duplicated.
         with self.assertRaises(ValueError):
-            title.make_part1_submenu_label_block('캠페인')
+            title.make_part1_submenu_label_block('하드 숍')
 
     def test_oversized_header_is_rejected(self):
         with self.assertRaises(ValueError):

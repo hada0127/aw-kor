@@ -8,9 +8,9 @@
 
 ---
 
-## 2026-10-21 정본 배포본
+## 2026-11-14 정본 배포본 (첫 공개 릴리스)
 
-현재 로컬 정본은 b44 SHA-256 `1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02`다. 2026-10-21 BPS/IPS와 검증 범위는 `temp/release_C/canon11/report.md`, 진행·미검증 항목은 `todo.md`를 따른다. 대화 끝 ▼ 커서를 마지막 글자에서 오른쪽으로 1px 띄웠다. 공개 업로드는 하지 않았다.
+현재 정본은 R21 후보(gfx6) SHA-256 `49e42333052937e78962e181dd99ae44bdd177d7efa02595e298ec6248ba46af` CRC32 `E936CE1B`다. 사용자 지시(「이제 배포할때가 됐다」)로 GitHub Release `v2026-11-14`에 xdelta(VCDIFF, 2차 압축 없음) `aw_kor_2026-11-14.xdelta`를 공개했다(사본 `dist/`). 소스에서 패치 오버레이 없이 다시 빌드하면 같은 SHA가 나온다(`temp/release_20261114/rebuild/`). 사용자용 안내는 루트 `README.md`, 블로그 스크린샷은 `docs/screenshots/release_2026-11-14/`. 이전 b44(`1ac68443…`)와 `dist/`의 BPS/IPS는 이력이다.
 
 ## 2026-10-18 대사 잘림 조사
 

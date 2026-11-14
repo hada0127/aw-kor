@@ -20,7 +20,24 @@ class SupplyPopupTests(unittest.TestCase):
                 if not (x0 <= x < x1 and y0 <= y < y1):
                     self.assertEqual(S.pixel(old, x, y), S.pixel(new, x, y))
         colors = {S.pixel(new, x, y) for y in range(y0, y1) for x in range(x0, x1)}
-        self.assertEqual(colors, {1, 3, 5})
+        self.assertEqual(colors, {S.INTERIOR, S.INK})
+
+    def test_jp_outlined_strokes_and_gap_before_bang(self):
+        # R20: white strokes, black 8-way outline; one white column between
+        # the last syllable's outline and the outline of '!'.
+        for source, text, box, _ in S.BUBBLES:
+            raw = S.bubble(self.original, source)
+            ink, _ = S._ink(text)
+            left, top = S.text_origin(text, box)
+            body = {(left + x, top + y) for x, y in ink}
+            ring = {(x + dx, y + dy) for x, y in body for dx in (-1, 0, 1) for dy in (-1, 0, 1)} - body
+            self.assertTrue(all(S.pixel(raw, x, y) == S.INTERIOR for x, y in body), text)
+            self.assertTrue(all(S.pixel(raw, x, y) == S.INK for x, y in ring), text)
+            bang = max(x for x, _ in body)   # '!' is one column wide
+            columns = {x for x, _ in ring | body}
+            self.assertEqual((bang - 1 in columns, bang - 2 in columns, bang - 3 in columns),
+                             (True, False, True), text)   # outline, white column, outline
+            self.assertEqual({y for _, y in ring | body}, set(range(box[1], box[3])), text)
 
     def test_source_drift_fails_closed(self):
         original = bytearray(self.original)

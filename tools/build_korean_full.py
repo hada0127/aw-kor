@@ -7487,66 +7487,16 @@ def patch_common_nintendo_presents_bg(rom):
     return len(out) // 32
 
 
-def patch_part2_strategic_map_mode4_labels(rom):
-    """Mode4 풀스크린 전략지도(0xC2FD70+0xC30EE8)의 영어 필기체 지명 한글화.
+def patch_part2_strategic_map_mode4_labels(rom, orig):
+    """Mode4 풀스크린 전략지도(0xC2FD70+0xC30EE8, 1편 오프닝 데모)의 영어 필기체 지명 한글화.
 
-    이 두 블록은 LZ77 해제 후 EWRAM→DMA로 Mode4 프레임버퍼(VRAM 0x06000000 상단 /
-    0x06004B00 하단, 각 240×80=0x4B00)에 그대로 들어가 화면 표시된다(fresh-run SWI 로그
-    temp/auto_fresh_p2/mgbah.stderr.log:7800~7806 확인). 타일 간접이 없어 오프라인 렌더
-    (팔레트 0xC2FC90)가 인게임 픽셀과 동일 → 오프라인 검증=인게임 검증.
-
-    실측 라벨(원본): 좌상 회색오벌 'Red star Palace'(파랑잉크 idx16), 중앙 적색구조
-    'Factory'(암적잉크 idx24), 중앙하단 회색오벌 'Cosmo earth Palace'(암잉크 idx4).
-    ⚠ codex_bgblocks의 'Blue moon Palace'·half-B Factory 좌표는 원본 픽셀 검증 결과
-    phantom(실제 텍스트 없음)이라 제외 — 거기 한글을 넣으면 빈 영역에 가짜 라벨이 됨.
-    상단 작은 해양 라벨 1건은 필기체 판독 불가(Cayo/Cargo?)라 미번역 유지(오역 회피).
-
-    'Cosmo earth'=녹색 국가이므로 배너/범례/proper_nouns와 동일하게 '그린어스'로 통일(명사
-    일관, /goal #3). 각 박스를 오벌/구조 bg색으로 wipe 후 galmuri7 정본 한글을 원본 잉크색
-    으로 렌더. 각 반쪽 재압축 len≤consumed 검증.
+    R20 (2026-11-09): 화면 BG 팔레트는 0xC31F2C(이전 판은 OBJ 팔레트 0xC2FC90로 색을 골라
+    그린어스 궁전이 살구색 직사각형+안 보이는 글자였음). 필기체 픽셀만 바탕색으로 지우고
+    레드스타 궁전·공장·블루문 궁전·그린어스 궁전을 원래 잉크색으로 그린다
+    (tools/part1_strategy_map_labels.py). Yellow Comet·City 등 작은 영어 라벨은 그대로.
     """
-    from lz77_compress import lz77_compress_optimal
-    from lz77_scan import lz77_decompress
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from bdf import load_bdf, glyph_grid
-    W = 240
-    dA = lz77_decompress(rom, 0xC2FD70); A = bytearray(dA[0]); cA = dA[1]
-    dB = lz77_decompress(rom, 0xC30EE8); B = bytearray(dB[0]); cB = dB[1]
-    g7 = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))[0]
-
-    def paint(buf, x0, y0, x1, y1, lines, bg, ink):
-        for y in range(y0, y1):
-            for x in range(x0, x1):
-                buf[y * W + x] = bg
-        n = len(lines); lh = (y1 - y0) // n
-        for li, ln in enumerate(lines):
-            ws = [(glyph_grid(g7[ord(c)])[1] if ord(c) in g7 else 5) for c in ln]
-            tot = sum(ws) + len(ln) - 1
-            cx = x0 + max(0, ((x1 - x0) - tot) // 2)
-            gh = max((glyph_grid(g7[ord(c)])[2] if ord(c) in g7 else 7) for c in ln)
-            cy = y0 + li * lh + max(0, (lh - gh) // 2)
-            for ch in ln:
-                gobj = g7.get(ord(ch))
-                if gobj is None:
-                    cx += 5
-                    continue
-                gg, w, h, xo, yo = glyph_grid(gobj)
-                for yy in range(h):
-                    for xx in range(w):
-                        if gg[yy][xx] and 0 <= cx + xx < W and 0 <= cy + yy + (gh - h) < len(buf) // W:
-                            buf[(cy + yy + (gh - h)) * W + cx + xx] = ink
-                cx += w + 1
-
-    paint(A, 42, 18, 100, 34, ['레드스타', '궁전'], 2, 16)     # Red star Palace (회색오벌/파랑)
-    paint(A, 112, 35, 153, 47, ['공장'], 17, 24)               # Factory (적색구조/암적)
-    paint(B, 113, 22, 163, 40, ['그린어스', '궁전'], 2, 4)     # Cosmo earth Palace (회색오벌/암)
-    compA = lz77_compress_optimal(bytes(A), vram_safe=True)
-    compB = lz77_compress_optimal(bytes(B), vram_safe=True)
-    if len(compA) > cA or len(compB) > cB:
-        raise AssertionError(f'strategic map mode4 recompress too big: A {len(compA)}/{cA} B {len(compB)}/{cB}')
-    rom[0xC2FD70:0xC2FD70 + len(compA)] = compA
-    rom[0xC30EE8:0xC30EE8 + len(compB)] = compB
-    return 3
+    import part1_strategy_map_labels
+    return part1_strategy_map_labels.patch(rom, orig)
 
 
 def patch_part2_operation_select_country_bg(rom):
@@ -8453,13 +8403,7 @@ def patch_part2_operation_prompt_labels(rom):
                     out.append(lo | (hi << 4))
         return bytes(out)
 
-    prompt = make_pixels(64, 24)
-    draw_text(prompt, '정보', 0, 1, 12)
-    draw_text(prompt, 'A', 0, 9, 3)
-    draw_text(prompt, '확인', 6, 9, 6)
-    draw_text(prompt, 'B', 0, 17, 10)
-    draw_text(prompt, '뒤로', 6, 17, 9)
-
+    # R:정보 / A:확인 / B:뒤로 button hints: part2_select_obj_captions (R20b).
     enemy = make_pixels(32, 8)
     draw_text(enemy, '적군', 0, 0, 12)
     record = make_pixels(64, 8)
@@ -8476,12 +8420,6 @@ def patch_part2_operation_prompt_labels(rom):
         0x456614: chunk(ok, 0, 0, 4) + chunk(ok, 0, 8, 4),
         0x456794: chunk(stock, 0, 0, 4) + chunk(stock, 0, 8, 4),
         0x456894: chunk(stock, 32, 0, 2) + chunk(stock, 32, 8, 2),
-        0x457174: chunk(prompt, 0, 0, 4),
-        0x4571F4: chunk(prompt, 32, 0, 4),
-        0x456C74: chunk(prompt, 0, 8, 4),
-        0x456CF4: chunk(prompt, 32, 8, 4),
-        0x456F74: chunk(prompt, 0, 16, 4),
-        0x456FF4: chunk(prompt, 32, 16, 4),
         0x456914: chunk(enemy, 0, 0, 4),
         0x456154: bytes(64),
         0x457374: chunk(record, 0, 0, 4),
@@ -10102,22 +10040,12 @@ CO_NAME_KO = [
     '캐서린', '료', '맥스', '호이프', '도미노', '빌리', '키쿠치요', '아스카', '이글', '모프',
     '헬보우즈', '콩', '캣', '스네이크', '호크', '하치', '이반', '한나', '야마모토',
 ]
-CO_NAME_OBJ_INK = 15  # 원본 가타카나 OBJ의 주 ink 팔레트 인덱스
 
 
-def _render_co_name_obj(name, ink=CO_NAME_OBJ_INK):
-    """한글 이름 → 384B(12타일, 48×16 col-major). 글리프=8×16(top+bot)."""
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from render_galmuri_8x16 import render_char
-    tiles = []
-    for i in range(6):
-        if i < len(name):
-            top, bot = render_char(name[i], ink=ink)
-        else:
-            top, bot = bytes(32), bytes(32)
-        tiles.append(top)
-        tiles.append(bot)
-    return b''.join(tiles)
+def _render_co_name_obj(name, limit):
+    """한글 이름 → 384B(48×16 col-major), JP식 하다 산스(R21: part2_co_name_obj, 원본 압축 슬롯 limit 안)."""
+    import part2_co_name_obj
+    return part2_co_name_obj.render(name, limit)
 
 
 def patch_part2_domino_co_name_obj(rom):
@@ -10126,7 +10054,7 @@ def patch_part2_domino_co_name_obj(rom):
     이름은 CO 테이블(0x081BE68, stride 0x44)의 첫 포인터로 찾는다. 중복 OBJ는 1회만 기록.
     원본 압축 슬롯 크기를 넘기지 않음(빌드 시 검증; 전 19개 fit 확인됨)."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from lz77_compress import lz77_compress
+    from lz77_compress import lz77_compress_optimal
     from lz77_scan import lz77_decompress
 
     offs = []
@@ -10151,7 +10079,7 @@ def patch_part2_domino_co_name_obj(rom):
         data, consumed = dec
         if len(data) != 12 * 32:
             raise AssertionError(f'unexpected CO name block size: {len(data)} at 0x{off:X}')
-        comp = lz77_compress(_render_co_name_obj(CO_NAME_KO[i]), vram_safe=True)
+        comp = lz77_compress_optimal(_render_co_name_obj(CO_NAME_KO[i], consumed), vram_safe=True)
         if len(comp) > consumed:
             raise AssertionError(f'CO name OBJ overflow #{i} {CO_NAME_KO[i]}: {len(comp)} > {consumed}')
         rom[off:off + consumed] = comp + bytes(consumed - len(comp))
@@ -15730,10 +15658,10 @@ def _build(args, publication):
     st['part2_menu_newspaper_bg'] = patch_part2_menu_newspaper_bg(rom, orig)
     st['part2_op_select_country_bg'] = patch_part2_operation_select_country_bg(rom)
     # Mode4 풀스크린 전략지도(0xC2FD70/0xC30EE8) 영어 지명 한글화. 표시 확정(fresh-run SWI
-    # 로그: LZ77→EWRAM→DMA 0x06000000/0x06004B00 = Mode4 fb). 실측 라벨 3건만(레드스타 궁전/
-    # 공장/그린어스 궁전); codex의 'Blue moon Palace'·half-B Factory는 phantom이라 제외.
+    # 로그: LZ77→EWRAM→DMA 0x06000000/0x06004B00 = Mode4 fb). R20: BG 팔레트 0xC31F2C 기준,
+    # 레드스타 궁전/공장/블루문 궁전/그린어스 궁전 4건(블루문은 R19b 실화면에 보임).
     # step073 Mode0 대륙 오버맵(BG3 0xC34E10)은 별개 화면(타일 필기체, 추후).
-    st['part2_strategic_map_mode4_labels'] = patch_part2_strategic_map_mode4_labels(rom)
+    st['part2_strategic_map_mode4_labels'] = patch_part2_strategic_map_mode4_labels(rom, orig)
     st['common_nintendo_presents_bg'] = patch_common_nintendo_presents_bg(rom)
     st['part2_splash_logo_bg'] = patch_part2_splash_logo_bg(rom)
     st['part2_intro_blackhole_bg'] = patch_part2_intro_blackhole_bg(rom)
@@ -15759,6 +15687,8 @@ def _build(args, publication):
     st['part2_action_menu_icon_labels'] = patch_part2_action_menu_icon_labels(rom)
     st['part2_mission_obj'] = patch_part2_mission_start_obj(rom)
     st['part2_operation_prompt_labels'] = patch_part2_operation_prompt_labels(rom)
+    import part2_select_obj_captions as p2_select_captions
+    st['part2_select_obj_captions'] = p2_select_captions.patch(rom, orig)
     st['part2_lets_go_obj'] = patch_part2_lets_go_obj(rom)
     st['part2_battle_start_day_overlay'] = patch_part2_battle_start_day_overlay_obj(rom)
     st['part2_mission_number'] = patch_part2_mission_number_obj(rom, orig)

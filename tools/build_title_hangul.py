@@ -53,7 +53,7 @@ PART1_MAIN_HEADER_BLOCKS = [
     ('part1 team setting logo', PART1_TEAM_SETTING_LZ77_OFF, '팀 설정', 20),
 ]
 PART1_SUBMENU_LOGO_BLOCKS = [
-    ("campaign", 0x00C1A2BC, "캠페인", 20),
+    ("hard_campaign", 0x00C1A2BC, "하드 캠페인", 18),  # JP ハードキャンペーン (R20)
     ("record", 0x00C1A81C, "기록", 18),
     ("single_battle", 0x00C1A9DC, "싱글 대전", 15),
     ("connect", 0x00C1AC60, "통신", 20),

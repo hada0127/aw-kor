@@ -17,10 +17,14 @@ ROOT = Path(__file__).resolve().parent.parent
 HEIGHT = 6
 # Galmuri7 seven-row syllable -> row to drop (0 = top).
 DROP_ROW = {
-    '캐': 6, '서': 1, '린': 4, '이': 2, '미': 2, '빌': 2, '리': 4, '키': 6,
-    '쿠': 6, '치': 6, '아': 1, '카': 6, '글': 3, '헬': 2, '우': 6,
+    '캐': 6, '린': 4, '이': 2, '미': 2, '빌': 2, '리': 4, '키': 6,
+    '쿠': 6, '아': 1, '카': 6, '헬': 2, '우': 6,
     '사': 1, '령': 4, '관': 4, '전': 3, '투': 4, '정': 3, '생': 3,
     '산': 1, '비': 4, '용': 4,
+    # R20: campaign rank strips (하드 캠페인 랭크 / 캠페인 랭크).  인 drops a
+    # duplicated ㅇ row, 캠 the second ㅋ row, 페 a duplicated ㅍ row, 하 the
+    # vowel tail, 랭 the ㅇ middle (same cut as 령).
+    '하': 6, '캠': 2, '페': 4, '인': 2, '랭': 4,
 }
 # Drawn rows where dropping one row loses a stroke.  필: the ㅍ bottom bar
 # joins the stem as the ㄹ top bar (Galmuri's own 빌 layout).  맥: the ㅁ
@@ -28,6 +32,14 @@ DROP_ROW = {
 DRAWN = {
     '필': ('####.#', '.##..#', '######', '...###', '.##...', '.#####'),
     '맥': ('###.#.#', '#.#.###', '###.#.#', '.......', '.######', '......#'),
+    # R20 (2026-11-09, user: 캐서린 read as 캐셔린): the ㅅ leg no longer
+    # touches the stem, so only the one ㅓ dash shows (7 columns).
+    '서': ('..#...#', '..#...#', '.#.#.##', '.#.#..#', '#...#.#', '......#'),
+    # 치 read as 쥐: the ㅊ bar stopped one column short of the stem.
+    '치': ('..#...#', '#####.#', '..#...#', '.#.#..#', '#...#.#', '......#'),
+    # 글 read as 균: Galmuri's own three-row ㄹ (from 칼) instead of a cut
+    # whose right part looked like a ㅠ leg under ㅡ.
+    '글': ('.#####.', '.....#.', '#######', '.####..', '...#...', '..####.'),
 }
 # Five-column forms for names too wide with 7px vowel bars (키쿠치요, 헬보우즈).
 NARROW = {

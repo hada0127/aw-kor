@@ -3,8 +3,8 @@ import unittest
 
 import galmuri6
 
-# Current-generator golden over every reviewed cut (R18, 2026-11-09).
-GLYPHS_SHA256 = '583feb7f401580982684883727bdf88ee3240965b820530e3c326c837ee28441'
+# Current-generator golden over every reviewed cut (R18, 2026-11-09; R20 서/치/글 drawn, rank-strip cuts).
+GLYPHS_SHA256 = '03e98b21ba6e053ade6d10d208991c01a77d5f9b027d26924c39d30945d3a3f2'
 
 
 def every_cut():

@@ -23,7 +23,7 @@ class Part2COSelectionNamesTests(unittest.TestCase):
         rom = bytearray(original)
         self.assertEqual(builder.patch_part2_domino_co_name_obj(rom), 19)
         result, used = lz77_decompress(rom, 0x45274C)
-        self.assertEqual(result, builder._render_co_name_obj('료'))
+        self.assertEqual(result, builder._render_co_name_obj('료', consumed))
         self.assertLessEqual(used, consumed)
         previous = bytearray(original)
         previous_names = list(builder.CO_NAME_KO)
@@ -45,7 +45,9 @@ class Part2COSelectionNamesTests(unittest.TestCase):
             if off in seen:
                 continue
             seen.add(off)
-            self.assertEqual(lz77_decompress(rom, off)[0], builder._render_co_name_obj(builder.CO_NAME_KO[index]))
+            slot = lz77_decompress(original, off)[1]
+            self.assertEqual(lz77_decompress(rom, off)[0],
+                             builder._render_co_name_obj(builder.CO_NAME_KO[index], slot))
             index += 1
         self.assertEqual(index, 19)
 

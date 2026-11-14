@@ -23,9 +23,14 @@ class AtlasChipLabelTests(unittest.TestCase):
         for number, address, w, h, _, text, kind, _ in m.ENTRIES:
             new = m._decode(rom[address:address + w * h * 32], w, h)
             values = {v for row in new for v in row}
-            if kind == 'chip':
+            if kind == 'native':
+                self.assertEqual(bytes(rom[address:address + w * h * 32]),
+                                 self.original[address:address + w * h * 32], number)
+            elif kind == 'chip_outline':
                 self.assertTrue(values <= {0, m.WHITE, m.GREY, m.BLACK, m.YELLOW}, number)
-                self.assertGreater(sum(row.count(m.BLACK) for row in new[4:11]), 8 * len(text), number)
+                # JP lettering: white strokes inside a black outline, rows 4..12
+                self.assertGreater(sum(row.count(m.WHITE) for row in new[5:12]), 8 * len(text), number)
+                self.assertNotIn(m.WHITE, new[4] + new[12], number)
             elif kind in ('strip', 'badge'):
                 self.assertTrue(values <= {0, m.WHITE, m.BLACK}, number)
             else:
@@ -52,14 +57,10 @@ class AtlasChipLabelTests(unittest.TestCase):
     def test_labels_review6(self):
         labels = {e[7]: e[5] for e in m.ENTRIES}
         self.assertEqual((labels['Day'], labels['Com'], labels['Play'], labels['CP']), ('날짜', '컴', '유저', '컴'))
-        # 16px chips keep a 1px gap between the two syllables (자금 = 15px with gap 1)
-        for text in ('수입', '자금'):
-            ink, width = m._ink7(text)
-            self.assertLessEqual(width, 15, text)
-            px = m._chip(16, text)
-            cols = [x for x in range(16) if any(px[y][x] == m.BLACK for y in range(4, 11))]
-            gaps = [x for x in range(cols[0], cols[-1] + 1) if x not in cols]
-            self.assertTrue(gaps, text)
+        # R20: In / G stay the JP icon chips next to the Korean 수입 / 군자금 text.
+        self.assertEqual((labels['In'], labels['G']), ('In', 'G'))
+        self.assertEqual({e[6] for e in m.ENTRIES if e[7] in ('In', 'G')}, {'native'})
+        self.assertEqual({e[6] for e in m.ENTRIES if e[7] in ('Day', 'Point')}, {'chip_outline'})
         for glyph in m.ICON_GLYPHS.values():
             self.assertEqual(len(glyph), m.ICON_BAND[1] - m.ICON_BAND[0])
             self.assertEqual(len({len(r) for r in glyph}), 1)

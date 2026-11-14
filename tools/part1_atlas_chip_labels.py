@@ -15,10 +15,10 @@ OAM23 x138 y40 In, OAM21 x176 y24 Day, palette 6 = 1 white, 3 grey,
 5 black, 6 yellow) and G in 211 savestates (OAM x162 y8, HUD funds).
 Point, ポイント, Com, Play, CP were not seen in any savestate (unverified).
 
-Korean (style: yellow chip, black frame, black Galmuri7 text; 16px chips have
-no room for side frames, so only top/bottom frame lines are drawn):
-  In 수입 (収入 -> 수입: 0x00A04D13, 0x00A0AB50)
-  G  자금 (Part 2 battle HUD funds G -> 자금: build patch_part2_battle_funds_hud_label)
+Korean (R20: yellow chip, black frame, white Galmuri7 strokes with a black
+outline like the JP chips):
+  In / G stay the native JP chips (R20: BATTLE INFO prints 수입 / 군자금 next
+  to them, so translated chips read 「[수입] 수입」; G is also the HUD coin)
   Day 날짜 (day counter label; the chip sits left of the day number,
   e.g. BATTLE INFO 'Day ... 3' in battleinfo_crop, so a label noun is needed:
   '일차 3' reads backwards, 날짜 3 reads as a label + value; candidate7)
@@ -47,10 +47,14 @@ WHITE, GREY, BLACK, YELLOW = 1, 3, 5, 6
 
 # (entry, address, width tiles, height tiles, original sha256, Korean, kind, original text)
 ENTRIES = (
-    (48, 0xBE8FBC, 2, 2, '2817f03f7acca5287c5380471f87754921494be4ee098253cdb3ebc1ccde0fe4', '수입', 'chip', 'In'),
-    (49, 0xBE903C, 2, 2, '80bd328b486dba85ee2d002c7cdbc4d7a17501c35ee57dd0ba515db3c4ada5de', '자금', 'chip', 'G'),
-    (50, 0xBE90BC, 4, 2, '859419075098014d8c886a6e87be620adde2fc230e3b4bed86224a3e88e5c262', '날짜', 'chip', 'Day'),
-    (51, 0xBE91BC, 4, 2, '15e7f3b43a9bc3287a4fc04a63ce91b9ab281175f7ae50e85f1951c31424873d', '포인트', 'chip', 'Point'),
+    # R20 (2026-11-09): BATTLE INFO prints 수입 / 군자금 right after the In / G
+    # chips, so translated chips read 「[수입] 수입」「[자금] 군자금」; the JP
+    # chips are icons, so In / G keep the native art (G is also the map HUD
+    # funds coin).  Day / Point keep Korean text in the JP chip lettering.
+    (48, 0xBE8FBC, 2, 2, '2817f03f7acca5287c5380471f87754921494be4ee098253cdb3ebc1ccde0fe4', 'In', 'native', 'In'),
+    (49, 0xBE903C, 2, 2, '80bd328b486dba85ee2d002c7cdbc4d7a17501c35ee57dd0ba515db3c4ada5de', 'G', 'native', 'G'),
+    (50, 0xBE90BC, 4, 2, '859419075098014d8c886a6e87be620adde2fc230e3b4bed86224a3e88e5c262', '날짜', 'chip_outline', 'Day'),
+    (51, 0xBE91BC, 4, 2, '15e7f3b43a9bc3287a4fc04a63ce91b9ab281175f7ae50e85f1951c31424873d', '포인트', 'chip_outline', 'Point'),
     (88, 0xBEB17C, 4, 1, '58778d5cd451cbc498ebb078996d118e9c56c53c33250ef085405ce25b21c566', '포인트', 'strip', 'ポイント'),
     (102, 0xBEB9BC, 2, 2, '1aefd1f6f667265682ce969486dd94e4f741d672f54c385f828d2ffb28919de8', '컴', 'icon', 'Com'),
     (103, 0xBEBA3C, 2, 2, 'ba06e49c5b2b0456df9d306154ea4159bf4b0929e1a5b85a3461cdee0c5f4f58', '유저', 'icon', 'Play'),
@@ -91,32 +95,34 @@ def _encode(px, w, h):
     return bytes(raw)
 
 
-def _chip(width, text):
-    """Yellow rounded chip rows 2..13, black frame, grey drop shadow, black text rows 4..10."""
-    px = [[0] * width for _ in range(16)]
-    narrow = width == 16
+def _chip_outline(width, text):
+    """JP Day / Point chip: yellow rounded chip with a black frame (rows 2..13)
+    and grey drop shadow; white Galmuri7 strokes in rows 5..11 with a black
+    8-way outline (JP: white kana strokes, black outline)."""
     ink, text_w = _ink7(text)
-    if narrow and text_w > width - 1:
-        ink, text_w = _ink7(text, gap=0)   # 16px chip: no side frame, 15px text keeps the 1px gap
-    if narrow and text_w > width - 1:
+    x0 = (width - text_w - 6) // 2
+    x1 = x0 + text_w + 5
+    if x0 < 0 or x1 > width - 2:
         raise AssertionError(f'chip label too wide: {text}')
-    x0, x1 = (0, width - 1) if narrow else ((width - text_w - 6) // 2, (width - text_w - 6) // 2 + text_w + 5)
-    if not narrow and (x0 < 0 or x1 > width - 2):
-        raise AssertionError(f'chip label too wide: {text}')
+    px = [[0] * width for _ in range(16)]
     for y in range(2, 14):
         inset = 2 if y in (2, 13) else 1 if y in (3, 12) else 0
         for x in range(x0 + inset, x1 - inset + 1):
-            edge = y in (2, 13) or (not narrow and x in (x0 + inset, x1 - inset)) or (y in (3, 12) and x in (x0 + 1, x1 - 1) and not narrow)
+            edge = y in (2, 13) or x in (x0 + inset, x1 - inset) or (y in (3, 12) and x in (x0 + 1, x1 - 1))
             px[y][x] = BLACK if edge else YELLOW
-    for y in range(4 if not narrow else 3, 15):   # shadow one pixel right/down
+    for y in range(4, 15):   # shadow one pixel right/down
         for x in range(x0 + 1, min(width, x1 + 2)):
-            if px[y][x] == 0 and (y == 14 or x == x1 + 1) and (y - 1 >= 2 and px[y - 1][x - 1]):
+            if px[y][x] == 0 and (y == 14 or x == x1 + 1) and px[y - 1][x - 1]:
                 px[y][x] = GREY
-    left = (width - text_w) // 2 if narrow else x0 + 3
-    for x, y in ink:
-        if not (x0 <= left + x <= x1 and 3 <= y + 4 <= 11) or px[y + 4][left + x] != YELLOW:
+    body = {(x0 + 3 + x, 5 + y) for x, y in ink}
+    ring = {(x + dx, y + dy) for x, y in body for dx in (-1, 0, 1) for dy in (-1, 0, 1)}
+    for x, y in ring:
+        if px[y][x] != YELLOW:
             raise AssertionError(f'chip glyph clipped: {text}')
-        px[y + 4][left + x] = BLACK
+    for x, y in ring:
+        px[y][x] = BLACK
+    for x, y in body:
+        px[y][x] = WHITE
     return px
 
 
@@ -206,8 +212,10 @@ def _badge(text):
 
 def render(native, entry):
     _, _, w, h, _, text, kind, _ = entry
-    if kind == 'chip':
-        px = _chip(w * 8, text)
+    if kind == 'native':
+        return bytes(native)
+    if kind == 'chip_outline':
+        px = _chip_outline(w * 8, text)
     elif kind == 'strip':
         px = _strip(w * 8, text)
     elif kind == 'icon':

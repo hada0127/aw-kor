@@ -377,14 +377,12 @@ for off,text in SMALL:
   x+=w+1
 for off,text,box,_ in bubbles.BUBBLES:
  raw=rom[off:off+1024];same(hex(off),raw,bubbles.bubble(original,off));assets.add(hex(off))
- ink,width=bubbles._ink(text);x0,y0,x1,y1=box;left=x0+(x1-x0-(width+1))//2
+ ink,width=bubbles._ink(text);left,y0=bubbles.text_origin(text,box)   # R20: white strokes, black outline
+ ring={(x+dx,y+dy) for x,y in ink for dx in (-1,0,1) for dy in (-1,0,1)}-set(ink)
  for x,y in ink:
-  if bubbles.pixel(raw,left+x,y0+y)!=bubbles.INK:failures.append(dict(asset=hex(off),reason='popup final ink mismatch'))
- font,_=load_bdf(str(C/'reference/fonts/Galmuri7.bdf'));cursor=0
- for ch in text:
-  grid,w,h,xo,yo=glyph_grid(font[ord(ch)]);top=7-h-yo
-  actual=image([[255 if bubbles.pixel(raw,left+cursor+x+xo,y0+top+y)==bubbles.INK else 0 for x in range(w)] for y in range(h)])
-  bitmap_audit(hex(off),ch,actual,grid);cursor+=w+1
+  if bubbles.pixel(raw,left+x,y0+y)!=bubbles.INTERIOR:failures.append(dict(asset=hex(off),reason='popup final ink mismatch'))
+ for x,y in ring:
+  if bubbles.pixel(raw,left+x,y0+y)!=bubbles.INK:failures.append(dict(asset=hex(off),reason='popup final outline mismatch'))
 for off,capacity,pointers in bubbles.LZ_COPIES:
  same(hex(off),lz77_decompress(rom,off)[0],b''.join(rom[a:a+1024] for a,*_ in bubbles.BUBBLES));assets.add(hex(off))
 # Unit-name slots use the native condensed BDF, with one blank column at

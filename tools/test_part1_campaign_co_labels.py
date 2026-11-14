@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 import part1_campaign_co_labels as labels
 
-# Current-generator goldens (R18, 2026-11-09).  Campaign names use six-row
+# Current-generator goldens (R18, 2026-11-09; R20 캐서린/키쿠치요/이글 redrawn).  Campaign names use six-row
 # Galmuri cuts with a black outline; battle HUD names keep the older renderer.
 GOLDEN = {
     'campaign_hoip': '50e8b8e31ab333dcda6418a521e8d334c2cfcaf8f3a3859fdfdb46b506df4d52',
@@ -13,10 +13,10 @@ GOLDEN = {
     'campaign_billy': '01907699d43967ee4836c59b4058ed762b4225d9816c79fad84c92a2b1f817d7',
     'battle_ryo': '9aab8206bec0dc901efa64e4889582a370709beeca212c133889d8f1cfc60c76',
     'battle_max': '64c55b9410bef333d84d7b848e5694c5adb37247f987c6eefa8e7032bd07af20',
-    'campaign_catherine': 'b5852fa7d1cd029b7f332514e5902750e2b6b3ec62fec4b4c72c4155d3617409',
-    'campaign_kikuchiyo': '47683dabc3fd1451e5058ee65b1905a6bdb804c4931f0de8840f9e81da75e6ac',
+    'campaign_catherine': '52f8897ee7001d4790e30004a015b5497da8ff9d346984dbd940c71e8b682c92',
+    'campaign_kikuchiyo': '8850ca30605c3a80567a6351f1329f8430ba011a2f85457ba5d680488919f268',
     'campaign_asuka': '10faa4b272298ea0341c2a26aea61aa6893f6a5dc7998c66025ecb0e586a3311',
-    'campaign_eagle': 'ada3f98e71cc824ee25e64c952e52f7859ce8751534c66174cf1369edf0a675e',
+    'campaign_eagle': '257c6935ac0c8f83c951ff37d145e231c0f38e55b53a7f8fb62041eab9cabd4a',
     'campaign_mop': '128c7537cc65be21bc55f1b122c815c975ccaeb11816823180c8d2f8ac2ef3e6',
     'campaign_sturm': '59efcc3ef63cce335ea0d02206ff9c61f9e1f6c8039d8ff7803f58e695a5d427',
     'campaign_sturm_alt': '59efcc3ef63cce335ea0d02206ff9c61f9e1f6c8039d8ff7803f58e695a5d427',

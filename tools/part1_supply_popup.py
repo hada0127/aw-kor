@@ -19,9 +19,11 @@ Part 2's sheet 0x4704D4 (pointer 0x327A50) and five pointerless archive copies
 
 Korean terms: 보급 = existing command/menu term (translation_for_import
 0x008052A8 / 0x00805394), 조우 = existing dialogue term for ソウグウ
-(0x00A0EEA7, 0x00D9E0E1, ...).  Glyphs: native Galmuri7 in seven ink rows, black ink (5) with a
-gray (3) drop shadow on the native white (1) interior, like the first fix.
-Patched live pixels remain unverified on screen.
+(0x00A0EEA7, 0x00D9E0E1, ...).  Glyphs (R20, 2026-11-09): JP composition -- the
+native kana are white (1) one-pixel strokes with a black (5) 8-way outline in
+rows 11..19 (rows 10 and 20 stay white inside the pill border).  Galmuri7 seven
+rows + outline fill rows 11..19 the same way; letters share one outline column
+and 「!」 keeps one white column after the outline before it (R19: 우! read as 위).
 """
 import hashlib
 import struct
@@ -33,18 +35,19 @@ from bdf import load_bdf, glyph_grid
 ROOT = Path(__file__).resolve().parent.parent
 ROM_BASE = 0x08000000
 SIZE = 1024
-INTERIOR, SHADOW, INK = 1, 3, 5
+INTERIOR, INK = 1, 5
+BANG_GAP = 3  # ink gap before '!': outline, one white column, outline
 
 # (source, Korean, text box (x0, y0, x1, y1) covering the native outlined kana
 #  plus their pill ends, original sha256)
 BUBBLES = (
-    (0xBD0790, '조우!', (19, 12, 53, 20),
+    (0xBD0790, '조우!', (19, 11, 53, 20),
      'c2ad6049cafefc9784c956b8a86ff643013f3c5c284ed6b3876bb7809b685877'),
-    (0xBD0B90, '조우!', (10, 12, 45, 20),
+    (0xBD0B90, '조우!', (10, 11, 45, 20),
      '67fafe8df87d5aa49580b64fb074e2074cb65fd2e67581a984b5dca29ffbaba6'),
-    (0xBD0F90, '보급!', (22, 12, 53, 20),
+    (0xBD0F90, '보급!', (22, 11, 53, 20),
      '466d77039a491789a742bcf8e1e349f16cf86ced31bd89ebf9515c362440d755'),
-    (0xBD1390, '보급!', (10, 12, 43, 20),
+    (0xBD1390, '보급!', (10, 11, 43, 20),
      '1cf7659e6f3eed89b9c9b6baee84a10d39a123a42da594c55a8e21ef6e71923c'),
 )
 # Back-compatible names for the first (left supply) bubble.
@@ -81,6 +84,8 @@ def _ink(text):
     font = _font()
     ink, cursor = set(), 0
     for char in text:
+        if char == '!':
+            cursor += BANG_GAP - 1
         grid, width, height, xoffset, yoffset = glyph_grid(font[ord(char)])
         top = 7 - height - yoffset
         for y in range(height):
@@ -104,13 +109,21 @@ def render_bubble(raw, text, box):
     for y in range(y0, y1):
         for x in range(x0, x1):
             put(x, y, INTERIOR)
-    ink, width = _ink(text)
-    left = x0 + (x1 - x0 - (width + 1)) // 2
+    ink, _ = _ink(text)
+    left, top = text_origin(text, box)
     for x, y in ink:
-        put(left + x + 1, y0 + y + 1, SHADOW)
+        for dy in (-1, 0, 1):
+            for dx in (-1, 0, 1):
+                put(left + x + dx, top + y + dy, INK)
     for x, y in ink:
-        put(left + x, y0 + y, INK)
+        put(left + x, top + y, INTERIOR)
     return bytes(output)
+
+
+def text_origin(text, box):
+    """Bubble pixel of the glyph cell origin: outlined text centred in the box."""
+    x0, y0, x1, _ = box
+    return x0 + 1 + (x1 - x0 - (_ink(text)[1] + 2)) // 2, y0 + 1
 
 
 def _check_source(original, source, digest):
