@@ -1,4 +1,4 @@
-"""Part 1 final-battle Hellbowz defeat line 0xDD0BCB (wording from the 쪼롱이 standard).
+"""Part 1 final-battle Hellbowz defeat line 0xDD0BCB (wording from the 짜옹이 standard).
 
 The approved wording (data/dialogue_overrides.json, commit 2d0b6af) needs 50 bytes
 in a 40-byte slot, so fit/strip dropped every space and the ellipsis. Words stay

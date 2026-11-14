@@ -134,7 +134,7 @@ Get-FileHash "Game Boy Wars Advance 1+2 (Korean).gba" -Algorithm SHA256
 
 ## 만든 사람들
 
-- **원 번역·감수·도트 그래픽:** B팀 · 쪼롱이님
+- **원 번역·감수·도트 그래픽:** B팀 · 짜옹이님
 - **대사 재작성·한글 출력 기술·그래픽·빌드·검수:** 이 저장소의 한글화 팀
 - **사용 글꼴**
   - 갈무리(Galmuri) — 이민서(Lee Minseo), SIL Open Font License 1.1 — 대사·메뉴 등 작은 글씨
